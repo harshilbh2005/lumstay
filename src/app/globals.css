@@ -136,6 +136,64 @@
       );
   }
 
+  .luma-hero-veil {
+    background:
+      radial-gradient(
+        95% 105% at 8% 54%,
+        rgb(9 32 33 / 84%) 0%,
+        rgb(9 32 33 / 58%) 43%,
+        transparent 74%
+      ),
+      linear-gradient(
+        90deg,
+        rgb(7 25 26 / 54%) 0%,
+        rgb(7 25 26 / 20%) 55%,
+        rgb(7 25 26 / 4%) 100%
+      );
+  }
+
+  .luma-hero-title-gradient {
+    background: linear-gradient(
+      102deg,
+      var(--luma-white) 4%,
+      var(--luma-linen-100) 58%,
+      #d8b987 118%
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .luma-search-surface {
+    background: rgb(244 240 233 / 82%);
+    border: 1px solid rgb(255 255 255 / 46%);
+    box-shadow:
+      0 1px 0 rgb(255 255 255 / 48%) inset,
+      0 18px 65px rgb(7 25 26 / 28%);
+    -webkit-backdrop-filter: blur(16px) saturate(116%);
+    backdrop-filter: blur(16px) saturate(116%);
+  }
+
+  .luma-search-button {
+    background: linear-gradient(
+      118deg,
+      var(--luma-forest-800) 0%,
+      var(--luma-forest-950) 72%,
+      #234346 100%
+    );
+    box-shadow: 0 8px 24px rgb(16 44 45 / 20%);
+  }
+
+  .luma-search-button:hover {
+    background: linear-gradient(
+      118deg,
+      var(--luma-forest-900) 0%,
+      #0b2526 72%,
+      var(--luma-forest-900) 100%
+    );
+  }
+
   .container-luma {
     width: min(100% - 2.5rem, var(--content-max));
     margin-inline: auto;
@@ -174,6 +232,12 @@
 @media (forced-colors: active) {
   .brand-wordmark,
   .brand-wordmark-inverse {
+    background: none;
+    color: CanvasText;
+    -webkit-text-fill-color: CanvasText;
+  }
+
+  .luma-hero-title-gradient {
     background: none;
     color: CanvasText;
     -webkit-text-fill-color: CanvasText;

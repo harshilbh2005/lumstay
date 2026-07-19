@@ -1,2 +1,1 @@
-// Public exports for the destination search and filtering feature belong here.
-export {};
+export { HeroSearch } from "./components/hero-search";

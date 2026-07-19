@@ -271,6 +271,6 @@ export const stockMedia = lumstayMedia.filter(
   (asset) => asset.origin === "stock",
 );
 
-export function getMediaById(id: string) {
+export function getMediaById(id: string): LumaStayMediaAsset | undefined {
   return lumstayMedia.find((asset) => asset.id === id);
 }
