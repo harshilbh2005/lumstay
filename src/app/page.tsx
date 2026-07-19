@@ -1,6 +1,7 @@
 import Link from "next/link";
-import { ArrowDownRight } from "lucide-react";
+import { ArrowDownRight } from "@phosphor-icons/react/ssr";
 
+import { SiteHeader } from "@/components/layout/site-header";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -16,14 +17,7 @@ const swatches = [
 export default function Home() {
   return (
     <main className="min-h-screen bg-background">
-      <header className="border-b border-border/80">
-        <div className="container-luma flex h-20 items-center justify-between">
-          <Link href="/" className="font-display text-2xl tracking-[-0.04em]">
-            LumaStay
-          </Link>
-          <span className="text-eyebrow text-muted-foreground">Foundation / 01</span>
-        </div>
-      </header>
+      <SiteHeader />
 
       <section className="container-luma grid min-h-[68vh] items-end gap-12 py-20 md:grid-cols-12 md:py-28">
         <div className="md:col-span-8">
@@ -43,7 +37,7 @@ export default function Home() {
             className={cn(buttonVariants({ size: "lg" }), "w-fit")}
           >
             View the foundation
-            <ArrowDownRight aria-hidden="true" />
+            <ArrowDownRight aria-hidden="true" weight="regular" />
           </Link>
         </div>
       </section>

@@ -95,6 +95,47 @@
 }
 
 @layer utilities {
+  .brand-wordmark {
+    background: linear-gradient(
+      108deg,
+      var(--luma-forest-950) 0%,
+      var(--luma-forest-900) 68%,
+      var(--luma-brass-700) 112%
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .brand-wordmark-inverse {
+    background: linear-gradient(
+      108deg,
+      var(--luma-paper) 0%,
+      var(--luma-paper) 66%,
+      #d2ab72 116%
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .luma-header-surface {
+    background:
+      radial-gradient(
+        72% 180% at 7% -95%,
+        color-mix(in oklab, var(--luma-brass-500) 14%, transparent),
+        transparent 64%
+      ),
+      linear-gradient(
+        102deg,
+        var(--luma-paper) 0%,
+        color-mix(in oklab, var(--luma-linen-100) 62%, var(--luma-paper)) 48%,
+        var(--luma-paper) 100%
+      );
+  }
+
   .container-luma {
     width: min(100% - 2.5rem, var(--content-max));
     margin-inline: auto;
@@ -127,5 +168,14 @@
     animation-iteration-count: 1 !important;
     scroll-behavior: auto !important;
     transition-duration: 0.01ms !important;
+  }
+}
+
+@media (forced-colors: active) {
+  .brand-wordmark,
+  .brand-wordmark-inverse {
+    background: none;
+    color: CanvasText;
+    -webkit-text-fill-color: CanvasText;
   }
 }
