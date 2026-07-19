@@ -297,14 +297,18 @@ export function HeroSearch() {
         <Button
           type="submit"
           disabled={isSearching}
-          className="luma-search-button min-h-16 rounded-[0.9rem] px-6 text-[0.9375rem] font-bold lg:m-1 lg:min-w-36 lg:rounded-[0.8rem]"
+          className="luma-search-button min-h-16 rounded-[1rem] px-5 text-[0.9375rem] font-semibold tracking-[0.018em] lg:min-w-40 lg:rounded-l-none lg:rounded-r-[1.15rem] lg:border-l-0"
         >
-          {isSearching ? (
-            <SpinnerGap aria-hidden="true" className="animate-spin" size={19} />
-          ) : (
-            <MagnifyingGlass aria-hidden="true" size={19} weight="bold" />
-          )}
-          {isSearching ? "Searching" : "Find a stay"}
+          <span className="relative z-10 flex size-8 items-center justify-center rounded-full bg-white/10 ring-1 ring-white/18 transition-[background-color,transform] duration-300 ease-luma group-hover/button:scale-105 group-hover/button:bg-white/16">
+            {isSearching ? (
+              <SpinnerGap aria-hidden="true" className="animate-spin" size={17} />
+            ) : (
+              <MagnifyingGlass aria-hidden="true" size={17} weight="bold" />
+            )}
+          </span>
+          <span className="relative z-10">
+            {isSearching ? "Searching" : "Find a stay"}
+          </span>
         </Button>
       </div>
 
