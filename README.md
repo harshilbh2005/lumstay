@@ -1,36 +1,68 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# LumaStay
 
-## Getting Started
+Premium, frontend-only hotel discovery and booking experience built with mock data.
 
-First, run the development server:
+## Foundation
+
+- Next.js App Router, React, and TypeScript
+- Tailwind CSS v4 design tokens
+- shadcn/ui with Base UI primitives
+- Motion with reduced-motion support
+- React Hook Form and Zod
+- Zustand for cross-route booking state
+- date-fns and React DayPicker
+- Embla Carousel
+- Sonner notifications
+- Lucide icons
+
+## Commands
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm run dev        # Start the development server
+npm run lint       # Run ESLint
+npm run typecheck  # Run TypeScript without emitting files
+npm run check      # Run lint and typecheck
+npm run build      # Create a production build
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Architecture
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```text
+src/
+├── app/                 # Thin route layer and route-level states
+├── components/
+│   ├── providers/       # Global client providers
+│   └── ui/              # Shared, accessible UI primitives
+├── config/              # Product and navigation configuration
+├── data/                # Mock repositories and fixtures
+├── features/            # Search, properties, booking, saved and trips
+├── hooks/               # Shared React hooks
+├── lib/                 # Framework-agnostic utilities
+├── stores/              # Small cross-route client stores
+├── styles/              # Brand and semantic design tokens
+└── types/               # Shared domain contracts
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Routes should remain thin. Product logic and feature-specific components belong in
+`src/features/<feature>`, while only genuinely reusable primitives belong in
+`src/components/ui`.
 
-## Learn More
+## Design system
 
-To learn more about Next.js, take a look at the following resources:
+Raw LumaStay brand values and semantic UI roles live in
+`src/styles/tokens.css`. Tailwind mappings and global accessibility rules live in
+`src/app/globals.css`.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+The visual system uses:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- Bodoni Moda for editorial display typography
+- Jost for interface and body typography
+- Deep forest, warm linen, paper, ink, and restrained antique brass
+- Sharp image frames, comfortable controls, and pill-shaped primary actions
+- A minimum 44px target for primary controls
 
-## Deploy on Vercel
+## Product scope
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+The planned frontend routes cover landing, search, property details, room selection,
+booking, checkout, confirmation, saved properties, and booking history. Data, payment,
+authentication, and availability are simulated locally; no backend is required.
