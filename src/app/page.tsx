@@ -1,4 +1,5 @@
 import { SiteHeader } from "@/components/layout/site-header";
+import { ExperienceCollections } from "@/components/marketing/experience-collections";
 import { LandingHero } from "@/components/marketing/landing-hero";
 import { CuratedStays } from "@/features/properties";
 
@@ -8,6 +9,7 @@ export default function Home() {
       <SiteHeader />
       <LandingHero />
       <CuratedStays />
+      <ExperienceCollections />
     </main>
   );
 }
