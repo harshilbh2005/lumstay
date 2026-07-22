@@ -314,6 +314,16 @@ Important limitation: footer destination, company, support, account, and legal r
 
 Important limitation: destination links point to the planned `/search` route, which is not implemented yet.
 
+### Editorial Luma Edit page
+
+- Publication-style editorial route at `/edit` with a masthead, issue metadata, and department index
+- Seven locally mocked stories across places, rooms, tables, and rituals
+- Monochrome Kyoto opening essay, full-width room feature, compact field-note ledger, and editor’s letter
+- Server-rendered feature with no client state, carousel, or animation dependency
+- All story imagery and alt text resolve through the central media catalog
+- Story context links point only to the implemented destination atlas instead of creating broken article routes
+- Verified at 1440×1000 and 390×844 with decoded images, no horizontal overflow, visible keyboard focus, hover feedback, 44px links, and sticky-header-safe anchors
+
 ## Current homepage order
 
 `src/app/page.tsx` renders:
@@ -326,12 +336,13 @@ Important limitation: destination links point to the planned `/search` route, wh
 6. `ClosingBookingCta`
 7. `SiteFooter`
 
-The implemented routes are `/` and `/destinations`. Navigation links to other planned pages will use the branded not-found state until their routes are built.
+The implemented routes are `/`, `/destinations`, and `/edit`. Navigation links to other planned pages will use the branded not-found state until their routes are built.
 
 ## Current mock-data state
 
 - `mockProperties`: 3 property summaries
 - `mockDestinations`: 7 destination summaries used by `/destinations`
+- `mockEditorialStories`: 7 editorial story summaries used by `/edit`
 - `mockRooms`: empty array
 - `mockBookings`: empty array
 - No full property-detail fixture yet
@@ -342,6 +353,7 @@ The implemented routes are `/` and `/destinations`. Navigation links to other pl
 ## Commit history
 
 ```text
+8729ec6 feat: add destination discovery page
 5c159f3 feat: add premium global footer
 fc88571 feat: add homepage closing search CTA
 10e7d4d feat: add booking confidence section
@@ -368,7 +380,7 @@ Build each item separately, research it first, verify it, and commit it before m
 ### Phase 2 — Discovery and search
 
 3. ~~Destination discovery page at `/destinations`~~ Complete
-4. Editorial Luma Edit page at `/edit`
+4. ~~Editorial Luma Edit page at `/edit`~~ Complete
 5. Search/results page at `/search`
 6. Search query handoff from the homepage hero
 7. Destination autocomplete and recent/popular suggestions
@@ -426,4 +438,4 @@ Build each item separately, research it first, verify it, and commit it before m
 
 ## Recommended immediate next step
 
-Build the **editorial Luma Edit page at `/edit`** as the next isolated page. Research premium travel editorial and magazine-index patterns in Refero first, then expand only the mock content required for that page. Do not begin the search/results page in the same unit.
+Build the **search/results page at `/search`** as the next isolated page. Research premium hotel-search result layouts and responsive filtering patterns in Refero first, then expand only the mock property data required to make the initial results view credible. Do not connect the homepage hero query handoff or begin autocomplete in the same unit.

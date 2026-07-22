@@ -44,6 +44,21 @@ export interface DestinationSummary {
   pace: string;
 }
 
+export type EditorialDepartment = "Places" | "Rooms" | "Tables" | "Rituals";
+
+export interface EditorialStory {
+  id: string;
+  slug: string;
+  title: string;
+  deck: string;
+  department: EditorialDepartment;
+  author: string;
+  readingTime: string;
+  mediaId: string;
+  relatedHref: string;
+  relatedLabel: string;
+}
+
 export interface Room {
   id: string;
   propertyId: string;

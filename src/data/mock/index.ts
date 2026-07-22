@@ -13,6 +13,7 @@ export type {
   MediaSource,
 } from "./media";
 export { mockDestinations } from "./destinations";
+export { mockEditorialStories } from "./editorial-stories";
 export { mockProperties } from "./properties";
 
 export const mockRooms: Room[] = [];
