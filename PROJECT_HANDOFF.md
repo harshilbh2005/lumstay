@@ -1,6 +1,6 @@
 # LumaStay Project Handoff
 
-Last updated: 19 July 2026
+Last updated: 22 July 2026
 
 Repository: `/Users/harshilbrahmani/Developer/Personal/lumstay`
 
@@ -286,6 +286,23 @@ Important limitation: collection links target `/search?...`, which is not implem
 
 Important limitation: `/about/curation` and `/support` are not implemented.
 
+### Homepage closing search CTA
+
+- Light, typography-led closing prompt that is deliberately distinct from the image-led hero
+- Single action returns to and focuses the existing hero destination field
+- Reduced-motion-aware smooth scrolling
+- No duplicated booking form or decorative photography
+
+### Premium global footer
+
+- Deep-forest global footer with a featured-destination rail
+- Company, support, account, legal, market, and currency navigation
+- Large LumaStay identity block with restrained editorial typography
+- Server-rendered layout with accessible navigation landmarks, focus states, and mobile targets
+- Prefetch disabled for planned routes so the footer does not generate avoidable 404 prefetch errors
+
+Important limitation: footer destination, company, support, account, and legal routes are planned but mostly not implemented yet.
+
 ## Current homepage order
 
 `src/app/page.tsx` renders:
@@ -295,6 +312,8 @@ Important limitation: `/about/curation` and `/support` are not implemented.
 3. `CuratedStays`
 4. `ExperienceCollections`
 5. `BookingConfidence`
+6. `ClosingBookingCta`
+7. `SiteFooter`
 
 Only the `/` route currently exists. Navigation links to planned pages will use the branded not-found state until their routes are built.
 
@@ -311,6 +330,7 @@ Only the `/` route currently exists. Navigation links to planned pages will use 
 ## Commit history
 
 ```text
+fc88571 feat: add homepage closing search CTA
 10e7d4d feat: add booking confidence section
 9bd0ae0 feat: add experience collection gallery
 b40cf70 fix: refine saved stay feedback
@@ -329,8 +349,8 @@ Build each item separately, research it first, verify it, and commit it before m
 
 ### Phase 1 — Finish the homepage
 
-1. Homepage closing booking/search call to action
-2. Premium global footer with destination, company, support, legal, currency, and account links
+1. ~~Homepage closing booking/search call to action~~ Complete
+2. ~~Premium global footer with destination, company, support, legal, currency, and account links~~ Complete
 
 ### Phase 2 — Discovery and search
 
@@ -393,4 +413,4 @@ Build each item separately, research it first, verify it, and commit it before m
 
 ## Recommended immediate next step
 
-Build the **homepage closing booking/search call to action** as the next isolated component. Research it in Refero first, make it visually distinct from the existing hero and confidence section, verify it at desktop/mobile sizes, and commit it. Build the global footer only after that component is approved.
+Build the **destination discovery page at `/destinations`** as the next isolated page. Research destination-index and editorial travel discovery patterns in Refero first, then expand only the mock data required to make that page credible. Do not begin the search/results page in the same unit.
