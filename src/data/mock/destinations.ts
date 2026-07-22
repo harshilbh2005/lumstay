@@ -1,0 +1,95 @@
+import type { DestinationSummary } from "@/types/domain";
+
+export const mockDestinations = [
+  {
+    id: "destination-kyoto",
+    slug: "kyoto",
+    name: "Kyoto",
+    country: "Japan",
+    region: "Kansai",
+    character: "Temple city",
+    description:
+      "Lantern-lit lanes, quiet gardens, and old timber houses reward travelers who leave room in the day for detours.",
+    mediaId: "kyoto-street-dusk",
+    bestSeason: "March–May / October–November",
+    pace: "Measured",
+  },
+  {
+    id: "destination-amalfi-coast",
+    slug: "amalfi-coast",
+    name: "Amalfi Coast",
+    country: "Italy",
+    region: "Campania",
+    character: "Coastal terraces",
+    description:
+      "Lemon groves, weathered villages, and paths above the sea make the coast most memorable beyond the main road.",
+    mediaId: "casa-serein-exterior",
+    bestSeason: "April–June / September",
+    pace: "Sun-warmed",
+  },
+  {
+    id: "destination-south-iceland",
+    slug: "south-iceland",
+    name: "South Iceland",
+    country: "Iceland",
+    region: "Suðurland",
+    character: "Elemental country",
+    description:
+      "Black shorelines, glacial valleys, and cabins beside dark water invite an unhurried way through the landscape.",
+    mediaId: "stillwater-cabin-exterior",
+    bestSeason: "May–September",
+    pace: "Remote",
+  },
+  {
+    id: "destination-alula",
+    slug: "alula",
+    name: "AlUla",
+    country: "Saudi Arabia",
+    region: "Hejaz",
+    character: "Desert valley",
+    description:
+      "Monumental sandstone and palm-lined oases reveal a place shaped as much by silence as by scale.",
+    mediaId: "sahra-fold-exterior",
+    bestSeason: "October–March",
+    pace: "Elemental",
+  },
+  {
+    id: "destination-udaipur",
+    slug: "udaipur",
+    name: "Udaipur",
+    country: "India",
+    region: "Rajasthan",
+    character: "Lakeside city",
+    description:
+      "Pale-stone palaces, rooftop kitchens, and still water lend the city a rare softness at the edges.",
+    mediaId: "aster-house-hero",
+    bestSeason: "October–March",
+    pace: "Lyrical",
+  },
+  {
+    id: "destination-jaipur",
+    slug: "jaipur",
+    name: "Jaipur",
+    country: "India",
+    region: "Rajasthan",
+    character: "Living heritage",
+    description:
+      "Stepwells, ateliers, and shaded courtyards offer a more intimate rhythm behind the city’s rose-toned façades.",
+    mediaId: "nila-haveli-courtyard-dining",
+    bestSeason: "October–February",
+    pace: "Layered",
+  },
+  {
+    id: "destination-graubunden",
+    slug: "graubunden",
+    name: "Graubünden",
+    country: "Switzerland",
+    region: "Swiss Alps",
+    character: "High alpine",
+    description:
+      "Mineral baths, quiet valleys, and long mountain tables bring warmth to Switzerland’s wildest canton.",
+    mediaId: "vela-alpine-bath",
+    bestSeason: "December–March / June–September",
+    pace: "Restorative",
+  },
+] as const satisfies readonly DestinationSummary[];

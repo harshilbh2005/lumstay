@@ -303,6 +303,17 @@ Important limitation: `/about/curation` and `/support` are not implemented.
 
 Important limitation: footer destination, company, support, account, and legal routes are planned but mostly not implemented yet.
 
+### Destination discovery page
+
+- Editorial destination index at `/destinations` with seven locally mocked places
+- Compact introduction, in-page destination ledger, contained Kyoto lead story, and asymmetric image atlas
+- Server-rendered feature with no client state or animation dependency
+- Destination imagery and alt text resolve through the central media catalog
+- Search links preserve the intended destination query and disable prefetch until `/search` exists
+- Verified at 1440×1000 and 390×844 with no horizontal overflow, decoded images, visible focus, hover feedback, and sticky-header-safe anchor offsets
+
+Important limitation: destination links point to the planned `/search` route, which is not implemented yet.
+
 ## Current homepage order
 
 `src/app/page.tsx` renders:
@@ -315,11 +326,12 @@ Important limitation: footer destination, company, support, account, and legal r
 6. `ClosingBookingCta`
 7. `SiteFooter`
 
-Only the `/` route currently exists. Navigation links to planned pages will use the branded not-found state until their routes are built.
+The implemented routes are `/` and `/destinations`. Navigation links to other planned pages will use the branded not-found state until their routes are built.
 
 ## Current mock-data state
 
 - `mockProperties`: 3 property summaries
+- `mockDestinations`: 7 destination summaries used by `/destinations`
 - `mockRooms`: empty array
 - `mockBookings`: empty array
 - No full property-detail fixture yet
@@ -330,6 +342,7 @@ Only the `/` route currently exists. Navigation links to planned pages will use 
 ## Commit history
 
 ```text
+5c159f3 feat: add premium global footer
 fc88571 feat: add homepage closing search CTA
 10e7d4d feat: add booking confidence section
 9bd0ae0 feat: add experience collection gallery
@@ -354,7 +367,7 @@ Build each item separately, research it first, verify it, and commit it before m
 
 ### Phase 2 — Discovery and search
 
-3. Destination discovery page at `/destinations`
+3. ~~Destination discovery page at `/destinations`~~ Complete
 4. Editorial Luma Edit page at `/edit`
 5. Search/results page at `/search`
 6. Search query handoff from the homepage hero
@@ -413,4 +426,4 @@ Build each item separately, research it first, verify it, and commit it before m
 
 ## Recommended immediate next step
 
-Build the **destination discovery page at `/destinations`** as the next isolated page. Research destination-index and editorial travel discovery patterns in Refero first, then expand only the mock data required to make that page credible. Do not begin the search/results page in the same unit.
+Build the **editorial Luma Edit page at `/edit`** as the next isolated page. Research premium travel editorial and magazine-index patterns in Refero first, then expand only the mock content required for that page. Do not begin the search/results page in the same unit.

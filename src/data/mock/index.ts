@@ -12,6 +12,7 @@ export type {
   MediaOrigin,
   MediaSource,
 } from "./media";
+export { mockDestinations } from "./destinations";
 export { mockProperties } from "./properties";
 
 export const mockRooms: Room[] = [];

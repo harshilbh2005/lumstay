@@ -31,6 +31,19 @@ export interface PropertySummary {
   isNew?: boolean;
 }
 
+export interface DestinationSummary {
+  id: string;
+  slug: string;
+  name: string;
+  country: string;
+  region: string;
+  character: string;
+  description: string;
+  mediaId: string;
+  bestSeason: string;
+  pace: string;
+}
+
 export interface Room {
   id: string;
   propertyId: string;
