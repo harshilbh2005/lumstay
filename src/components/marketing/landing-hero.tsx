@@ -1,7 +1,8 @@
 import Image from "next/image";
 
-import { getMediaById } from "@/data/mock";
+import { getMediaById, mockDestinations } from "@/data/mock";
 import { HeroSearch } from "@/features/search";
+import { getDestinationSuggestions } from "@/features/search/lib/destination-suggestions";
 
 export function LandingHero() {
   const hero = getMediaById("aster-house-hero");
@@ -9,6 +10,8 @@ export function LandingHero() {
   if (!hero) {
     throw new Error("The Aster House hero image is missing from the media catalog.");
   }
+
+  const destinationSuggestions = getDestinationSuggestions(mockDestinations);
 
   return (
     <section
@@ -51,7 +54,7 @@ export function LandingHero() {
           </p>
         </div>
 
-        <HeroSearch />
+        <HeroSearch destinationSuggestions={destinationSuggestions} />
       </div>
 
       <aside className="absolute top-9 right-[var(--space-page)] hidden text-right lg:block">

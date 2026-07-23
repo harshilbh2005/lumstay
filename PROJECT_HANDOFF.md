@@ -248,7 +248,7 @@ For each unit:
 - URL-backed handoff to `/search` with destination, date, adult, child, and room values
 - Responsive stacking and touch-friendly controls
 
-Important limitation: destination autocomplete and recent/popular suggestions are not implemented yet.
+Important limitation: destination suggestions are currently drawn from local mock data. The “recent” group is seeded editorially rather than learned from a guest’s history.
 
 ### The LumaStay Edit
 
@@ -336,7 +336,7 @@ Important limitation: destination links populate the `/search` summary, but the 
 - Homepage curation remains intentionally limited to the original first three properties
 - Verified at 1440×1000 and 390×844 with all six images decoded, no horizontal overflow, visible keyboard focus, hover feedback, working saved-state feedback, and 44px result-title targets
 
-Important limitation: the summary reads URL query parameters, but the six-property mock ledger is not filtered by them yet. Filters, sorting, autocomplete, mobile sheets, loading, empty, error, and retry states remain separate roadmap items. Result links point to the planned `/properties/[slug]` route, which is not implemented yet.
+Important limitation: the summary reads URL query parameters, but the six-property mock ledger is not filtered by them yet. Filters, sorting, mobile sheets, loading, empty, error, and retry states remain separate roadmap items. Result links point to the planned `/properties/[slug]` route, which is not implemented yet.
 
 ### Homepage search query handoff
 
@@ -348,7 +348,21 @@ Important limitation: the summary reads URL query parameters, but the six-proper
 - Blank-destination validation remains inline and accessible before navigation
 - Verified end to end at 1440×1000 and 390×844, including edited guest/room counts, direct destination links, malformed query fallback, URL persistence, and browser console review
 
-Important limitation: this unit persists and displays search intent only. It does not filter the editorial result set, add autocomplete, or introduce filter/sort/mobile-sheet behavior.
+Important limitation: this unit persists and displays search intent only. It does not filter the editorial result set or introduce filter/sort/mobile-sheet behavior.
+
+### Destination autocomplete
+
+- Refero-informed destination suggestion surface anchored above the existing hero search instead of introducing a separate search experience
+- Empty-query discovery split into two recent places and five popular places from the seven-place destination fixture
+- Local matching across destination name, country, region, and editorial character while preserving unmatched free-text searches
+- Accessible combobox semantics with active-descendant tracking, wrapping arrow navigation, Home/End jumps, Enter selection, Escape/Tab dismissal, and outside-click closure
+- Active keyboard options remain visible inside the scrollable suggestion ledger
+- Full-row 64px pointer targets, visible active styling, live status feedback, and restrained paper/linen/forest/brass presentation
+- Compact mobile panel stays below the sticky header, scrolls independently, and introduces no horizontal overflow
+- Existing destination, date, guest, and room query handoff remains intact
+- Verified at 1440×1000 and 390×844, including discovery groups, local filtering, pointer and keyboard selection, selected and free-text submissions, active-option scrolling, 64px mobile targets, and browser console review
+
+Important limitation: suggestions are local and finite, and recent searches are not persisted between visits. Remote place lookup, typo tolerance, hotel-name search, and personal history remain future data/product work.
 
 ## Current homepage order
 
@@ -367,7 +381,7 @@ The implemented routes are `/`, `/destinations`, `/edit`, and `/search`. Navigat
 ## Current mock-data state
 
 - `mockProperties`: 6 property summaries; the homepage intentionally renders the first 3
-- `mockDestinations`: 7 destination summaries used by `/destinations`
+- `mockDestinations`: 7 destination summaries shared by `/destinations` and the hero autocomplete
 - `mockEditorialStories`: 7 editorial story summaries used by `/edit`
 - `mockRooms`: empty array
 - `mockBookings`: empty array
@@ -379,6 +393,7 @@ The implemented routes are `/`, `/destinations`, `/edit`, and `/search`. Navigat
 ## Commit history
 
 ```text
+0060d54 feat: connect hero search to results
 4c1dcfb feat: add initial search results page
 d26e196 feat: add editorial Luma Edit page
 8729ec6 feat: add destination discovery page
@@ -411,7 +426,7 @@ Build each item separately, research it first, verify it, and commit it before m
 4. ~~Editorial Luma Edit page at `/edit`~~ Complete
 5. ~~Search/results page at `/search`~~ Complete
 6. ~~Search query handoff from the homepage hero~~ Complete
-7. Destination autocomplete and recent/popular suggestions
+7. ~~Destination autocomplete and recent/popular suggestions~~ Complete
 8. Property listing layout with responsive card variants
 9. Price, facility, rating, property-type, and atmosphere filters
 10. Sorting controls and applied-filter chips
@@ -466,4 +481,4 @@ Build each item separately, research it first, verify it, and commit it before m
 
 ## Recommended immediate next step
 
-Build **destination autocomplete with recent/popular suggestions** as the next isolated feature. Research premium travel autocomplete behavior in Refero first, then add a focused suggestion surface to the existing homepage destination field with strong keyboard, focus, selection, empty-query, and mobile behavior. Keep the current query handoff intact. Do not begin result filtering, sorting, property-card variants, or mobile filter/search sheets in the same unit.
+Build the **property listing layout with responsive card variants** as the next isolated feature. Research premium editorial hotel-result layouts in Refero first, then refine the current six-property ledger into intentional desktop and compact mobile variants while preserving its query summary, media catalog, saved feedback, and LumaStay ordering language. Do not begin filters, sorting, mobile sheets, property details, or additional result states in the same unit.

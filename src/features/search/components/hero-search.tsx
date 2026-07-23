@@ -7,7 +7,6 @@ import {
   CalendarBlank,
   Check,
   MagnifyingGlass,
-  MapPin,
   Minus,
   Plus,
   SpinnerGap,
@@ -22,6 +21,8 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { DestinationCombobox } from "@/features/search/components/destination-combobox";
+import type { DestinationSuggestion } from "@/features/search/lib/destination-suggestions";
 import { cn } from "@/lib/utils";
 
 const mockToday = new Date(2026, 6, 19);
@@ -94,7 +95,11 @@ function formatStayDate(date?: Date) {
   return date ? format(date, "dd MMM") : "Choose date";
 }
 
-export function HeroSearch() {
+export function HeroSearch({
+  destinationSuggestions,
+}: {
+  destinationSuggestions: readonly DestinationSuggestion[];
+}) {
   const router = useRouter();
   const [destination, setDestination] = React.useState("Udaipur, India");
   const [dateRange, setDateRange] = React.useState<DateRange | undefined>(
@@ -152,39 +157,22 @@ export function HeroSearch() {
       noValidate
       className="w-full min-w-0 max-w-[min(72rem,calc(100vw-2.5rem))]"
     >
-      <div className="luma-search-surface grid w-full min-w-0 gap-2 overflow-hidden rounded-[1.25rem] p-2 lg:grid-cols-[1.35fr_1.4fr_0.9fr_auto] lg:gap-px lg:p-px">
-        <label
-          htmlFor="hero-destination"
-          className={cn(
-            "group flex min-h-16 min-w-0 items-center gap-3 rounded-[0.9rem] bg-white px-4 transition-colors duration-200 lg:rounded-l-[1.15rem] lg:rounded-r-none lg:px-5",
-            error && !destination.trim() && "ring-2 ring-destructive/70",
-          )}
-        >
-          <MapPin
-            aria-hidden="true"
-            size={20}
-            weight="duotone"
-            className="shrink-0 text-brand-brass"
-          />
-          <span className="min-w-0 flex-1">
-            <span className="block text-[0.625rem] font-bold tracking-[0.16em] text-muted-foreground uppercase">
-              Where
-            </span>
-            <input
-              id="hero-destination"
-              name="destination"
-              value={destination}
-              onChange={(event) => {
-                setDestination(event.target.value);
-                if (error) setError("");
-              }}
-              placeholder="City, coast or hotel"
-              aria-invalid={Boolean(error && !destination.trim())}
-              aria-describedby={error ? "hero-search-message" : undefined}
-              className="mt-0.5 w-full bg-transparent text-[0.9375rem] font-semibold text-foreground outline-none placeholder:font-normal placeholder:text-muted-foreground"
-            />
-          </span>
-        </label>
+      <div className="luma-search-surface grid w-full min-w-0 gap-2 overflow-visible rounded-[1.25rem] p-2 lg:grid-cols-[1.35fr_1.4fr_0.9fr_auto] lg:gap-px lg:p-px">
+        <DestinationCombobox
+          value={destination}
+          suggestions={destinationSuggestions}
+          hasError={Boolean(error && !destination.trim())}
+          onChange={(nextDestination) => {
+            setDestination(nextDestination);
+            if (status) setStatus("");
+          }}
+          onClearError={() => {
+            if (error) setError("");
+          }}
+          onSelect={(suggestion) => {
+            setStatus(`${suggestion.name}, ${suggestion.country} selected.`);
+          }}
+        />
 
         <Popover>
           <PopoverTrigger
