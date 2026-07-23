@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { format } from "date-fns";
+import { useRouter } from "next/navigation";
 import {
   CalendarBlank,
   Check,
@@ -94,6 +95,7 @@ function formatStayDate(date?: Date) {
 }
 
 export function HeroSearch() {
+  const router = useRouter();
   const [destination, setDestination] = React.useState("Udaipur, India");
   const [dateRange, setDateRange] = React.useState<DateRange | undefined>(
     initialDateRange,
@@ -101,14 +103,7 @@ export function HeroSearch() {
   const [guests, setGuests] = React.useState(initialGuests);
   const [error, setError] = React.useState("");
   const [status, setStatus] = React.useState("");
-  const [isSearching, setIsSearching] = React.useState(false);
-  const timerRef = React.useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  React.useEffect(() => {
-    return () => {
-      if (timerRef.current) clearTimeout(timerRef.current);
-    };
-  }, []);
+  const [isPending, startTransition] = React.useTransition();
 
   function updateGuests(key: keyof GuestState, value: number) {
     setGuests((current) => ({ ...current, [key]: value }));
@@ -130,13 +125,20 @@ export function HeroSearch() {
     }
 
     setError("");
-    setStatus("Searching the LumaStay edit…");
-    setIsSearching(true);
+    setStatus("Opening the LumaStay edit…");
 
-    timerRef.current = setTimeout(() => {
-      setIsSearching(false);
-      setStatus(`42 considered stays near ${destination} are ready to explore.`);
-    }, 850);
+    const params = new URLSearchParams({
+      destination: destination.trim(),
+      checkIn: format(dateRange.from, "yyyy-MM-dd"),
+      checkOut: format(dateRange.to, "yyyy-MM-dd"),
+      adults: String(guests.adults),
+      children: String(guests.children),
+      rooms: String(guests.rooms),
+    });
+
+    startTransition(() => {
+      router.push(`/search?${params.toString()}`);
+    });
   }
 
   const guestCount = guests.adults + guests.children;
@@ -144,6 +146,8 @@ export function HeroSearch() {
 
   return (
     <form
+      action="/search"
+      method="get"
       onSubmit={handleSubmit}
       noValidate
       className="w-full min-w-0 max-w-[min(72rem,calc(100vw-2.5rem))]"
@@ -296,24 +300,32 @@ export function HeroSearch() {
 
         <Button
           type="submit"
-          disabled={isSearching}
+          disabled={isPending}
           className="luma-search-button min-h-16 rounded-[1rem] px-5 text-[0.9375rem] font-semibold tracking-[0.018em] lg:min-w-40 lg:rounded-l-none lg:rounded-r-[1.15rem] lg:border-l-0"
         >
           <span className="relative z-10 flex size-8 items-center justify-center rounded-full bg-white/10 ring-1 ring-white/18 transition-[background-color,transform] duration-300 ease-luma group-hover/button:scale-105 group-hover/button:bg-white/16">
-            {isSearching ? (
+            {isPending ? (
               <SpinnerGap aria-hidden="true" className="animate-spin" size={17} />
             ) : (
               <MagnifyingGlass aria-hidden="true" size={17} weight="bold" />
             )}
           </span>
           <span className="relative z-10">
-            {isSearching ? "Searching" : "Find a stay"}
+            {isPending ? "Opening" : "Find a stay"}
           </span>
         </Button>
       </div>
 
-      <input type="hidden" name="checkIn" value={dateRange?.from?.toISOString() ?? ""} />
-      <input type="hidden" name="checkOut" value={dateRange?.to?.toISOString() ?? ""} />
+      <input
+        type="hidden"
+        name="checkIn"
+        value={dateRange?.from ? format(dateRange.from, "yyyy-MM-dd") : ""}
+      />
+      <input
+        type="hidden"
+        name="checkOut"
+        value={dateRange?.to ? format(dateRange.to, "yyyy-MM-dd") : ""}
+      />
       <input type="hidden" name="adults" value={guests.adults} />
       <input type="hidden" name="children" value={guests.children} />
       <input type="hidden" name="rooms" value={guests.rooms} />

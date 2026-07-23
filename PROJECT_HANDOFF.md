@@ -244,10 +244,11 @@ For each unit:
 - Date-range calendar popover
 - Adult, child, and room counters
 - Validation for missing destination and incomplete date range
-- Simulated 850ms searching state and live status message
+- Pending navigation state and live status message
+- URL-backed handoff to `/search` with destination, date, adult, child, and room values
 - Responsive stacking and touch-friendly controls
 
-Important limitation: the hero search does **not** navigate to `/search` or apply real query state. It currently simulates success and reports “42 considered stays.”
+Important limitation: destination autocomplete and recent/popular suggestions are not implemented yet.
 
 ### The LumaStay Edit
 
@@ -274,7 +275,7 @@ Important limitation: saved state currently lives inside each `SaveStayButton` w
 - Mobile swipe rail with intentional next-card preview
 - Images pulled from the typed media catalog with focal-point cropping
 
-Important limitation: collection links target `/search?...`, which is not implemented yet.
+Important limitation: collection links reach `/search?...`, but the results page does not apply collection filtering yet.
 
 ### The Luma Promise
 
@@ -312,7 +313,7 @@ Important limitation: footer destination, company, support, account, and legal r
 - Search links preserve the intended destination query and disable prefetch until `/search` exists
 - Verified at 1440×1000 and 390×844 with no horizontal overflow, decoded images, visible focus, hover feedback, and sticky-header-safe anchor offsets
 
-Important limitation: destination links point to the planned `/search` route, which is not implemented yet.
+Important limitation: destination links populate the `/search` summary, but the mock result ledger is not destination-filtered yet.
 
 ### Editorial Luma Edit page
 
@@ -326,8 +327,8 @@ Important limitation: destination links point to the planned `/search` route, wh
 
 ### Initial search results page
 
-- Static, server-rendered search foundation at `/search`
-- Compact generic search context for destination, dates, and guests with a return link to the homepage search
+- Request-time rendered search foundation at `/search`
+- Compact search context for destination, dates, and guests with a return link to the homepage search
 - Six-property editorial result ledger with image, location, rating, review count, atmosphere, facilities, price, and saved action
 - Desktop filter-rail space is established through a restrained “Luma order” sidebar without implementing filters early
 - Result imagery and alt text resolve through the central media catalog
@@ -335,7 +336,19 @@ Important limitation: destination links point to the planned `/search` route, wh
 - Homepage curation remains intentionally limited to the original first three properties
 - Verified at 1440×1000 and 390×844 with all six images decoded, no horizontal overflow, visible keyboard focus, hover feedback, working saved-state feedback, and 44px result-title targets
 
-Important limitation: `/search` deliberately does not read or apply URL query parameters yet. Filters, sorting, autocomplete, mobile sheets, loading, empty, error, and retry states remain separate roadmap items. Result links point to the planned `/properties/[slug]` route, which is not implemented yet.
+Important limitation: the summary reads URL query parameters, but the six-property mock ledger is not filtered by them yet. Filters, sorting, autocomplete, mobile sheets, loading, empty, error, and retry states remain separate roadmap items. Result links point to the planned `/properties/[slug]` route, which is not implemented yet.
+
+### Homepage search query handoff
+
+- The hero now performs a real client-side transition to `/search`
+- Destination, check-in, check-out, adults, children, and rooms are encoded as shareable URL parameters
+- Date values use stable `yyyy-MM-dd` strings instead of timezone-sensitive timestamps
+- The results summary safely normalizes destination text, validates dates, bounds guest/room counts, and supplies resilient defaults for incomplete or malformed direct URLs
+- The existing linen summary remains compact on desktop and collapses into a clear vertical ledger on mobile
+- Blank-destination validation remains inline and accessible before navigation
+- Verified end to end at 1440×1000 and 390×844, including edited guest/room counts, direct destination links, malformed query fallback, URL persistence, and browser console review
+
+Important limitation: this unit persists and displays search intent only. It does not filter the editorial result set, add autocomplete, or introduce filter/sort/mobile-sheet behavior.
 
 ## Current homepage order
 
@@ -366,6 +379,7 @@ The implemented routes are `/`, `/destinations`, `/edit`, and `/search`. Navigat
 ## Commit history
 
 ```text
+4c1dcfb feat: add initial search results page
 d26e196 feat: add editorial Luma Edit page
 8729ec6 feat: add destination discovery page
 5c159f3 feat: add premium global footer
@@ -396,7 +410,7 @@ Build each item separately, research it first, verify it, and commit it before m
 3. ~~Destination discovery page at `/destinations`~~ Complete
 4. ~~Editorial Luma Edit page at `/edit`~~ Complete
 5. ~~Search/results page at `/search`~~ Complete
-6. Search query handoff from the homepage hero
+6. ~~Search query handoff from the homepage hero~~ Complete
 7. Destination autocomplete and recent/popular suggestions
 8. Property listing layout with responsive card variants
 9. Price, facility, rating, property-type, and atmosphere filters
@@ -452,4 +466,4 @@ Build each item separately, research it first, verify it, and commit it before m
 
 ## Recommended immediate next step
 
-Connect the **homepage hero query handoff** as the next isolated feature. Research premium hotel-search transitions and compact persisted search summaries in Refero first. Replace the simulated success-only state with navigation to `/search`, carry destination, dates, and guest counts through the URL, and let the results page reflect that context. Do not begin destination autocomplete, filters, sorting, or mobile filter/search sheets in the same unit.
+Build **destination autocomplete with recent/popular suggestions** as the next isolated feature. Research premium travel autocomplete behavior in Refero first, then add a focused suggestion surface to the existing homepage destination field with strong keyboard, focus, selection, empty-query, and mobile behavior. Keep the current query handoff intact. Do not begin result filtering, sorting, property-card variants, or mobile filter/search sheets in the same unit.

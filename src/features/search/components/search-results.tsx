@@ -12,28 +12,11 @@ import { getMediaById, mockProperties } from "@/data/mock";
 import type { PropertySummary } from "@/types/domain";
 
 import { SaveStayButton } from "@/features/properties/components/save-stay-button";
+import type { SearchContext } from "@/features/search/lib/search-context";
 
 const priceFormatter = new Intl.NumberFormat("en-IN", {
   maximumFractionDigits: 0,
 });
-
-const searchContext = [
-  {
-    label: "Where",
-    value: "Across the LumaStay world",
-    icon: MapPin,
-  },
-  {
-    label: "When",
-    value: "Any dates",
-    icon: CalendarBlank,
-  },
-  {
-    label: "Who",
-    value: "2 guests · 1 room",
-    icon: UsersThree,
-  },
-] as const;
 
 function ResultRow({
   property,
@@ -164,7 +147,25 @@ function ResultRow({
   );
 }
 
-export function SearchResults() {
+export function SearchResults({ context }: { context: SearchContext }) {
+  const searchContext = [
+    {
+      label: "Where",
+      value: context.destination,
+      icon: MapPin,
+    },
+    {
+      label: "When",
+      value: context.dates,
+      icon: CalendarBlank,
+    },
+    {
+      label: "Who",
+      value: context.guests,
+      icon: UsersThree,
+    },
+  ] as const;
+
   return (
     <section
       aria-labelledby="search-results-title"
