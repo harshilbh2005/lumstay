@@ -334,7 +334,10 @@ Important limitation: destination links populate the `/search` summary, but the 
 - Result imagery and alt text resolve through the central media catalog
 - Property summary media now uses catalog IDs instead of repeating image paths
 - Homepage curation remains intentionally limited to the original first three properties
-- Verified at 1440×1000 and 390×844 with all six images decoded, no horizontal overflow, visible keyboard focus, hover feedback, working saved-state feedback, and 44px result-title targets
+- The first result uses a more generous desktop composition while ranks 02–06 tighten into comparison-friendly editorial rows
+- One semantic card structure adapts below the tablet breakpoint into a sharp 16:10 image stack, two-column fact ledger, and compact price/action row
+- Responsive image sizing preserves catalog focal points, and only saved-state feedback remains client-side
+- Verified at 1440×1000 and 390×844 with all six images decoded, no horizontal overflow, visible brass keyboard focus, hover feedback, working saved-state feedback, and 44px controls
 
 Important limitation: the summary reads URL query parameters, but the six-property mock ledger is not filtered by them yet. Filters, sorting, mobile sheets, loading, empty, error, and retry states remain separate roadmap items. Result links point to the planned `/properties/[slug]` route, which is not implemented yet.
 
@@ -393,6 +396,7 @@ The implemented routes are `/`, `/destinations`, `/edit`, and `/search`. Navigat
 ## Commit history
 
 ```text
+ec095a2 feat: add destination autocomplete
 0060d54 feat: connect hero search to results
 4c1dcfb feat: add initial search results page
 d26e196 feat: add editorial Luma Edit page
@@ -427,7 +431,7 @@ Build each item separately, research it first, verify it, and commit it before m
 5. ~~Search/results page at `/search`~~ Complete
 6. ~~Search query handoff from the homepage hero~~ Complete
 7. ~~Destination autocomplete and recent/popular suggestions~~ Complete
-8. Property listing layout with responsive card variants
+8. ~~Property listing layout with responsive card variants~~ Complete
 9. Price, facility, rating, property-type, and atmosphere filters
 10. Sorting controls and applied-filter chips
 11. Mobile search and filter sheets
@@ -481,4 +485,4 @@ Build each item separately, research it first, verify it, and commit it before m
 
 ## Recommended immediate next step
 
-Build the **property listing layout with responsive card variants** as the next isolated feature. Research premium editorial hotel-result layouts in Refero first, then refine the current six-property ledger into intentional desktop and compact mobile variants while preserving its query summary, media catalog, saved feedback, and LumaStay ordering language. Do not begin filters, sorting, mobile sheets, property details, or additional result states in the same unit.
+Build **price, facility, rating, property-type, and atmosphere filters** as the next isolated feature. Research premium hotel-filter patterns in Refero first, then add a restrained desktop filtering experience that works against the local property fixture while preserving the editorial result cards, query summary, saved feedback, and LumaStay ordering language. Expand only the domain/mock fields required to exercise these filters. Do not begin sorting, applied-filter chips, mobile sheets, loading/empty/error states, pagination, or property details in the same unit.

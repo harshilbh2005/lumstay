@@ -1,151 +1,14 @@
-import Image from "next/image";
 import Link from "next/link";
 import {
   ArrowRight,
   CalendarBlank,
   MapPin,
-  Star,
   UsersThree,
 } from "@phosphor-icons/react/ssr";
 
-import { getMediaById, mockProperties } from "@/data/mock";
-import type { PropertySummary } from "@/types/domain";
-
-import { SaveStayButton } from "@/features/properties/components/save-stay-button";
+import { mockProperties } from "@/data/mock";
+import { PropertyResultCard } from "@/features/search/components/property-result-card";
 import type { SearchContext } from "@/features/search/lib/search-context";
-
-const priceFormatter = new Intl.NumberFormat("en-IN", {
-  maximumFractionDigits: 0,
-});
-
-function ResultRow({
-  property,
-  index,
-}: {
-  property: PropertySummary;
-  index: number;
-}) {
-  const media = getMediaById(property.mediaId);
-
-  if (!media) {
-    return null;
-  }
-
-  return (
-    <article className="group grid min-w-0 gap-5 py-8 sm:gap-7 sm:py-10 xl:grid-cols-[minmax(18rem,0.95fr)_minmax(0,1.05fr)] xl:gap-10">
-      <div className="relative aspect-[4/3] min-w-0 overflow-hidden bg-muted">
-        <Link
-          href={`/properties/${property.slug}`}
-          prefetch={false}
-          aria-label={`View ${property.name}`}
-          className="absolute inset-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-brass focus-visible:ring-inset"
-        >
-          <Image
-            fill
-            src={media.src}
-            alt={media.alt}
-            sizes="(max-width: 1279px) calc(100vw - 2.5rem), 36vw"
-            priority={index === 0}
-            className="object-cover transition-transform duration-500 ease-luma group-hover:scale-[1.018]"
-            style={{ objectPosition: media.focalPoint }}
-          />
-          <span
-            aria-hidden="true"
-            className="absolute inset-0 bg-gradient-to-t from-brand-forest-deep/22 via-transparent to-transparent"
-          />
-        </Link>
-
-        <div className="pointer-events-none absolute inset-x-4 top-4 flex items-start justify-between gap-4">
-          <span className="flex min-h-8 items-center border border-white/34 bg-brand-forest-deep/66 px-3 font-mono text-[0.625rem] tracking-[0.13em] text-white uppercase backdrop-blur-md">
-            {property.isNew
-              ? "Just added"
-              : property.isLumaPick
-                ? "Luma pick"
-                : "Considered stay"}
-          </span>
-          <SaveStayButton
-            propertyName={property.name}
-            className="pointer-events-auto shrink-0"
-          />
-        </div>
-
-        <span className="absolute right-4 bottom-4 font-mono text-[0.625rem] tracking-[0.14em] text-white/84">
-          {String(index + 1).padStart(2, "0")}
-        </span>
-      </div>
-
-      <div className="flex min-w-0 flex-col xl:py-1">
-        <div className="flex flex-wrap items-center justify-between gap-x-5 gap-y-2 font-mono text-[0.625rem] tracking-[0.11em] text-muted-foreground uppercase">
-          <span>
-            {property.location.city} · {property.location.country}
-          </span>
-          <span className="flex items-center gap-1.5 text-foreground">
-            <Star aria-hidden="true" size={11} weight="fill" />
-            {property.rating.toFixed(2)}
-            <span className="text-muted-foreground">
-              · {property.reviewCount} notes
-            </span>
-          </span>
-        </div>
-
-        <Link
-          href={`/properties/${property.slug}`}
-          prefetch={false}
-          className="mt-2 inline-flex min-h-11 w-fit items-center rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-4"
-        >
-          <h3 className="font-sans text-[clamp(2rem,3vw,3.25rem)] leading-[0.98] font-bold tracking-[-0.05em] text-brand-forest-deep">
-            {property.name}
-          </h3>
-        </Link>
-
-        <p className="mt-4 max-w-[54ch] text-base leading-7 text-muted-foreground">
-          {property.description}
-        </p>
-
-        <dl className="mt-7 grid gap-5 border-t border-border/85 pt-5 sm:grid-cols-2">
-          <div>
-            <dt className="font-mono text-[0.625rem] tracking-[0.13em] text-brand-stone uppercase">
-              The feeling
-            </dt>
-            <dd className="mt-2 text-sm leading-6 text-foreground">
-              {property.atmosphere.join(" · ")}
-            </dd>
-          </div>
-          <div>
-            <dt className="font-mono text-[0.625rem] tracking-[0.13em] text-brand-stone uppercase">
-              Worth knowing
-            </dt>
-            <dd className="mt-2 text-sm leading-6 text-foreground">
-              {property.facilities.join(" · ")}
-            </dd>
-          </div>
-        </dl>
-
-        <div className="mt-auto flex flex-wrap items-end justify-between gap-5 pt-8">
-          <p className="text-sm text-muted-foreground">
-            From{" "}
-            <span className="font-mono text-base font-medium text-foreground tabular-nums">
-              ₹{priceFormatter.format(property.priceFrom.amount)}
-            </span>{" "}
-            / night
-          </p>
-          <Link
-            href={`/properties/${property.slug}`}
-            prefetch={false}
-            className="group/link inline-flex min-h-11 items-center gap-3 border-b border-brand-forest-deep/45 text-sm font-semibold text-brand-forest-deep transition-colors duration-200 hover:border-brand-brass hover:text-brand-forest focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-4"
-          >
-            View the stay
-            <ArrowRight
-              aria-hidden="true"
-              size={16}
-              className="transition-transform duration-200 ease-luma group-hover/link:translate-x-1"
-            />
-          </Link>
-        </div>
-      </div>
-    </article>
-  );
-}
 
 export function SearchResults({ context }: { context: SearchContext }) {
   const searchContext = [
@@ -287,7 +150,11 @@ export function SearchResults({ context }: { context: SearchContext }) {
             <ol className="mt-3 divide-y divide-brand-forest-deep/16">
               {mockProperties.map((property, index) => (
                 <li key={property.id}>
-                  <ResultRow property={property} index={index} />
+                  <PropertyResultCard
+                    property={property}
+                    index={index}
+                    featured={index === 0}
+                  />
                 </li>
               ))}
             </ol>
