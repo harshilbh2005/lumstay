@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, Star } from "@phosphor-icons/react/ssr";
 
-import { mockProperties } from "@/data/mock";
+import { getMediaById, mockProperties } from "@/data/mock";
 import type { PropertySummary } from "@/types/domain";
 
 import { SaveStayButton } from "./save-stay-button";
@@ -20,6 +20,12 @@ function PropertyCard({
   index: number;
   featured?: boolean;
 }) {
+  const media = getMediaById(property.mediaId);
+
+  if (!media) {
+    return null;
+  }
+
   return (
     <article className="group min-w-0">
       <div
@@ -36,8 +42,8 @@ function PropertyCard({
         >
           <Image
             fill
-            src={property.image}
-            alt={`${property.name} in ${property.location.region ?? property.location.city}`}
+            src={media.src}
+            alt={media.alt}
             sizes={
               featured
                 ? "(max-width: 1023px) 86vw, 62vw"
@@ -161,7 +167,7 @@ export function CuratedStays() {
         </div>
 
         <ol className="-mx-5 mt-12 flex snap-x snap-mandatory gap-5 overflow-x-auto px-5 pb-5 [scrollbar-width:none] sm:-mx-10 sm:px-10 lg:mx-0 lg:mt-20 lg:grid lg:grid-cols-[minmax(0,1.35fr)_minmax(22rem,0.78fr)] lg:grid-rows-2 lg:gap-x-10 lg:gap-y-12 lg:overflow-visible lg:px-0 lg:pb-0 [&::-webkit-scrollbar]:hidden">
-          {mockProperties.map((property, index) => (
+          {mockProperties.slice(0, 3).map((property, index) => (
             <li
               key={property.id}
               className={

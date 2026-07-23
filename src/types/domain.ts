@@ -21,7 +21,7 @@ export interface PropertySummary {
   name: string;
   location: Location;
   description: string;
-  image: string;
+  mediaId: string;
   rating: number;
   reviewCount: number;
   priceFrom: Money;

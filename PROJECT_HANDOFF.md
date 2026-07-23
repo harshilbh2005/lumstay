@@ -1,6 +1,6 @@
 # LumaStay Project Handoff
 
-Last updated: 22 July 2026
+Last updated: 23 July 2026
 
 Repository: `/Users/harshilbrahmani/Developer/Personal/lumstay`
 
@@ -324,6 +324,19 @@ Important limitation: destination links point to the planned `/search` route, wh
 - Story context links point only to the implemented destination atlas instead of creating broken article routes
 - Verified at 1440×1000 and 390×844 with decoded images, no horizontal overflow, visible keyboard focus, hover feedback, 44px links, and sticky-header-safe anchors
 
+### Initial search results page
+
+- Static, server-rendered search foundation at `/search`
+- Compact generic search context for destination, dates, and guests with a return link to the homepage search
+- Six-property editorial result ledger with image, location, rating, review count, atmosphere, facilities, price, and saved action
+- Desktop filter-rail space is established through a restrained “Luma order” sidebar without implementing filters early
+- Result imagery and alt text resolve through the central media catalog
+- Property summary media now uses catalog IDs instead of repeating image paths
+- Homepage curation remains intentionally limited to the original first three properties
+- Verified at 1440×1000 and 390×844 with all six images decoded, no horizontal overflow, visible keyboard focus, hover feedback, working saved-state feedback, and 44px result-title targets
+
+Important limitation: `/search` deliberately does not read or apply URL query parameters yet. Filters, sorting, autocomplete, mobile sheets, loading, empty, error, and retry states remain separate roadmap items. Result links point to the planned `/properties/[slug]` route, which is not implemented yet.
+
 ## Current homepage order
 
 `src/app/page.tsx` renders:
@@ -336,11 +349,11 @@ Important limitation: destination links point to the planned `/search` route, wh
 6. `ClosingBookingCta`
 7. `SiteFooter`
 
-The implemented routes are `/`, `/destinations`, and `/edit`. Navigation links to other planned pages will use the branded not-found state until their routes are built.
+The implemented routes are `/`, `/destinations`, `/edit`, and `/search`. Navigation links to other planned pages will use the branded not-found state until their routes are built.
 
 ## Current mock-data state
 
-- `mockProperties`: 3 property summaries
+- `mockProperties`: 6 property summaries; the homepage intentionally renders the first 3
 - `mockDestinations`: 7 destination summaries used by `/destinations`
 - `mockEditorialStories`: 7 editorial story summaries used by `/edit`
 - `mockRooms`: empty array
@@ -353,6 +366,7 @@ The implemented routes are `/`, `/destinations`, and `/edit`. Navigation links t
 ## Commit history
 
 ```text
+d26e196 feat: add editorial Luma Edit page
 8729ec6 feat: add destination discovery page
 5c159f3 feat: add premium global footer
 fc88571 feat: add homepage closing search CTA
@@ -381,7 +395,7 @@ Build each item separately, research it first, verify it, and commit it before m
 
 3. ~~Destination discovery page at `/destinations`~~ Complete
 4. ~~Editorial Luma Edit page at `/edit`~~ Complete
-5. Search/results page at `/search`
+5. ~~Search/results page at `/search`~~ Complete
 6. Search query handoff from the homepage hero
 7. Destination autocomplete and recent/popular suggestions
 8. Property listing layout with responsive card variants
@@ -438,4 +452,4 @@ Build each item separately, research it first, verify it, and commit it before m
 
 ## Recommended immediate next step
 
-Build the **search/results page at `/search`** as the next isolated page. Research premium hotel-search result layouts and responsive filtering patterns in Refero first, then expand only the mock property data required to make the initial results view credible. Do not connect the homepage hero query handoff or begin autocomplete in the same unit.
+Connect the **homepage hero query handoff** as the next isolated feature. Research premium hotel-search transitions and compact persisted search summaries in Refero first. Replace the simulated success-only state with navigation to `/search`, carry destination, dates, and guest counts through the URL, and let the results page reflect that context. Do not begin destination autocomplete, filters, sorting, or mobile filter/search sheets in the same unit.
