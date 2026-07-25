@@ -19,13 +19,17 @@ export default async function SearchPage({
 }: {
   searchParams: Promise<Record<string, SearchParamValue>>;
 }) {
-  const context = getSearchContext(await searchParams);
+  const resolvedSearchParams = await searchParams;
+  const context = getSearchContext(resolvedSearchParams);
 
   return (
     <>
       <SiteHeader />
       <main className="min-h-screen bg-brand-paper">
-        <SearchResults context={context} />
+        <SearchResults
+          context={context}
+          searchParams={resolvedSearchParams}
+        />
       </main>
       <SiteFooter />
     </>

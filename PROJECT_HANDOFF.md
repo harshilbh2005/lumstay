@@ -1,6 +1,6 @@
 # LumaStay Project Handoff
 
-Last updated: 23 July 2026
+Last updated: 25 July 2026
 
 Repository: `/Users/harshilbrahmani/Developer/Personal/lumstay`
 
@@ -339,7 +339,21 @@ Important limitation: destination links populate the `/search` summary, but the 
 - Responsive image sizing preserves catalog focal points, and only saved-state feedback remains client-side
 - Verified at 1440×1000 and 390×844 with all six images decoded, no horizontal overflow, visible brass keyboard focus, hover feedback, working saved-state feedback, and 44px controls
 
-Important limitation: the summary reads URL query parameters, but the six-property mock ledger is not filtered by them yet. Filters, sorting, mobile sheets, loading, empty, error, and retry states remain separate roadmap items. Result links point to the planned `/properties/[slug]` route, which is not implemented yet.
+Important limitation: the destination and dates still describe search intent rather than filtering availability or geography. Sorting, applied-filter chips, mobile sheets, loading, empty, error, and retry states remain separate roadmap items. Result links point to the planned `/properties/[slug]` route, which is not implemented yet.
+
+### Search result filters
+
+- Refero-informed faceted filtering for nightly price, guest rating, property type, facilities, and atmosphere
+- Restrained desktop rail uses the existing paper, linen, forest, brass, hairline, and mono-metadata language without introducing cards, shadows, pills, or a second search hero
+- Typed local taxonomies extend the six-property fixture only far enough to exercise the filter combinations
+- Server-side parsing ignores invalid URL values, filters the fixture before rendering cards, and preserves the original Luma editorial order
+- A progressively enhanced Next.js `Form` writes shareable GET parameters while retaining destination, dates, guests, and rooms
+- Multi-select facilities require every selected facility; atmosphere and property-type choices match any selected option within their group
+- Mobile reuses the same semantic form inside a compact inline disclosure; the dedicated mobile filter sheet remains a later roadmap item
+- Selected controls remount from server URL state after client navigation so Apply and Clear all remain visually accurate
+- Verified at 1440×1000 and 390×844 with combined filters, mobile apply/reopen/reset flow, preserved search intent, 44px or larger targets, zero horizontal overflow, and a clean browser console
+
+Important limitation: filtering operates only against the six local editorial fixtures and their mock taxonomy. It does not represent real availability, destination matching, live pricing, or a complete hotel facility model.
 
 ### Homepage search query handoff
 
@@ -383,19 +397,20 @@ The implemented routes are `/`, `/destinations`, `/edit`, and `/search`. Navigat
 
 ## Current mock-data state
 
-- `mockProperties`: 6 property summaries; the homepage intentionally renders the first 3
+- `mockProperties`: 6 property summaries with local property-type, facility, and atmosphere tags; the homepage intentionally renders the first 3
 - `mockDestinations`: 7 destination summaries shared by `/destinations` and the hero autocomplete
 - `mockEditorialStories`: 7 editorial story summaries used by `/edit`
 - `mockRooms`: empty array
 - `mockBookings`: empty array
 - No full property-detail fixture yet
-- No availability, price breakdown, facility taxonomy, cancellation-policy, review, guest, or checkout fixture yet
+- No availability, price breakdown, complete facility catalog, cancellation-policy, review, guest, or checkout fixture yet
 - `src/stores/index.ts` is intentionally empty
 - Saved and trips feature indexes are scaffolds only
 
 ## Commit history
 
 ```text
+9ef2068 feat: refine responsive property listings
 ec095a2 feat: add destination autocomplete
 0060d54 feat: connect hero search to results
 4c1dcfb feat: add initial search results page
@@ -432,7 +447,7 @@ Build each item separately, research it first, verify it, and commit it before m
 6. ~~Search query handoff from the homepage hero~~ Complete
 7. ~~Destination autocomplete and recent/popular suggestions~~ Complete
 8. ~~Property listing layout with responsive card variants~~ Complete
-9. Price, facility, rating, property-type, and atmosphere filters
+9. ~~Price, facility, rating, property-type, and atmosphere filters~~ Complete
 10. Sorting controls and applied-filter chips
 11. Mobile search and filter sheets
 12. Search loading skeletons
@@ -485,4 +500,4 @@ Build each item separately, research it first, verify it, and commit it before m
 
 ## Recommended immediate next step
 
-Build **price, facility, rating, property-type, and atmosphere filters** as the next isolated feature. Research premium hotel-filter patterns in Refero first, then add a restrained desktop filtering experience that works against the local property fixture while preserving the editorial result cards, query summary, saved feedback, and LumaStay ordering language. Expand only the domain/mock fields required to exercise these filters. Do not begin sorting, applied-filter chips, mobile sheets, loading/empty/error states, pagination, or property details in the same unit.
+Build **sorting controls and applied-filter chips** as the next isolated feature. Research premium hotel result-toolbars and removable applied-filter treatments in Refero first, then preserve destination, date, guest, and filter URL state while keeping LumaStay’s editorial ordering language legible. Do not begin mobile sheets, loading/empty/error states, pagination, or property details in the same unit.

@@ -15,10 +15,32 @@ export interface Location {
   };
 }
 
+export type PropertyType =
+  | "boutique-hotel"
+  | "private-cabin"
+  | "desert-lodge"
+  | "heritage-stay"
+  | "wellness-retreat";
+
+export type PropertyFacility =
+  | "pool"
+  | "wellness"
+  | "breakfast"
+  | "destination-dining"
+  | "private-transfers";
+
+export type PropertyAtmosphere =
+  | "quiet"
+  | "design-led"
+  | "remote"
+  | "nature-led"
+  | "heritage";
+
 export interface PropertySummary {
   id: string;
   slug: string;
   name: string;
+  propertyType: PropertyType;
   location: Location;
   description: string;
   mediaId: string;
@@ -26,7 +48,9 @@ export interface PropertySummary {
   reviewCount: number;
   priceFrom: Money;
   atmosphere: string[];
+  atmosphereTags: PropertyAtmosphere[];
   facilities: string[];
+  facilityTags: PropertyFacility[];
   isLumaPick?: boolean;
   isNew?: boolean;
 }
