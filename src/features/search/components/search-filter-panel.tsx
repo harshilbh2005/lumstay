@@ -6,6 +6,7 @@ import {
   atmosphereOptions,
   facilityOptions,
   getClearFiltersHref,
+  getPreservedSortEntries,
   getSearchIntentEntries,
   priceOptions,
   propertyTypeOptions,
@@ -98,7 +99,10 @@ export function SearchFilterPanel({
   properties: readonly PropertySummary[];
 }) {
   const clearHref = getClearFiltersHref(searchParams);
-  const searchIntentEntries = getSearchIntentEntries(searchParams);
+  const preservedSearchEntries = [
+    ...getSearchIntentEntries(searchParams),
+    ...getPreservedSortEntries(searchParams),
+  ];
 
   const countPropertyType = (value: PropertyType) =>
     properties.filter((property) => property.propertyType === value).length;
@@ -122,7 +126,7 @@ export function SearchFilterPanel({
             </h2>
             <p className="mt-4 text-base leading-7 text-muted-foreground">
               Narrow the collection by the details that shape a day there.
-              Luma order remains unchanged.
+              Your chosen order stays with the search.
             </p>
           </div>
 
@@ -132,9 +136,9 @@ export function SearchFilterPanel({
             aria-label="Refine search results"
             className="lg:mt-8"
           >
-            {searchIntentEntries.map(([name, value]) => (
+            {preservedSearchEntries.map(([name, value], index) => (
               <input
-                key={`${name}-${value}`}
+                key={`${name}-${value}-${index}`}
                 type="hidden"
                 name={name}
                 value={value}

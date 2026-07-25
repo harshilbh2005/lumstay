@@ -9,9 +9,12 @@ import {
 import { mockProperties } from "@/data/mock";
 import { SearchFilterPanel } from "@/features/search/components/search-filter-panel";
 import { PropertyResultCard } from "@/features/search/components/property-result-card";
+import { SearchResultsToolbar } from "@/features/search/components/search-results-toolbar";
 import {
   filterProperties,
   getSearchFilters,
+  getSearchSort,
+  sortProperties,
 } from "@/features/search/lib/search-filters";
 import type {
   SearchContext,
@@ -26,7 +29,15 @@ export function SearchResults({
   searchParams: Record<string, SearchParamValue>;
 }) {
   const filters = getSearchFilters(searchParams);
+  const sortOrder = getSearchSort(searchParams);
   const filteredProperties = filterProperties(mockProperties, filters);
+  const sortedProperties = sortProperties(filteredProperties, sortOrder);
+  const resultOrderLabel =
+    sortOrder === "luma-edit"
+      ? null
+      : sortOrder === "rating-descending"
+        ? "Rating order"
+        : "Price order";
   const searchContext = [
     {
       label: "Where",
@@ -123,26 +134,21 @@ export function SearchResults({
           />
 
           <div className="min-w-0 lg:col-span-9">
-            <div className="flex flex-wrap items-end justify-between gap-4 border-t border-brand-forest-deep/18 pt-5">
-              <h2
-                id="filtered-results-count"
-                className="font-sans text-2xl font-bold tracking-[-0.035em] text-brand-forest-deep sm:text-3xl"
-              >
-                {filteredProperties.length} considered{" "}
-                {filteredProperties.length === 1 ? "stay" : "stays"}
-              </h2>
-              <p className="font-mono text-[0.625rem] tracking-[0.12em] text-brand-stone uppercase">
-                Ordered by the Luma edit
-              </p>
-            </div>
+            <SearchResultsToolbar
+              resultCount={sortedProperties.length}
+              filters={filters}
+              sortOrder={sortOrder}
+              searchParams={searchParams}
+            />
 
             <ol className="mt-3 divide-y divide-brand-forest-deep/16">
-              {filteredProperties.map((property, index) => (
+              {sortedProperties.map((property, index) => (
                 <li key={property.id}>
                   <PropertyResultCard
                     property={property}
                     index={index}
                     featured={index === 0}
+                    orderLabel={resultOrderLabel ?? undefined}
                   />
                 </li>
               ))}

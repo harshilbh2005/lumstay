@@ -27,10 +27,12 @@ export function PropertyResultCard({
   property,
   index,
   featured = false,
+  orderLabel,
 }: {
   property: PropertySummary;
   index: number;
   featured?: boolean;
+  orderLabel?: string;
 }) {
   const media = getMediaById(property.mediaId);
   const propertyHref = `/properties/${property.slug}`;
@@ -92,7 +94,9 @@ export function PropertyResultCard({
           </div>
 
           <div className="pointer-events-none absolute inset-x-4 bottom-4 flex items-end justify-between gap-4 font-mono text-[0.625rem] tracking-[0.14em] text-white/84 uppercase sm:inset-x-5 sm:bottom-5">
-            <span>{featured ? "First in the edit" : "Luma order"}</span>
+            <span>
+              {orderLabel ?? (featured ? "First in the edit" : "Luma order")}
+            </span>
             <span>{String(index + 1).padStart(2, "0")}</span>
           </div>
         </div>
