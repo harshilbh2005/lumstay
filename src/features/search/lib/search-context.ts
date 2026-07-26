@@ -8,6 +8,15 @@ export interface SearchContext {
   guests: string;
 }
 
+export interface SearchFormValues {
+  destination: string;
+  checkIn: string;
+  checkOut: string;
+  adults: number;
+  children: number;
+  rooms: number;
+}
+
 const defaultDestination = "Across the LumaStay world";
 
 function getSingleValue(value: SearchParamValue) {
@@ -47,6 +56,10 @@ function getDate(value: SearchParamValue) {
     : null;
 }
 
+function getDestination(value: SearchParamValue) {
+  return getSingleValue(value)?.trim().replace(/\s+/g, " ").slice(0, 80) ?? "";
+}
+
 function formatDateRange(checkIn: SearchParamValue, checkOut: SearchParamValue) {
   const start = getDate(checkIn);
   const end = getDate(checkOut);
@@ -72,10 +85,7 @@ function formatDateRange(checkIn: SearchParamValue, checkOut: SearchParamValue) 
 export function getSearchContext(
   params: Record<string, SearchParamValue>,
 ): SearchContext {
-  const destinationValue = getSingleValue(params.destination);
-  const destination =
-    destinationValue?.trim().replace(/\s+/g, " ").slice(0, 80) ||
-    defaultDestination;
+  const destination = getDestination(params.destination) || defaultDestination;
   const adults = getBoundedInteger(params.adults, 1, 8, 2);
   const children = getBoundedInteger(params.children, 0, 6, 0);
   const rooms = getBoundedInteger(params.rooms, 1, 8, 1);
@@ -87,5 +97,23 @@ export function getSearchContext(
     guests: `${guestCount} ${guestCount === 1 ? "guest" : "guests"} · ${rooms} ${
       rooms === 1 ? "room" : "rooms"
     }`,
+  };
+}
+
+export function getSearchFormValues(
+  params: Record<string, SearchParamValue>,
+): SearchFormValues {
+  const checkIn = getDate(params.checkIn);
+  const checkOut = getDate(params.checkOut);
+  const hasValidDateRange =
+    checkIn !== null && checkOut !== null && isAfter(checkOut, checkIn);
+
+  return {
+    destination: getDestination(params.destination),
+    checkIn: hasValidDateRange ? format(checkIn, "yyyy-MM-dd") : "",
+    checkOut: hasValidDateRange ? format(checkOut, "yyyy-MM-dd") : "",
+    adults: getBoundedInteger(params.adults, 1, 8, 2),
+    children: getBoundedInteger(params.children, 0, 6, 0),
+    rooms: getBoundedInteger(params.rooms, 1, 8, 1),
   };
 }

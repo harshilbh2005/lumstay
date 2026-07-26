@@ -7,18 +7,22 @@ import {
 } from "@phosphor-icons/react/ssr";
 
 import { mockProperties } from "@/data/mock";
+import { MobileSearchSheet } from "@/features/search/components/mobile-search-sheet";
 import { SearchFilterPanel } from "@/features/search/components/search-filter-panel";
 import { PropertyResultCard } from "@/features/search/components/property-result-card";
 import { SearchResultsToolbar } from "@/features/search/components/search-results-toolbar";
 import {
   filterProperties,
+  getAppliedFilterEntries,
+  getPreservedSortEntries,
   getSearchFilters,
   getSearchSort,
   sortProperties,
 } from "@/features/search/lib/search-filters";
-import type {
-  SearchContext,
-  SearchParamValue,
+import {
+  getSearchFormValues,
+  type SearchContext,
+  type SearchParamValue,
 } from "@/features/search/lib/search-context";
 
 export function SearchResults({
@@ -32,6 +36,19 @@ export function SearchResults({
   const sortOrder = getSearchSort(searchParams);
   const filteredProperties = filterProperties(mockProperties, filters);
   const sortedProperties = sortProperties(filteredProperties, sortOrder);
+  const searchFormValues = getSearchFormValues(searchParams);
+  const mobileSearchPreservedEntries = [
+    ...getAppliedFilterEntries(filters),
+    ...getPreservedSortEntries(searchParams),
+  ];
+  const mobileSearchKey = [
+    searchFormValues.destination,
+    searchFormValues.checkIn,
+    searchFormValues.checkOut,
+    searchFormValues.adults,
+    searchFormValues.children,
+    searchFormValues.rooms,
+  ].join("|");
   const resultOrderLabel =
     sortOrder === "luma-edit"
       ? null
@@ -113,9 +130,15 @@ export function SearchResults({
             );
           })}
 
+          <MobileSearchSheet
+            key={mobileSearchKey}
+            initialValues={searchFormValues}
+            preservedEntries={mobileSearchPreservedEntries}
+          />
+
           <Link
             href="/#stay-search"
-            className="group/change flex min-h-14 items-center justify-between gap-4 px-5 text-sm font-semibold text-brand-forest-deep transition-colors duration-200 hover:bg-brand-forest-deep hover:text-brand-paper focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-inset sm:px-6 lg:min-w-48"
+            className="group/change hidden min-h-14 items-center justify-between gap-4 px-5 text-sm font-semibold text-brand-forest-deep transition-colors duration-200 hover:bg-brand-forest-deep hover:text-brand-paper focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-inset sm:px-6 lg:flex lg:min-w-48"
           >
             Change search
             <ArrowRight

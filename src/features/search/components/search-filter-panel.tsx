@@ -227,22 +227,24 @@ export function SearchFilterPanel({
               ))}
             </FilterGroup>
 
-            <div className="grid gap-2 border-t border-brand-forest-deep/16 pt-5">
-              <button
-                type="submit"
-                className="inline-flex min-h-12 items-center justify-center border border-brand-forest-deep bg-brand-forest-deep px-5 text-sm font-semibold text-brand-paper transition-colors duration-200 hover:bg-brand-forest hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 active:translate-y-px"
-              >
-                Apply filters
-              </button>
+            <div className="sticky bottom-0 -mx-5 grid grid-cols-[auto_minmax(0,1fr)] items-center gap-4 border-t border-brand-forest-deep/16 bg-brand-paper px-5 pt-4 pb-[calc(1rem+env(safe-area-inset-bottom))] lg:static lg:mx-0 lg:grid-cols-1 lg:gap-2 lg:bg-transparent lg:px-0 lg:pt-5 lg:pb-0">
               {filters.activeCount > 0 ? (
                 <Link
                   href={clearHref}
                   scroll={false}
-                  className="inline-flex min-h-11 items-center justify-center text-sm font-semibold text-brand-forest-deep underline decoration-brand-forest-deep/35 underline-offset-4 transition-colors duration-200 hover:text-brand-brass focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                  className="inline-flex min-h-12 items-center justify-center px-1 text-sm font-semibold text-brand-forest-deep underline decoration-brand-forest-deep/35 underline-offset-4 transition-colors duration-200 hover:text-brand-brass focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 lg:order-2 lg:min-h-11"
                 >
-                  Clear all
+                  Reset filters
                 </Link>
-              ) : null}
+              ) : (
+                <span aria-hidden="true" className="lg:hidden" />
+              )}
+              <button
+                type="submit"
+                className="inline-flex min-h-12 items-center justify-center rounded-pill border border-brand-forest-deep bg-brand-forest-deep px-5 text-sm font-semibold text-brand-paper transition-colors duration-200 hover:bg-brand-forest hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 active:translate-y-px lg:order-1 lg:rounded-none"
+              >
+                Apply filters
+              </button>
             </div>
           </Form>
         </>

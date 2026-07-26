@@ -1,6 +1,6 @@
 # LumaStay Project Handoff
 
-Last updated: 25 July 2026
+Last updated: 26 July 2026
 
 Repository: `/Users/harshilbrahmani/Developer/Personal/lumstay`
 
@@ -339,7 +339,7 @@ Important limitation: destination links populate the `/search` summary, but the 
 - Responsive image sizing preserves catalog focal points, and only saved-state feedback remains client-side
 - Verified at 1440×1000 and 390×844 with all six images decoded, no horizontal overflow, visible brass keyboard focus, hover feedback, working saved-state feedback, and 44px controls
 
-Important limitation: the destination and dates still describe search intent rather than filtering availability or geography. Mobile sheets, loading, empty, error, and retry states remain separate roadmap items. Result links point to the planned `/properties/[slug]` route, which is not implemented yet.
+Important limitation: the destination and dates still describe search intent rather than filtering availability or geography. Loading, empty, error, and retry states remain separate roadmap items. Result links point to the planned `/properties/[slug]` route, which is not implemented yet.
 
 ### Search result filters
 
@@ -349,7 +349,7 @@ Important limitation: the destination and dates still describe search intent rat
 - Server-side parsing ignores invalid URL values, filters the fixture before rendering cards, and preserves the original Luma editorial order
 - A progressively enhanced Next.js `Form` writes shareable GET parameters while retaining destination, dates, guests, and rooms
 - Multi-select facilities require every selected facility; atmosphere and property-type choices match any selected option within their group
-- Mobile reuses the same semantic form inside a compact inline disclosure; the dedicated mobile filter sheet remains a later roadmap item
+- Mobile reuses the same semantic form inside a dedicated filter sheet
 - Selected controls remount from server URL state after client navigation so Apply and Clear all remain visually accurate
 - Verified at 1440×1000 and 390×844 with combined filters, mobile apply/reopen/reset flow, preserved search intent, 44px or larger targets, zero horizontal overflow, and a clean browser console
 
@@ -369,6 +369,20 @@ Important limitation: filtering operates only against the six local editorial fi
 - Verified at 1440×1000 and 390×844 with chip removal, clear-all, cross-form state preservation, exact price/rating sequences, visible keyboard focus, 44px targets, zero horizontal overflow, and a clean browser console
 
 Important limitation: the sort options operate only on each property’s local starting price, aggregate guest rating, and editorial fixture order. They do not account for date-specific availability, total-stay price, taxes, personalization, or commission.
+
+### Mobile search and filter sheets
+
+- Refero-informed, near-full-height mobile sheets replace the temporary inline filter disclosure without repeating the homepage hero
+- The search sheet edits destination, check-in, check-out, adults, children, and rooms while preserving valid active filters and sorting
+- Date-order validation keeps an invalid draft open and presents an accessible inline error before navigation
+- The filter sheet reuses the existing semantic URL-backed server form and local taxonomy rather than introducing parallel mobile state
+- Both sheets use a quiet paper-and-linen editorial surface, sharp hairline divisions, scrollable bodies, and pinned action footers aligned with the established forest and brass token roles
+- Base UI supplies modal focus containment, Escape dismissal, background scroll lock, and focus return to each trigger
+- Search Cancel and filter Reset/Apply behavior are explicit; applying or resetting closes the sheet while preserving the remaining canonical search state
+- Desktop retains the existing homepage search link and full filter rail
+- Verified at 1440×1000 and 390×844 with search edits, invalid date handling, combined filters, reset/apply, filter and sort preservation, focus return, Escape dismissal, body scroll lock, 44px controls, zero horizontal overflow, and a clean browser console
+
+Important limitation: the mobile destination field intentionally remains a focused text input rather than duplicating the homepage autocomplete. Search intent still does not geofilter the local result set, and native date inputs remain platform-rendered.
 
 ### Homepage search query handoff
 
@@ -425,6 +439,7 @@ The implemented routes are `/`, `/destinations`, `/edit`, and `/search`. Navigat
 ## Commit history
 
 ```text
+cdbc5c2 feat: add search sorting and filter chips
 84d8d0e feat: add search result filters
 9ef2068 feat: refine responsive property listings
 ec095a2 feat: add destination autocomplete
@@ -465,7 +480,7 @@ Build each item separately, research it first, verify it, and commit it before m
 8. ~~Property listing layout with responsive card variants~~ Complete
 9. ~~Price, facility, rating, property-type, and atmosphere filters~~ Complete
 10. ~~Sorting controls and applied-filter chips~~ Complete
-11. Mobile search and filter sheets
+11. ~~Mobile search and filter sheets~~ Complete
 12. Search loading skeletons
 13. Search empty, no-results, error, and retry states
 14. Expand mock property data enough to exercise filtering and pagination/loading behavior
@@ -516,4 +531,4 @@ Build each item separately, research it first, verify it, and commit it before m
 
 ## Recommended immediate next step
 
-Build the **mobile search and filter sheets** as the next isolated feature. Research premium travel mobile-sheet patterns in Refero first, then reuse the existing URL-backed search, filter, and sort state rather than creating a parallel mobile data model. Preserve accessible focus management, clear Apply/Reset behavior, and the LumaStay visual system. Do not begin loading skeletons, empty/error states, pagination, mock-data expansion, or property details in the same unit.
+Build **search loading skeletons** as the next isolated feature. Research premium editorial travel and listing-loading patterns in Refero first, then mirror the current desktop and mobile result geometry closely enough to avoid layout shift while retaining the LumaStay paper, linen, forest, brass, and hairline language. Keep route-level loading UI server-friendly and accessible. Do not begin empty/error/retry states, pagination, mock-data expansion, or property details in the same unit.
