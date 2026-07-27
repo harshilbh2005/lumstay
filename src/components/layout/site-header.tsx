@@ -45,6 +45,7 @@ export function SiteHeader() {
         <div className="flex items-center justify-self-end gap-1 sm:gap-2">
           <Link
             href="/saved"
+            prefetch={false}
             aria-label="View saved stays"
             className="hidden h-11 items-center gap-2 rounded-control px-3 text-[0.8125rem] font-semibold tracking-[0.01em] text-foreground/80 transition-colors duration-200 ease-luma hover:bg-secondary hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background sm:flex"
           >
@@ -54,6 +55,7 @@ export function SiteHeader() {
 
           <Link
             href="/trips"
+            prefetch={false}
             className="hidden h-11 items-center rounded-control px-3 text-[0.8125rem] font-semibold tracking-[0.01em] text-foreground/80 transition-colors duration-200 ease-luma hover:bg-secondary hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background lg:flex"
           >
             Trips

@@ -37,6 +37,7 @@ function PropertyCard({
       >
         <Link
           href={`/properties/${property.slug}`}
+          prefetch={false}
           aria-label={`View ${property.name}`}
           className="absolute inset-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-brass focus-visible:ring-inset"
         >
@@ -85,6 +86,7 @@ function PropertyCard({
 
         <Link
           href={`/properties/${property.slug}`}
+          prefetch={false}
           className="mt-2 inline-flex rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-4"
         >
           <h3

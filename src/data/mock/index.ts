@@ -14,6 +14,10 @@ export type {
 } from "./media";
 export { mockDestinations } from "./destinations";
 export { mockEditorialStories } from "./editorial-stories";
+export {
+  getPropertyDetailBySlug,
+  mockPropertyDetails,
+} from "./property-details";
 export { mockProperties } from "./properties";
 
 export const mockRooms: Room[] = [];

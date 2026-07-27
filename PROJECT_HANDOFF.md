@@ -424,6 +424,19 @@ Important limitation: empty and recoverable-error outcomes are deterministic pre
 
 Important limitation: this is incremental reveal over a synchronous local collection, not cursor pagination or an API-backed infinite list. The six new listings are fictional editorial fixtures illustrated with licensed stock photographs; the source photographs are not representations of bookable LumaStay inventory.
 
+### Property details route shell
+
+- Static dynamic route at `/properties/[slug]`, currently generated for `/properties/casa-serein`
+- One representative `PropertyDetail` fixture composes the existing Casa Serein summary with editorial copy and catalog media IDs instead of duplicating summary data or image paths
+- Thin route handles async Next.js 16 params, static param generation, route metadata, and unknown-slug `notFound()` behavior
+- Restrained editorial shell uses a folio-led masthead, one decisive existing architectural image, a caption ledger, and a Luma note
+- Existing property links disable speculative prefetch so listings without full fixtures continue to reach the branded 404 only when deliberately opened
+- Header Saved and Trips links also disable prefetch, preventing avoidable desktop console 404s while those routes remain planned
+- No new image was generated or downloaded for this unit; the existing Casa Serein catalog asset is reused
+- Verified from the production build at 1440×1000 and 390×844 with decoded imagery, exact metadata, visible keyboard focus, 44px navigation, zero horizontal overflow, clean consoles, and a branded unknown-slug 404 carrying `noindex`
+
+Important limitation: Casa Serein is the only full property-detail fixture. The shell intentionally omits rating, pricing, saved state, gallery controls, facilities, rooms, and booking actions so those roadmap items can be researched, verified, and committed separately.
+
 ### Homepage search query handoff
 
 - The hero now performs a real client-side transition to `/search`
@@ -462,16 +475,16 @@ Important limitation: suggestions are local and finite, and recent searches are 
 6. `ClosingBookingCta`
 7. `SiteFooter`
 
-The implemented routes are `/`, `/destinations`, `/edit`, and `/search`. Navigation links to other planned pages will use the branded not-found state until their routes are built.
+The implemented routes are `/`, `/destinations`, `/edit`, `/search`, and `/properties/casa-serein`. Other property slugs and navigation links to planned pages use the branded not-found state until their routes are built.
 
 ## Current mock-data state
 
 - `mockProperties`: 12 property summaries with local property-type, facility, and atmosphere tags; the homepage intentionally renders the first 3
+- `mockPropertyDetails`: 1 full property shell fixture for Casa Serein, composed from its existing summary
 - `mockDestinations`: 7 destination summaries shared by `/destinations` and the hero autocomplete
 - `mockEditorialStories`: 7 editorial story summaries used by `/edit`
 - `mockRooms`: empty array
 - `mockBookings`: empty array
-- No full property-detail fixture yet
 - No availability, price breakdown, complete facility catalog, cancellation-policy, review, guest, or checkout fixture yet
 - `src/stores/index.ts` is intentionally empty
 - Saved and trips feature indexes are scaffolds only
@@ -479,6 +492,7 @@ The implemented routes are `/`, `/destinations`, `/edit`, and `/search`. Navigat
 ## Commit history
 
 ```text
+47bb501 feat: expand search property fixtures
 3e55134 feat: add search recovery states
 38d35fe feat: add search loading skeletons
 bc0f9a7 feat: add mobile search and filter sheets
@@ -530,7 +544,7 @@ Build each item separately, research it first, verify it, and commit it before m
 
 ### Phase 3 — Property and room selection
 
-15. Property details route at `/properties/[slug]`
+15. ~~Property details route at `/properties/[slug]`~~ Complete
 16. Property hero summary, location, rating, pricing, and saved state
 17. Responsive property image gallery
 18. Fullscreen gallery lightbox with keyboard and touch navigation
@@ -574,4 +588,4 @@ Build each item separately, research it first, verify it, and commit it before m
 
 ## Recommended immediate next step
 
-Build the first isolated **property details route at `/properties/[slug]`**. Research the property-detail information architecture before editing, decide how the current summary fixtures map into a full property shape, and implement the route shell and one representative property without starting the gallery lightbox, room selection, booking store, checkout, saved-state persistence, or trips in the same unit.
+Build the isolated **property hero summary** for Casa Serein: location, rating, starting price, and a non-persistent saved interaction. Research the information hierarchy first, retain the current editorial masthead and single-image shell, and do not begin the responsive gallery, gallery lightbox, room selection, booking panel, or persistent saved store in the same unit.

@@ -55,6 +55,16 @@ export interface PropertySummary {
   isNew?: boolean;
 }
 
+export interface PropertyDetail {
+  summary: PropertySummary;
+  editorial: {
+    folio: string;
+    statement: string;
+    note: string;
+  };
+  galleryMediaIds: string[];
+}
+
 export interface DestinationSummary {
   id: string;
   slug: string;
