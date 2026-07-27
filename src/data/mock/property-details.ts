@@ -12,7 +12,13 @@ export const mockPropertyDetails = [
       note:
         "Casa Serein is less a grand hotel than a sequence of quiet thresholds. Limewashed rooms open to citrus terraces, the garden restaurant keeps pace with the season, and the sea is rarely out of view. Come for the architecture; stay for mornings that seem to have nowhere else to be.",
     },
-    galleryMediaIds: ["casa-serein-exterior"],
+    galleryMediaIds: [
+      "casa-serein-exterior",
+      "casa-serein-lemon-terrace",
+      "casa-serein-sea-room",
+      "casa-serein-positano-terrace",
+      "casa-serein-pool-at-dusk",
+    ],
   },
 ] satisfies PropertyDetail[];
 

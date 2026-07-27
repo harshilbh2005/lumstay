@@ -10,7 +10,7 @@ export type MediaKind =
 export type MediaOrigin = "generated" | "stock";
 
 export interface MediaSource {
-  provider: "Unsplash";
+  provider: "Pexels" | "Unsplash";
   creator: string;
   pageUrl: string;
   licenseUrl: string;
@@ -33,6 +33,7 @@ export interface LumaStayMediaAsset {
 }
 
 const unsplashLicenseUrl = "https://unsplash.com/license";
+const pexelsLicenseUrl = "https://www.pexels.com/license/";
 
 export const lumstayMedia = [
   {
@@ -64,6 +65,93 @@ export const lumstayMedia = [
     aspectRatio: "4:3",
     focalPoint: "left center",
     palette: ["chalk white", "terracotta", "olive", "mineral blue"],
+  },
+  {
+    id: "casa-serein-lemon-terrace",
+    src: "/images/lumstay/properties/casa-serein-lemon-terrace.jpg",
+    title: "Lemon Terrace",
+    alt: "Sun loungers and striped umbrellas tucked beneath mature lemon trees on a stone terrace",
+    kind: "property",
+    origin: "stock",
+    location: "Sicily, Italy",
+    description:
+      "A shaded citrus terrace used illustratively to extend Casa Serein's quiet Mediterranean atmosphere.",
+    intendedUses: ["property gallery", "pool story", "coastal collection"],
+    aspectRatio: "2:3",
+    focalPoint: "center 58%",
+    palette: ["lemon yellow", "olive leaf", "chalk linen", "warm stone"],
+    source: {
+      provider: "Unsplash",
+      creator: "Sara Abilova",
+      pageUrl:
+        "https://unsplash.com/photos/sun-loungers-umbrellas-and-lemon-trees-z32wCbOO15M",
+      licenseUrl: unsplashLicenseUrl,
+    },
+  },
+  {
+    id: "casa-serein-sea-room",
+    src: "/images/lumstay/properties/casa-serein-sea-room.jpg",
+    title: "Sea-Room Threshold",
+    alt: "Sunlit tiled sitting room opening through wide doors to a blue Mediterranean sea view",
+    kind: "property",
+    origin: "stock",
+    location: "Italy",
+    description:
+      "An airy Italian interior used illustratively for Casa Serein's sea-facing rooms.",
+    intendedUses: ["property gallery", "room story", "coastal collection"],
+    aspectRatio: "2:3",
+    focalPoint: "center 45%",
+    palette: ["chalk white", "sea blue", "sun gold", "terracotta"],
+    source: {
+      provider: "Pexels",
+      creator: "Magda Ehlers",
+      pageUrl:
+        "https://www.pexels.com/photo/sunlit-italian-villa-interior-with-sea-view-35438897/",
+      licenseUrl: pexelsLicenseUrl,
+    },
+  },
+  {
+    id: "casa-serein-positano-terrace",
+    src: "/images/lumstay/properties/casa-serein-positano-terrace.jpg",
+    title: "Terrace Above the Sea",
+    alt: "A vine-shaded terrace table overlooking the sea and hillside buildings of Positano",
+    kind: "property",
+    origin: "stock",
+    location: "Positano, Italy",
+    description:
+      "A lived-in Amalfi terrace used illustratively for Casa Serein's outdoor dining rhythm.",
+    intendedUses: ["property gallery", "dining story", "coastal collection"],
+    aspectRatio: "2:3",
+    focalPoint: "center 52%",
+    palette: ["vine green", "sea blue", "sun-warmed stone", "timber"],
+    source: {
+      provider: "Pexels",
+      creator: "Meghan Marron",
+      pageUrl:
+        "https://www.pexels.com/photo/terrace-on-sea-coast-13418034/",
+      licenseUrl: pexelsLicenseUrl,
+    },
+  },
+  {
+    id: "casa-serein-pool-at-dusk",
+    src: "/images/lumstay/properties/casa-serein-pool-at-dusk.jpg",
+    title: "Pool at Dusk",
+    alt: "A long blue pool beside a pale Mediterranean villa under a peach-colored evening sky",
+    kind: "property",
+    origin: "stock",
+    description:
+      "A restrained evening pool scene used illustratively for Casa Serein's slower hours.",
+    intendedUses: ["property gallery", "pool story", "coastal collection"],
+    aspectRatio: "2:3",
+    focalPoint: "center 66%",
+    palette: ["dusk peach", "pool blue", "chalk white", "olive"],
+    source: {
+      provider: "Pexels",
+      creator: "Berat Yüksel",
+      pageUrl:
+        "https://www.pexels.com/photo/elegant-mediterranean-villa-by-the-sea-at-sunset-31751025/",
+      licenseUrl: pexelsLicenseUrl,
+    },
   },
   {
     id: "stillwater-cabin-exterior",

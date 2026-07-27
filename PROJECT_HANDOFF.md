@@ -435,7 +435,7 @@ Important limitation: this is incremental reveal over a synchronous local collec
 - No new image was generated or downloaded for this unit; the existing Casa Serein catalog asset is reused
 - Verified from the production build at 1440×1000 and 390×844 with decoded imagery, exact metadata, visible keyboard focus, 44px navigation, zero horizontal overflow, clean consoles, and a branded unknown-slug 404 carrying `noindex`
 
-Important limitation: Casa Serein is the only full property-detail fixture. The shell intentionally omits a responsive gallery, gallery controls, facilities, rooms, and booking actions so those roadmap items can be researched, verified, and committed separately.
+Important limitation: Casa Serein is the only full property-detail fixture. The shell intentionally omits gallery controls, facilities, rooms, and booking actions so those roadmap items can be researched, verified, and committed separately.
 
 ### Property hero summary
 
@@ -448,6 +448,19 @@ Important limitation: Casa Serein is the only full property-detail fixture. The 
 - Verified against the production build at 1440×1000 and 390×844 with exact setting/rating/price output, 99px-or-larger save targets, successful add feedback, reload reset, decoded imagery, zero horizontal overflow, and clean consoles
 
 Important limitation: saved state remains local to the button and intentionally resets on reload. The nightly amount is a mock starting price, not date-specific availability or a total-stay quote. Persistent saved state remains roadmap item 32.
+
+### Responsive property image gallery
+
+- Casa Serein now has a five-view editorial gallery composed from the existing fictional-property lead image and four new licensed stock photographs
+- No imagery was generated for this unit: the supporting lemon terrace comes from Unsplash, while the sea-view room, Positano terrace, and dusk pool come from Pexels
+- Photographer, source page, provider, license, alt text, focal point, palette, and intended-use metadata live in the central media catalog and `docs/image-library.md`
+- Refero reference lock uses MANNA’s warm, sharp-edged architectural presentation as the layout foundation, Kobu’s quiet gallery-wall rhythm, and only Airbnb’s proven one-large/four-supporting composition
+- Desktop uses a 12-column asymmetric mosaic with one decisive lead view and four supporting portraits; mobile collapses to a native horizontal snap rail with the following image kept partially visible as its scroll affordance
+- Small numbered folio labels and a single caption ledger provide orientation without card chrome, arrows, autoplay, or a control that falsely implies the not-yet-built fullscreen viewer
+- The server-rendered gallery preloads only the lead image, leaves supporting views lazy, and supplies viewport-specific `sizes`
+- Verified against the production build at 1440×1000 and 390×844 with five decoded images, exact desktop mosaic geometry, working mobile horizontal scroll, zero document overflow, no nested interactive controls, and clean browser consoles
+
+Important limitation: the four stock photographs are illustrative editorial mock imagery, not representations of bookable Casa Serein inventory. Fullscreen viewing, keyboard/touch navigation, and image-category controls remain roadmap item 18.
 
 ### Homepage search query handoff
 
@@ -492,7 +505,7 @@ The implemented routes are `/`, `/destinations`, `/edit`, `/search`, and `/prope
 ## Current mock-data state
 
 - `mockProperties`: 12 property summaries with local property-type, facility, and atmosphere tags; the homepage intentionally renders the first 3
-- `mockPropertyDetails`: 1 full property shell fixture for Casa Serein, composed from its existing summary
+- `mockPropertyDetails`: 1 full property fixture for Casa Serein, composed from its existing summary and five central-catalog gallery media IDs
 - `mockDestinations`: 7 destination summaries shared by `/destinations` and the hero autocomplete
 - `mockEditorialStories`: 7 editorial story summaries used by `/edit`
 - `mockRooms`: empty array
@@ -504,6 +517,7 @@ The implemented routes are `/`, `/destinations`, `/edit`, `/search`, and `/prope
 ## Commit history
 
 ```text
+4fdf91d feat: add property hero summary
 0e3a334 feat: add property detail route shell
 47bb501 feat: expand search property fixtures
 3e55134 feat: add search recovery states
@@ -559,7 +573,7 @@ Build each item separately, research it first, verify it, and commit it before m
 
 15. ~~Property details route at `/properties/[slug]`~~ Complete
 16. ~~Property hero summary, location, rating, pricing, and saved state~~ Complete
-17. Responsive property image gallery
+17. ~~Responsive property image gallery~~ Complete
 18. Fullscreen gallery lightbox with keyboard and touch navigation
 19. Facilities, atmosphere, policies, practical details, and location sections
 20. Room fixtures with distinct images, occupancy, beds, size, facilities, pricing, breakfast, and cancellation terms
@@ -601,4 +615,4 @@ Build each item separately, research it first, verify it, and commit it before m
 
 ## Recommended immediate next step
 
-Build the isolated **responsive property image gallery** for Casa Serein. Source any additional mock imagery from Pinterest or another real external source rather than generating it, record source/license metadata in the central catalog, and keep the fullscreen lightbox, room selection, booking panel, and persistent saved store out of this unit.
+Build the isolated **fullscreen gallery lightbox** for Casa Serein with keyboard navigation, touch-friendly previous/next controls, an explicit close action, focus management, and a restrained image counter. Reuse the five cataloged gallery images and keep facilities, room selection, the booking panel, and persistent saved state out of this unit.

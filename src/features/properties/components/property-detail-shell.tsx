@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 import {
   ArrowLeft,
@@ -11,6 +10,7 @@ import { getMediaById } from "@/data/mock";
 import type { PropertyDetail } from "@/types/domain";
 
 import { SaveStayButton } from "./save-stay-button";
+import { PropertyGallery } from "./property-gallery";
 
 export function PropertyDetailShell({
   property,
@@ -18,9 +18,13 @@ export function PropertyDetailShell({
   property: PropertyDetail;
 }) {
   const { summary, editorial } = property;
-  const leadMedia = getMediaById(property.galleryMediaIds[0]);
+  const galleryMedia = property.galleryMediaIds.flatMap((mediaId) => {
+    const media = getMediaById(mediaId);
 
-  if (!leadMedia) {
+    return media ? [media] : [];
+  });
+
+  if (galleryMedia.length === 0) {
     return null;
   }
 
@@ -134,23 +138,11 @@ export function PropertyDetailShell({
           </div>
         </header>
 
-        <figure className="container-luma">
-          <div className="relative aspect-[4/5] overflow-hidden bg-brand-linen sm:aspect-[16/10] lg:aspect-[16/8.3]">
-            <Image
-              fill
-              preload
-              src={leadMedia.src}
-              alt={leadMedia.alt}
-              sizes="(max-width: 767px) calc(100vw - 2.5rem), calc(100vw - 5rem)"
-              className="object-cover"
-              style={{ objectPosition: leadMedia.focalPoint }}
-            />
-          </div>
-          <figcaption className="grid gap-3 border-b border-brand-forest-deep/18 py-4 font-mono text-[0.625rem] leading-5 tracking-[0.1em] text-muted-foreground uppercase sm:grid-cols-2 sm:py-5">
-            <span>{leadMedia.title} · Lead view</span>
-            <span className="sm:text-right">{leadMedia.location}</span>
-          </figcaption>
-        </figure>
+        <PropertyGallery
+          media={galleryMedia}
+          propertyName={summary.name}
+          location={`${summary.location.city} · ${summary.location.country}`}
+        />
 
         <section
           aria-labelledby="luma-note-title"

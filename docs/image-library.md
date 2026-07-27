@@ -1,6 +1,6 @@
 # LumaStay image library
 
-This library uses custom fictional-property photography for the initial brand-defining moments and curated Unsplash photography for supporting human, food, destination, and expanded mock-property moments. Components should consume the metadata in `src/data/mock/media.ts` rather than repeating paths or alt text.
+This library uses custom fictional-property photography for the initial brand-defining moments and curated Unsplash and Pexels photography for supporting human, food, destination, and expanded mock-property moments. Components should consume the metadata in `src/data/mock/media.ts` rather than repeating paths or alt text.
 
 ## Visual language
 
@@ -26,7 +26,7 @@ Shared constraints: photorealistic natural photography; original plausible archi
 
 ## Stock sources
 
-All stock files are stored locally at 2400 px on their longest constrained dimension and are free to use under the [Unsplash License](https://unsplash.com/license).
+All stock files are stored locally at up to 2400 px on their longest dimension. They are free to use under either the [Unsplash License](https://unsplash.com/license) or the [Pexels License](https://www.pexels.com/license/), as recorded in the media catalog.
 
 | Local asset | Photographer | Source |
 | --- | --- | --- |
@@ -41,3 +41,7 @@ All stock files are stored locally at 2400 px on their longest constrained dimen
 | `properties/bhutan-forest-lodge.jpg` | Pema Gyamtsho | [Unsplash photo](https://unsplash.com/photos/wooden-cabins-nestled-among-trees-in-a-forest-9i6mVlOAnBM) |
 | `properties/vietnam-lake-retreat.jpg` | Alex Safareli | [Unsplash photo](https://unsplash.com/photos/resort-buildings-nestled-beside-a-tranquil-lake-and-mountains-2Cq7FeXlFAQ) |
 | `properties/indonesia-hillside-cabin.jpg` | Stanley Kustamin | [Unsplash photo](https://unsplash.com/photos/modern-cabin-nestled-on-a-green-hillside-gJ_Y_r7GTEc) |
+| `properties/casa-serein-lemon-terrace.jpg` | Sara Abilova | [Unsplash photo](https://unsplash.com/photos/sun-loungers-umbrellas-and-lemon-trees-z32wCbOO15M) |
+| `properties/casa-serein-sea-room.jpg` | Magda Ehlers | [Pexels photo](https://www.pexels.com/photo/sunlit-italian-villa-interior-with-sea-view-35438897/) |
+| `properties/casa-serein-positano-terrace.jpg` | Meghan Marron | [Pexels photo](https://www.pexels.com/photo/terrace-on-sea-coast-13418034/) |
+| `properties/casa-serein-pool-at-dusk.jpg` | Berat Yüksel | [Pexels photo](https://www.pexels.com/photo/elegant-mediterranean-villa-by-the-sea-at-sunset-31751025/) |
