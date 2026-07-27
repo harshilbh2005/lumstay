@@ -1,6 +1,6 @@
 # LumaStay Project Handoff
 
-Last updated: 26 July 2026
+Last updated: 27 July 2026
 
 Repository: `/Users/harshilbrahmani/Developer/Personal/lumstay`
 
@@ -339,7 +339,7 @@ Important limitation: destination links populate the `/search` summary, but the 
 - Responsive image sizing preserves catalog focal points, and only saved-state feedback remains client-side
 - Verified at 1440×1000 and 390×844 with all six images decoded, no horizontal overflow, visible brass keyboard focus, hover feedback, working saved-state feedback, and 44px controls
 
-Important limitation: the destination and dates still describe search intent rather than filtering availability or geography. Loading, empty, error, and retry states remain separate roadmap items. Result links point to the planned `/properties/[slug]` route, which is not implemented yet.
+Important limitation: the destination and dates still describe search intent rather than filtering availability or geography. Empty, error, and retry states remain separate roadmap items. Result links point to the planned `/properties/[slug]` route, which is not implemented yet.
 
 ### Search result filters
 
@@ -383,6 +383,20 @@ Important limitation: the sort options operate only on each property’s local s
 - Verified at 1440×1000 and 390×844 with search edits, invalid date handling, combined filters, reset/apply, filter and sort preservation, focus return, Escape dismissal, body scroll lock, 44px controls, zero horizontal overflow, and a clean browser console
 
 Important limitation: the mobile destination field intentionally remains a focused text input rather than duplicating the homepage autocomplete. Search intent still does not geofilter the local result set, and native date inputs remain platform-rendered.
+
+### Search loading skeletons
+
+- Route-level `/search/loading.tsx` streams a lightweight Server Component fallback while request-dependent results resolve
+- A search-specific layout keeps the global header and footer stable and interactive around the loading boundary
+- The invariant editorial introduction is shared between loaded and loading states so its hierarchy and spacing cannot drift
+- Request-dependent search context, mobile filter trigger, desktop filter rail, results toolbar, and six property rows use content-shaped placeholders that preserve the established listing geometry
+- The featured desktop row measures 608px in both states; the featured mobile row is 640px while loading and 659px when loaded
+- Warm muted placeholders, paper and linen surfaces, sharp edges, and forest hairlines follow the LumaStay token system without introducing generic gray cards, spinners, blurred overlays, or a second search surface
+- Motion is limited to the existing opacity pulse and is neutralized by the global reduced-motion rule
+- The loading section exposes `aria-busy`, announces “Loading search results” through a live status, and hides decorative placeholder geometry from assistive technology
+- Verified at 1440×1000 and 390×844 with the real streamed fallback, stable shell, matching first-row geometry, zero horizontal overflow, successful loaded-state replacement, and a clean browser console
+
+Important limitation: the local editorial fixture resolves almost immediately, so the loading state is intentionally brief under normal local conditions. It is structured for future asynchronous result data without adding artificial production delays.
 
 ### Homepage search query handoff
 
@@ -439,6 +453,7 @@ The implemented routes are `/`, `/destinations`, `/edit`, and `/search`. Navigat
 ## Commit history
 
 ```text
+bc0f9a7 feat: add mobile search and filter sheets
 cdbc5c2 feat: add search sorting and filter chips
 84d8d0e feat: add search result filters
 9ef2068 feat: refine responsive property listings
@@ -481,7 +496,7 @@ Build each item separately, research it first, verify it, and commit it before m
 9. ~~Price, facility, rating, property-type, and atmosphere filters~~ Complete
 10. ~~Sorting controls and applied-filter chips~~ Complete
 11. ~~Mobile search and filter sheets~~ Complete
-12. Search loading skeletons
+12. ~~Search loading skeletons~~ Complete
 13. Search empty, no-results, error, and retry states
 14. Expand mock property data enough to exercise filtering and pagination/loading behavior
 
@@ -531,4 +546,4 @@ Build each item separately, research it first, verify it, and commit it before m
 
 ## Recommended immediate next step
 
-Build **search loading skeletons** as the next isolated feature. Research premium editorial travel and listing-loading patterns in Refero first, then mirror the current desktop and mobile result geometry closely enough to avoid layout shift while retaining the LumaStay paper, linen, forest, brass, and hairline language. Keep route-level loading UI server-friendly and accessible. Do not begin empty/error/retry states, pagination, mock-data expansion, or property details in the same unit.
+Build the **search empty, no-results, error, and retry states** as the next isolated feature. Research premium editorial search-state and recovery patterns in Refero first, then keep the successful search shell recognizable while giving each state a clear reason, recovery action, and accessible announcement. Reuse the current URL-backed search and filter model, and preserve the LumaStay paper, linen, forest, brass, typography, and hairline language. Do not begin pagination, mock-data expansion, property details, booking, or checkout in the same unit.

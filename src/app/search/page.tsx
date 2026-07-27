@@ -1,7 +1,5 @@
 import type { Metadata } from "next";
 
-import { SiteFooter } from "@/components/layout/site-footer";
-import { SiteHeader } from "@/components/layout/site-header";
 import { SearchResults } from "@/features/search";
 import {
   getSearchContext,
@@ -23,15 +21,9 @@ export default async function SearchPage({
   const context = getSearchContext(resolvedSearchParams);
 
   return (
-    <>
-      <SiteHeader />
-      <main className="min-h-screen bg-brand-paper">
-        <SearchResults
-          context={context}
-          searchParams={resolvedSearchParams}
-        />
-      </main>
-      <SiteFooter />
-    </>
+    <SearchResults
+      context={context}
+      searchParams={resolvedSearchParams}
+    />
   );
 }
