@@ -261,6 +261,138 @@ export const lumstayMedia = [
       licenseUrl: unsplashLicenseUrl,
     },
   },
+  {
+    id: "azalai-house-pool",
+    src: "/images/lumstay/properties/sahra-pool-morocco.jpg",
+    title: "Azalai House Pool",
+    alt: "Red earthen hotel beside a still blue pool with an olive tree and shaded loungers",
+    kind: "property",
+    origin: "stock",
+    location: "Sahara Desert, Morocco",
+    description:
+      "A sun-softened pool court for a warm, restrained desert-stay portrait.",
+    intendedUses: ["property card", "desert collection", "pool story"],
+    aspectRatio: "2:3",
+    focalPoint: "center 58%",
+    palette: ["earth red", "olive", "pool blue", "cloud grey"],
+    source: {
+      provider: "Unsplash",
+      creator: "Alexander Psiuk",
+      pageUrl:
+        "https://unsplash.com/photos/poolside-serenity-with-vibrant-architecture-and-blue-skies-iPEWymTTUDw",
+      licenseUrl: unsplashLicenseUrl,
+    },
+  },
+  {
+    id: "shiro-line-facade",
+    src: "/images/lumstay/properties/tokyo-minimal-hotel.jpg",
+    title: "Shiro Line Facade",
+    alt: "Monochrome Tokyo building facade composed of vertical screens and deep shadow",
+    kind: "property",
+    origin: "stock",
+    location: "Tokyo, Japan",
+    description:
+      "A tightly framed architectural study for a graphic, design-led city stay.",
+    intendedUses: ["property card", "design stays", "city collection"],
+    aspectRatio: "2:3",
+    focalPoint: "center",
+    palette: ["paper white", "graphite", "soft grey", "ink"],
+    source: {
+      provider: "Unsplash",
+      creator: "Sebastian Schuster",
+      pageUrl:
+        "https://unsplash.com/photos/modern-building-facade-with-vertical-lines-KmL6FeLXrfs",
+      licenseUrl: unsplashLicenseUrl,
+    },
+  },
+  {
+    id: "dar-afnar-courtyard",
+    src: "/images/lumstay/properties/moroccan-riad-courtyard.jpg",
+    title: "Dar Afnar Courtyard",
+    alt: "Earthen Moroccan courtyard glowing with low lanterns beneath a deep blue evening sky",
+    kind: "property",
+    origin: "stock",
+    location: "Tajante, Morocco",
+    description:
+      "A blue-hour courtyard view balancing carved earth walls, garden shadow, and pools of warm light.",
+    intendedUses: ["property card", "heritage collection", "courtyard story"],
+    aspectRatio: "2:3",
+    focalPoint: "center 48%",
+    palette: ["night blue", "earthen brown", "lantern gold", "palm green"],
+    source: {
+      provider: "Unsplash",
+      creator: "Bernd Dittrich",
+      pageUrl:
+        "https://unsplash.com/photos/courtyard-of-a-moroccan-riad-at-dusk-with-lanterns-yzm55q5pA_A",
+      licenseUrl: unsplashLicenseUrl,
+    },
+  },
+  {
+    id: "punakha-field-house-cabins",
+    src: "/images/lumstay/properties/bhutan-forest-lodge.jpg",
+    title: "Punakha Field House Cabins",
+    alt: "A row of timber cabins following a stone path through dense Bhutanese forest",
+    kind: "property",
+    origin: "stock",
+    location: "Punakha, Bhutan",
+    description:
+      "Low forest cabins held in warm timber, shifting shade, and deep green foliage.",
+    intendedUses: ["property card", "remote escapes", "wellness collection"],
+    aspectRatio: "3:2",
+    focalPoint: "center",
+    palette: ["forest green", "cedar", "warm stone", "leaf shadow"],
+    source: {
+      provider: "Unsplash",
+      creator: "Pema Gyamtsho",
+      pageUrl:
+        "https://unsplash.com/photos/wooden-cabins-nestled-among-trees-in-a-forest-9i6mVlOAnBM",
+      licenseUrl: unsplashLicenseUrl,
+    },
+  },
+  {
+    id: "ninh-lake-lodge-aerial",
+    src: "/images/lumstay/properties/vietnam-lake-retreat.jpg",
+    title: "Ninh Lake Lodge",
+    alt: "Thatched resort pavilions curving around a green lake beneath misty limestone mountains",
+    kind: "property",
+    origin: "stock",
+    location: "Vietnam",
+    description:
+      "A wide landscape view of organic roofs, reflective water, and rain-soft mountain green.",
+    intendedUses: ["property card", "nature stays", "wellness collection"],
+    aspectRatio: "3:2",
+    focalPoint: "center",
+    palette: ["lake green", "thatch", "mist grey", "deep foliage"],
+    source: {
+      provider: "Unsplash",
+      creator: "Alex Safareli",
+      pageUrl:
+        "https://unsplash.com/photos/resort-buildings-nestled-beside-a-tranquil-lake-and-mountains-2Cq7FeXlFAQ",
+      licenseUrl: unsplashLicenseUrl,
+    },
+  },
+  {
+    id: "sukawana-cabin-hillside",
+    src: "/images/lumstay/properties/indonesia-hillside-cabin.jpg",
+    title: "Sukawana Cabin",
+    alt: "Minimal timber-and-glass cabin lifted above a lush green hillside beneath an overcast sky",
+    kind: "property",
+    origin: "stock",
+    location: "West Java, Indonesia",
+    description:
+      "A compact hillside cabin framed by tea-country green and generous pale sky.",
+    intendedUses: ["property card", "cabin collection", "remote escapes"],
+    aspectRatio: "2:3",
+    focalPoint: "center 62%",
+    palette: ["tea green", "dark timber", "mist blue", "charcoal"],
+    source: {
+      provider: "Unsplash",
+      creator: "Stanley Kustamin",
+      pageUrl:
+        "https://unsplash.com/photos/modern-cabin-nestled-on-a-green-hillside-gJ_Y_r7GTEc",
+      licenseUrl: unsplashLicenseUrl,
+    },
+  },
 ] as const satisfies readonly LumaStayMediaAsset[];
 
 export const generatedMedia = lumstayMedia.filter(

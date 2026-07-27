@@ -80,6 +80,8 @@ const searchIntentKeys = [
 
 const defaultSortOrder: SearchSortOrder = "luma-edit";
 
+export const SEARCH_RESULTS_BATCH_SIZE = 6;
+
 function getValues(value: SearchParamValue) {
   if (!value) {
     return [];
@@ -288,6 +290,34 @@ export function getCanonicalSearchHref(
       getSearchSort(params),
     ),
   );
+}
+
+export function getVisibleResultCount(
+  params: Record<string, SearchParamValue>,
+  totalCount: number,
+) {
+  const requestedCount = Number(getSingleValue(params.show));
+  const visibleCount =
+    Number.isInteger(requestedCount) && requestedCount > 0
+      ? requestedCount
+      : SEARCH_RESULTS_BATCH_SIZE;
+
+  return Math.min(visibleCount, totalCount);
+}
+
+export function getMoreResultsHref(
+  params: Record<string, SearchParamValue>,
+  visibleCount: number,
+) {
+  const query = getCanonicalSearchParams(
+    params,
+    getSearchFilters(params),
+    getSearchSort(params),
+  );
+
+  query.set("show", String(visibleCount + SEARCH_RESULTS_BATCH_SIZE));
+
+  return getSearchHref(query);
 }
 
 function getFilterRemovalHref(

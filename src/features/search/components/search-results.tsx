@@ -10,6 +10,7 @@ import { MobileSearchSheet } from "@/features/search/components/mobile-search-sh
 import { SearchFilterPanel } from "@/features/search/components/search-filter-panel";
 import { PropertyResultCard } from "@/features/search/components/property-result-card";
 import { SearchResultsIntro } from "@/features/search/components/search-results-intro";
+import { SearchResultsProgress } from "@/features/search/components/search-results-progress";
 import {
   SearchResultsState,
   SearchStateRail,
@@ -21,9 +22,11 @@ import {
   getAppliedFilterEntries,
   getCanonicalSearchHref,
   getClearFiltersHref,
+  getMoreResultsHref,
   getPreservedSortEntries,
   getSearchFilters,
   getSearchSort,
+  getVisibleResultCount,
   sortProperties,
 } from "@/features/search/lib/search-filters";
 import {
@@ -46,6 +49,15 @@ export function SearchResults({
     searchData.status === "ready" ? searchData.properties : [];
   const filteredProperties = filterProperties(availableProperties, filters);
   const sortedProperties = sortProperties(filteredProperties, sortOrder);
+  const visibleResultCount = getVisibleResultCount(
+    searchParams,
+    sortedProperties.length,
+  );
+  const visibleProperties = sortedProperties.slice(0, visibleResultCount);
+  const moreResultsHref =
+    visibleResultCount < sortedProperties.length
+      ? getMoreResultsHref(searchParams, visibleResultCount)
+      : null;
   const resultsState =
     searchData.status === "error"
       ? "error"
@@ -182,18 +194,25 @@ export function SearchResults({
                     />
                   </div>
                 ) : (
-                  <ol className="mt-3 divide-y divide-brand-forest-deep/16">
-                    {sortedProperties.map((property, index) => (
-                      <li key={property.id}>
-                        <PropertyResultCard
-                          property={property}
-                          index={index}
-                          featured={index === 0}
-                          orderLabel={resultOrderLabel ?? undefined}
-                        />
-                      </li>
-                    ))}
-                  </ol>
+                  <>
+                    <ol className="mt-3 divide-y divide-brand-forest-deep/16">
+                      {visibleProperties.map((property, index) => (
+                        <li key={property.id}>
+                          <PropertyResultCard
+                            property={property}
+                            index={index}
+                            featured={index === 0}
+                            orderLabel={resultOrderLabel ?? undefined}
+                          />
+                        </li>
+                      ))}
+                    </ol>
+                    <SearchResultsProgress
+                      visibleCount={visibleResultCount}
+                      totalCount={sortedProperties.length}
+                      moreResultsHref={moreResultsHref}
+                    />
+                  </>
                 )}
               </>
             )}

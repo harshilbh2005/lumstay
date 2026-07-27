@@ -345,7 +345,7 @@ Important limitation: the destination and dates still describe search intent rat
 
 - Refero-informed faceted filtering for nightly price, guest rating, property type, facilities, and atmosphere
 - Restrained desktop rail uses the existing paper, linen, forest, brass, hairline, and mono-metadata language without introducing cards, shadows, pills, or a second search hero
-- Typed local taxonomies extend the six-property fixture only far enough to exercise the filter combinations
+- Typed local taxonomies extend the property fixture only far enough to exercise the filter combinations
 - Server-side parsing ignores invalid URL values, filters the fixture before rendering cards, and preserves the original Luma editorial order
 - A progressively enhanced Next.js `Form` writes shareable GET parameters while retaining destination, dates, guests, and rooms
 - Multi-select facilities require every selected facility; atmosphere and property-type choices match any selected option within their group
@@ -401,7 +401,7 @@ Important limitation: the local editorial fixture resolves almost immediately, s
 ### Search empty, no-results, error, and retry states
 
 - Refero-informed recovery states stay inside the established search context and result ledger instead of replacing the page with a generic centered card
-- Valid filters that eliminate the six-property fixture now produce a dedicated no-results state while retaining the active filter rail, applied chips, sort order, destination, dates, guests, and rooms
+- Valid filters that eliminate the twelve-property fixture now produce a dedicated no-results state while retaining the active filter rail, applied chips, sort order, destination, dates, guests, and rooms
 - No-results recovery clears only the active filters and preserves the chosen order and original search intent
 - Explicit mock repository outcomes expose reviewable collection-empty and recoverable-error states through `_demo=empty` and `_demo=error`
 - Empty and error states replace the unusable filter controls with a plain collection-status rail and preserve valid search, filter, and sort parameters when retrying
@@ -409,7 +409,20 @@ Important limitation: the local editorial fixture resolves almost immediately, s
 - State messaging uses status or alert semantics, 44px-or-larger recovery controls, visible keyboard focus, sharp hairline geometry, and the existing paper, linen, forest, brass, and destructive token roles
 - Verified at 1440×1000 and 390×844 across success, no-results, empty, recoverable-error, and injected unexpected-error paths with clean expected-state consoles, zero horizontal overflow, canonical recovery URLs, and successful retry behavior
 
-Important limitation: empty and recoverable-error outcomes are deterministic presentation fixtures rather than real data-provider failures. The six-property collection still loads synchronously from local mock data.
+Important limitation: empty and recoverable-error outcomes are deterministic presentation fixtures rather than real data-provider failures. The twelve-property collection still loads synchronously from local mock data.
+
+### Expanded property fixtures and incremental results
+
+- The editorial property collection now includes 12 typed summaries, enough to exercise every existing property-type, facility, atmosphere, price, and rating filter with meaningful result-count changes
+- The six added listings use six locally stored Unsplash photographs; photographer, source page, license, alt text, focal point, and palette metadata live in `src/data/mock/media.ts` and `docs/image-library.md`
+- No image was generated for this expansion; the two initial source candidates with visible real-hotel branding were rejected before entering the catalog
+- Search results reveal six stays initially and six more through a Server Component link backed by the canonical `show=12` URL parameter
+- The control reports `06 of 12 stays shown`, preserves the current search intent, active filters, and sort order, and uses `scroll={false}` so the viewport stays anchored during the transition
+- Filter, sort, and search changes intentionally omit `show`, returning the user to the first six results for the new result set
+- Result sets of six or fewer show their full count and completion message without rendering a non-functional load-more action
+- Verified at 1440×1000 and 390×844: 6 → 12 results, loaded local images, zero-pixel scroll movement, canonical URL persistence, three-result heritage filtering, completion state, and a clean browser console
+
+Important limitation: this is incremental reveal over a synchronous local collection, not cursor pagination or an API-backed infinite list. The six new listings are fictional editorial fixtures illustrated with licensed stock photographs; the source photographs are not representations of bookable LumaStay inventory.
 
 ### Homepage search query handoff
 
@@ -453,7 +466,7 @@ The implemented routes are `/`, `/destinations`, `/edit`, and `/search`. Navigat
 
 ## Current mock-data state
 
-- `mockProperties`: 6 property summaries with local property-type, facility, and atmosphere tags; the homepage intentionally renders the first 3
+- `mockProperties`: 12 property summaries with local property-type, facility, and atmosphere tags; the homepage intentionally renders the first 3
 - `mockDestinations`: 7 destination summaries shared by `/destinations` and the hero autocomplete
 - `mockEditorialStories`: 7 editorial story summaries used by `/edit`
 - `mockRooms`: empty array
@@ -466,6 +479,7 @@ The implemented routes are `/`, `/destinations`, `/edit`, and `/search`. Navigat
 ## Commit history
 
 ```text
+3e55134 feat: add search recovery states
 38d35fe feat: add search loading skeletons
 bc0f9a7 feat: add mobile search and filter sheets
 cdbc5c2 feat: add search sorting and filter chips
@@ -512,7 +526,7 @@ Build each item separately, research it first, verify it, and commit it before m
 11. ~~Mobile search and filter sheets~~ Complete
 12. ~~Search loading skeletons~~ Complete
 13. ~~Search empty, no-results, error, and retry states~~ Complete
-14. Expand mock property data enough to exercise filtering and pagination/loading behavior
+14. ~~Expand mock property data enough to exercise filtering and pagination/loading behavior~~ Complete
 
 ### Phase 3 — Property and room selection
 
@@ -560,4 +574,4 @@ Build each item separately, research it first, verify it, and commit it before m
 
 ## Recommended immediate next step
 
-Expand the **mock property data enough to exercise filtering and pagination/loading behavior** as the next isolated feature. Decide the smallest useful collection size and pagination or incremental-loading model before editing fixtures, preserve the current taxonomy and editorial ordering rules, and keep all data local. Do not begin property details, room fixtures, booking, checkout, saved-state persistence, or trips in the same unit.
+Build the first isolated **property details route at `/properties/[slug]`**. Research the property-detail information architecture before editing, decide how the current summary fixtures map into a full property shape, and implement the route shell and one representative property without starting the gallery lightbox, room selection, booking store, checkout, saved-state persistence, or trips in the same unit.

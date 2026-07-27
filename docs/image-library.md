@@ -1,6 +1,6 @@
 # LumaStay image library
 
-This library uses custom fictional-property photography for the brand-defining moments and curated Unsplash photography for supporting human, food, and destination moments. Components should consume the metadata in `src/data/mock/media.ts` rather than repeating paths or alt text.
+This library uses custom fictional-property photography for the initial brand-defining moments and curated Unsplash photography for supporting human, food, destination, and expanded mock-property moments. Components should consume the metadata in `src/data/mock/media.ts` rather than repeating paths or alt text.
 
 ## Visual language
 
@@ -35,3 +35,9 @@ All stock files are stored locally at 2400 px on their longest constrained dimen
 | `experiences/tropical-infinity-pool.jpg` | Merve Kalafat Yılmaz | [Unsplash photo](https://unsplash.com/photos/infinity-pool-surrounded-by-lush-tropical-palm-trees-Vm4jio0b4ek) |
 | `experiences/chef-plating-dinner.jpg` | Madeline Liu | [Unsplash photo](https://unsplash.com/photos/chef-plating-food-in-a-professional-kitchen-bXOHW6fKdPI) |
 | `experiences/japanese-market-moment.jpg` | Haewon Oh | [Unsplash photo](https://unsplash.com/photos/woman-walking-through-a-busy-street-market-S2Fl6B_wE9U) |
+| `properties/sahra-pool-morocco.jpg` | Alexander Psiuk | [Unsplash photo](https://unsplash.com/photos/poolside-serenity-with-vibrant-architecture-and-blue-skies-iPEWymTTUDw) |
+| `properties/tokyo-minimal-hotel.jpg` | Sebastian Schuster | [Unsplash photo](https://unsplash.com/photos/modern-building-facade-with-vertical-lines-KmL6FeLXrfs) |
+| `properties/moroccan-riad-courtyard.jpg` | Bernd Dittrich | [Unsplash photo](https://unsplash.com/photos/courtyard-of-a-moroccan-riad-at-dusk-with-lanterns-yzm55q5pA_A) |
+| `properties/bhutan-forest-lodge.jpg` | Pema Gyamtsho | [Unsplash photo](https://unsplash.com/photos/wooden-cabins-nestled-among-trees-in-a-forest-9i6mVlOAnBM) |
+| `properties/vietnam-lake-retreat.jpg` | Alex Safareli | [Unsplash photo](https://unsplash.com/photos/resort-buildings-nestled-beside-a-tranquil-lake-and-mountains-2Cq7FeXlFAQ) |
+| `properties/indonesia-hillside-cabin.jpg` | Stanley Kustamin | [Unsplash photo](https://unsplash.com/photos/modern-cabin-nestled-on-a-green-hillside-gJ_Y_r7GTEc) |
