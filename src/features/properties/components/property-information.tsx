@@ -53,7 +53,7 @@ export function PropertyInformation({
         <div className="container-luma py-[var(--space-section)]">
           <div className="grid gap-10 border-t border-brand-forest-deep/18 pt-7 lg:grid-cols-12 lg:gap-x-8 lg:pt-9">
             <div className="lg:col-span-3">
-              <SectionLabel index="03">The character</SectionLabel>
+              <SectionLabel index="04">The character</SectionLabel>
             </div>
 
             <div className="lg:col-span-6">
@@ -93,7 +93,7 @@ export function PropertyInformation({
       >
         <div className="grid gap-8 border-t border-brand-forest-deep/18 pt-7 lg:grid-cols-12 lg:gap-x-8 lg:pt-9">
           <div className="lg:col-span-3">
-            <SectionLabel index="04">At the house</SectionLabel>
+            <SectionLabel index="05">At the house</SectionLabel>
           </div>
 
           <div className="lg:col-span-9">
@@ -136,7 +136,7 @@ export function PropertyInformation({
         <div className="container-luma py-[var(--space-section)]">
           <div className="grid gap-10 border-t border-white/18 pt-7 lg:grid-cols-12 lg:gap-x-8 lg:pt-9">
             <div className="lg:col-span-3">
-              <SectionLabel index="05" inverse>
+              <SectionLabel index="06" inverse>
                 Before you arrive
               </SectionLabel>
             </div>
@@ -209,7 +209,7 @@ export function PropertyInformation({
       >
         <div className="grid gap-10 border-t border-brand-forest-deep/18 pt-7 lg:grid-cols-12 lg:gap-x-8 lg:pt-9">
           <div className="lg:col-span-3">
-            <SectionLabel index="06">The setting</SectionLabel>
+            <SectionLabel index="07">The setting</SectionLabel>
           </div>
 
           <div className="lg:col-span-6">

@@ -5,7 +5,7 @@ import {
   Star,
 } from "@phosphor-icons/react/ssr";
 
-import { getMediaById } from "@/data/mock";
+import { getMediaById, getRoomsByPropertyId } from "@/data/mock";
 import type { PropertyDetail } from "@/types/domain";
 
 import { SaveStayButton } from "./save-stay-button";
@@ -14,6 +14,7 @@ import {
   type PropertyGalleryMedia,
 } from "./property-gallery";
 import { PropertyInformation } from "./property-information";
+import { RoomSelection } from "./room-selection";
 
 export function PropertyDetailShell({
   property,
@@ -21,6 +22,7 @@ export function PropertyDetailShell({
   property: PropertyDetail;
 }) {
   const { summary, editorial } = property;
+  const rooms = getRoomsByPropertyId(summary.id);
   const galleryMedia: PropertyGalleryMedia[] =
     property.galleryMediaIds.flatMap((mediaId) => {
       const media = getMediaById(mediaId);
@@ -185,6 +187,8 @@ export function PropertyDetailShell({
 
           </div>
         </section>
+
+        <RoomSelection rooms={rooms} propertyName={summary.name} />
 
         <PropertyInformation property={property} />
       </article>

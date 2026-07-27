@@ -503,6 +503,20 @@ Important limitation: Casa Serein remains fictional. The operational content is 
 
 Important limitation: these are illustrative interface fixtures, not live Casa Serein inventory. Prices, availability, occupancy rules, cancellation charges, breakfast entitlements, and the room-to-photo associations are not bookable claims and must eventually come from a real property data source.
 
+### Casa Serein room selection
+
+- The property page now places a dedicated room-selection section between the Luma note and the general property-information ledger
+- Three comparison-friendly room studies expose both catalog images, occupancy, bed setup, room size, full facility lists, breakfast inclusion, nightly price, and cancellation category
+- Each cancellation summary uses a native disclosure so detailed charges remain available without making every row visually dense
+- Room choice uses one native radio group with 48px visual labels, arrow-key movement, visible keyboard focus, selected-state copy, and no client JavaScript
+- The reference lock uses Kobu’s sharp image-led gallery rhythm as the primary direction, Christopher Ireland Creative’s ruled editorial rows, Scape’s rapid image/name/price scan, and only Trip.com’s clear separation of inclusions, occupancy, policy, and price
+- Rounded marketplace cards, shadows, filter chrome, urgency badges, blue conversion styling, the UI/UX Pro Max liquid-glass recommendation, and the not-yet-built sticky booking panel were explicitly rejected
+- Desktop uses asymmetric 5/4/3 image, detail, and rate columns; mobile collapses every room into one readable column with a compact two-image diptych and full-width selection target
+- The existing property-information folios now continue from 04 through 07 after the room section’s 03
+- Verified from the production build at 1440×1000 and 390×844 with all six room images decoded, exact room data, native radio click and arrow-key selection, disclosure expansion, 48px-or-larger controls, visible keyboard focus, zero horizontal overflow, and a clean browser console
+
+Important limitation: room choice is intentionally local browser form state. It resets on reload, does not check availability, does not calculate a stay total, and is not yet reflected in a sticky booking summary or cross-route booking store.
+
 ### Homepage search query handoff
 
 - The hero now performs a real client-side transition to `/search`
@@ -558,6 +572,7 @@ The implemented routes are `/`, `/destinations`, `/edit`, `/search`, and `/prope
 ## Commit history
 
 ```text
+6bea367 feat: add Casa Serein room fixtures
 467d4d6 feat: add property information ledger
 7e07882 feat: add fullscreen property gallery
 e6c118e feat: add responsive property gallery
@@ -621,7 +636,7 @@ Build each item separately, research it first, verify it, and commit it before m
 18. ~~Fullscreen gallery lightbox with keyboard and touch navigation~~ Complete
 19. ~~Facilities, atmosphere, policies, practical details, and location sections~~ Complete
 20. ~~Room fixtures with distinct images, occupancy, beds, size, facilities, pricing, breakfast, and cancellation terms~~ Complete
-21. Room selection cards/interface
+21. ~~Room selection cards/interface~~ Complete
 22. Sticky booking summary/action panel
 23. Property loading, not-found, error, and unavailable-room states
 
@@ -659,4 +674,4 @@ Build each item separately, research it first, verify it, and commit it before m
 
 ## Recommended immediate next step
 
-Build the isolated **Casa Serein room-selection cards/interface** from the completed fixtures. Research and lock a Refero direction before implementation, preserve the existing editorial property-page rhythm, and make room differences easy to compare across desktop and mobile. Keep the sticky booking panel, live availability behavior, price-total calculations, and cross-route booking state out of this unit.
+Build the isolated **Casa Serein sticky booking summary/action panel**. Research and lock a Refero direction before implementation, progressively reflect the currently selected native room, and keep the interaction local to the property page. Preserve the existing room radio semantics and defer live availability, total-stay calculations, checkout navigation, and cross-route Zustand state to their later roadmap units.
