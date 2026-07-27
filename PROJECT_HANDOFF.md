@@ -398,6 +398,19 @@ Important limitation: the mobile destination field intentionally remains a focus
 
 Important limitation: the local editorial fixture resolves almost immediately, so the loading state is intentionally brief under normal local conditions. It is structured for future asynchronous result data without adding artificial production delays.
 
+### Search empty, no-results, error, and retry states
+
+- Refero-informed recovery states stay inside the established search context and result ledger instead of replacing the page with a generic centered card
+- Valid filters that eliminate the six-property fixture now produce a dedicated no-results state while retaining the active filter rail, applied chips, sort order, destination, dates, guests, and rooms
+- No-results recovery clears only the active filters and preserves the chosen order and original search intent
+- Explicit mock repository outcomes expose reviewable collection-empty and recoverable-error states through `_demo=empty` and `_demo=error`
+- Empty and error states replace the unusable filter controls with a plain collection-status rail and preserve valid search, filter, and sort parameters when retrying
+- A route-level `/search/error.tsx` boundary handles unexpected render failures with the Next.js 16 `unstable_retry` recovery callback
+- State messaging uses status or alert semantics, 44px-or-larger recovery controls, visible keyboard focus, sharp hairline geometry, and the existing paper, linen, forest, brass, and destructive token roles
+- Verified at 1440×1000 and 390×844 across success, no-results, empty, recoverable-error, and injected unexpected-error paths with clean expected-state consoles, zero horizontal overflow, canonical recovery URLs, and successful retry behavior
+
+Important limitation: empty and recoverable-error outcomes are deterministic presentation fixtures rather than real data-provider failures. The six-property collection still loads synchronously from local mock data.
+
 ### Homepage search query handoff
 
 - The hero now performs a real client-side transition to `/search`
@@ -453,6 +466,7 @@ The implemented routes are `/`, `/destinations`, `/edit`, and `/search`. Navigat
 ## Commit history
 
 ```text
+38d35fe feat: add search loading skeletons
 bc0f9a7 feat: add mobile search and filter sheets
 cdbc5c2 feat: add search sorting and filter chips
 84d8d0e feat: add search result filters
@@ -497,7 +511,7 @@ Build each item separately, research it first, verify it, and commit it before m
 10. ~~Sorting controls and applied-filter chips~~ Complete
 11. ~~Mobile search and filter sheets~~ Complete
 12. ~~Search loading skeletons~~ Complete
-13. Search empty, no-results, error, and retry states
+13. ~~Search empty, no-results, error, and retry states~~ Complete
 14. Expand mock property data enough to exercise filtering and pagination/loading behavior
 
 ### Phase 3 — Property and room selection
@@ -546,4 +560,4 @@ Build each item separately, research it first, verify it, and commit it before m
 
 ## Recommended immediate next step
 
-Build the **search empty, no-results, error, and retry states** as the next isolated feature. Research premium editorial search-state and recovery patterns in Refero first, then keep the successful search shell recognizable while giving each state a clear reason, recovery action, and accessible announcement. Reuse the current URL-backed search and filter model, and preserve the LumaStay paper, linen, forest, brass, typography, and hairline language. Do not begin pagination, mock-data expansion, property details, booking, or checkout in the same unit.
+Expand the **mock property data enough to exercise filtering and pagination/loading behavior** as the next isolated feature. Decide the smallest useful collection size and pagination or incremental-loading model before editing fixtures, preserve the current taxonomy and editorial ordering rules, and keep all data local. Do not begin property details, room fixtures, booking, checkout, saved-state persistence, or trips in the same unit.

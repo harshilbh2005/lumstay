@@ -278,6 +278,18 @@ function getSearchHref(params: URLSearchParams) {
   return query ? `/search?${query}` : "/search";
 }
 
+export function getCanonicalSearchHref(
+  params: Record<string, SearchParamValue>,
+) {
+  return getSearchHref(
+    getCanonicalSearchParams(
+      params,
+      getSearchFilters(params),
+      getSearchSort(params),
+    ),
+  );
+}
+
 function getFilterRemovalHref(
   params: Record<string, SearchParamValue>,
   filters: SearchFilters,

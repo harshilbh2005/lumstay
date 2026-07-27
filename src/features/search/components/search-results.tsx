@@ -6,15 +6,21 @@ import {
   UsersThree,
 } from "@phosphor-icons/react/ssr";
 
-import { mockProperties } from "@/data/mock";
 import { MobileSearchSheet } from "@/features/search/components/mobile-search-sheet";
 import { SearchFilterPanel } from "@/features/search/components/search-filter-panel";
 import { PropertyResultCard } from "@/features/search/components/property-result-card";
 import { SearchResultsIntro } from "@/features/search/components/search-results-intro";
+import {
+  SearchResultsState,
+  SearchStateRail,
+} from "@/features/search/components/search-results-state";
 import { SearchResultsToolbar } from "@/features/search/components/search-results-toolbar";
+import { getSearchData } from "@/features/search/lib/search-data";
 import {
   filterProperties,
   getAppliedFilterEntries,
+  getCanonicalSearchHref,
+  getClearFiltersHref,
   getPreservedSortEntries,
   getSearchFilters,
   getSearchSort,
@@ -35,8 +41,19 @@ export function SearchResults({
 }) {
   const filters = getSearchFilters(searchParams);
   const sortOrder = getSearchSort(searchParams);
-  const filteredProperties = filterProperties(mockProperties, filters);
+  const searchData = getSearchData(searchParams);
+  const availableProperties =
+    searchData.status === "ready" ? searchData.properties : [];
+  const filteredProperties = filterProperties(availableProperties, filters);
   const sortedProperties = sortProperties(filteredProperties, sortOrder);
+  const resultsState =
+    searchData.status === "error"
+      ? "error"
+      : availableProperties.length === 0
+        ? "empty"
+        : sortedProperties.length === 0
+          ? "no-results"
+          : null;
   const searchFormValues = getSearchFormValues(searchParams);
   const mobileSearchPreservedEntries = [
     ...getAppliedFilterEntries(filters),
@@ -132,32 +149,54 @@ export function SearchResults({
         </div>
 
         <div className="mt-16 grid gap-12 lg:mt-24 lg:grid-cols-12 lg:gap-x-8 xl:gap-x-12">
-          <SearchFilterPanel
-            filters={filters}
-            searchParams={searchParams}
-            properties={mockProperties}
-          />
+          {resultsState === "empty" || resultsState === "error" ? (
+            <SearchStateRail variant={resultsState} />
+          ) : (
+            <SearchFilterPanel
+              filters={filters}
+              searchParams={searchParams}
+              properties={availableProperties}
+            />
+          )}
 
           <div className="min-w-0 lg:col-span-9">
-            <SearchResultsToolbar
-              resultCount={sortedProperties.length}
-              filters={filters}
-              sortOrder={sortOrder}
-              searchParams={searchParams}
-            />
+            {resultsState === "empty" || resultsState === "error" ? (
+              <SearchResultsState
+                variant={resultsState}
+                primaryHref={getCanonicalSearchHref(searchParams)}
+              />
+            ) : (
+              <>
+                <SearchResultsToolbar
+                  resultCount={sortedProperties.length}
+                  filters={filters}
+                  sortOrder={sortOrder}
+                  searchParams={searchParams}
+                />
 
-            <ol className="mt-3 divide-y divide-brand-forest-deep/16">
-              {sortedProperties.map((property, index) => (
-                <li key={property.id}>
-                  <PropertyResultCard
-                    property={property}
-                    index={index}
-                    featured={index === 0}
-                    orderLabel={resultOrderLabel ?? undefined}
-                  />
-                </li>
-              ))}
-            </ol>
+                {resultsState === "no-results" ? (
+                  <div className="mt-3">
+                    <SearchResultsState
+                      variant="no-results"
+                      primaryHref={getClearFiltersHref(searchParams)}
+                    />
+                  </div>
+                ) : (
+                  <ol className="mt-3 divide-y divide-brand-forest-deep/16">
+                    {sortedProperties.map((property, index) => (
+                      <li key={property.id}>
+                        <PropertyResultCard
+                          property={property}
+                          index={index}
+                          featured={index === 0}
+                          orderLabel={resultOrderLabel ?? undefined}
+                        />
+                      </li>
+                    ))}
+                  </ol>
+                )}
+              </>
+            )}
           </div>
         </div>
       </div>
