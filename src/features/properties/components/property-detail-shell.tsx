@@ -1,9 +1,16 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowLeft, ArrowUpRight } from "@phosphor-icons/react/ssr";
+import {
+  ArrowLeft,
+  ArrowUpRight,
+  MapPin,
+  Star,
+} from "@phosphor-icons/react/ssr";
 
 import { getMediaById } from "@/data/mock";
 import type { PropertyDetail } from "@/types/domain";
+
+import { SaveStayButton } from "./save-stay-button";
 
 export function PropertyDetailShell({
   property,
@@ -16,6 +23,12 @@ export function PropertyDetailShell({
   if (!leadMedia) {
     return null;
   }
+
+  const formattedPrice = new Intl.NumberFormat("en-IN", {
+    style: "currency",
+    currency: summary.priceFrom.currency,
+    maximumFractionDigits: 0,
+  }).format(summary.priceFrom.amount);
 
   return (
     <main className="min-h-screen overflow-hidden bg-brand-paper">
@@ -41,9 +54,9 @@ export function PropertyDetailShell({
                 <span className="mr-3 text-brand-brass">01</span>
                 {editorial.folio}
               </p>
-              <p className="mt-5 max-w-[24rem] text-sm leading-6 text-muted-foreground lg:mt-8">
-                {summary.location.city}, {summary.location.country}
-                {summary.location.region ? ` · ${summary.location.region}` : ""}
+              <p className="mt-5 max-w-[24rem] text-sm leading-6 text-muted-foreground capitalize lg:mt-8">
+                {summary.propertyType.replaceAll("-", " ")}
+                {summary.isLumaPick ? " · Luma pick" : ""}
               </p>
             </div>
 
@@ -57,6 +70,66 @@ export function PropertyDetailShell({
               <p className="max-w-[31rem] text-[1.0625rem] leading-7 text-foreground/78 sm:text-lg sm:leading-8">
                 {editorial.statement}
               </p>
+            </div>
+          </div>
+
+          <div className="mt-10 grid lg:mt-12 lg:grid-cols-12 lg:gap-x-8">
+            <div className="grid grid-cols-2 border-y border-brand-forest-deep/18 lg:col-span-9 lg:col-start-4 lg:grid-cols-[minmax(0,1.25fr)_minmax(0,0.75fr)_minmax(0,0.9fr)_auto]">
+              <div className="min-w-0 border-r border-b border-brand-forest-deep/18 px-4 py-4 sm:px-5 sm:py-5 lg:border-b-0 lg:px-6">
+                <p className="flex items-center gap-2 font-mono text-[0.625rem] tracking-[0.12em] text-brand-stone uppercase">
+                  <MapPin aria-hidden="true" size={13} />
+                  Setting
+                </p>
+                <p className="mt-2 text-sm leading-5 font-semibold text-brand-forest-deep sm:text-base">
+                  {summary.location.city}
+                  {summary.location.region
+                    ? ` · ${summary.location.region}`
+                    : ""}
+                </p>
+                <p className="mt-1 text-xs text-muted-foreground">
+                  {summary.location.country}
+                </p>
+              </div>
+
+              <div className="min-w-0 border-b border-brand-forest-deep/18 px-4 py-4 sm:px-5 sm:py-5 lg:border-r lg:border-b-0 lg:px-6">
+                <p className="font-mono text-[0.625rem] tracking-[0.12em] text-brand-stone uppercase">
+                  Guest rating
+                </p>
+                <p
+                  aria-label={`Rated ${summary.rating.toFixed(2)} out of 5 from ${summary.reviewCount} guest reviews`}
+                  className="mt-2 flex items-center gap-2 text-base font-semibold text-brand-forest-deep"
+                >
+                  <Star
+                    aria-hidden="true"
+                    size={14}
+                    weight="fill"
+                    className="text-brand-brass"
+                  />
+                  <span className="font-mono tabular-nums">
+                    {summary.rating.toFixed(2)}
+                  </span>
+                </p>
+                <p className="mt-1 text-xs text-muted-foreground">
+                  {summary.reviewCount} guest reviews
+                </p>
+              </div>
+
+              <div className="min-w-0 border-r border-brand-forest-deep/18 px-4 py-4 sm:px-5 sm:py-5 lg:px-6">
+                <p className="font-mono text-[0.625rem] tracking-[0.12em] text-brand-stone uppercase">
+                  Stay from
+                </p>
+                <p className="mt-2 font-mono text-base font-medium text-brand-forest-deep tabular-nums">
+                  {formattedPrice}
+                </p>
+                <p className="mt-1 text-xs text-muted-foreground">
+                  Per night · taxes later
+                </p>
+              </div>
+
+              <SaveStayButton
+                propertyName={summary.name}
+                variant="ledger"
+              />
             </div>
           </div>
         </header>

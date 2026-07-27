@@ -50,6 +50,7 @@ function SaveConfirmation({
       {isSaved ? (
         <Link
           href="/saved"
+          prefetch={false}
           aria-label="View saved stays"
           onClick={() => toast.dismiss(toastId)}
           className="group/notice flex min-h-11 items-center gap-2 rounded-full border border-white/16 bg-white/8 px-3.5 text-xs font-semibold text-brand-paper/88 transition-[background-color,border-color,color] duration-200 hover:border-brand-brass/48 hover:bg-white/12 hover:text-brand-paper focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-brass"
@@ -81,11 +82,14 @@ function SaveConfirmation({
 export function SaveStayButton({
   propertyName,
   className,
+  variant = "image",
 }: {
   propertyName: string;
   className?: string;
+  variant?: "image" | "ledger";
 }) {
   const [isSaved, setIsSaved] = React.useState(false);
+  const isLedgerVariant = variant === "ledger";
 
   function handleSave() {
     const nextSavedState = !isSaved;
@@ -115,11 +119,17 @@ export function SaveStayButton({
       aria-pressed={isSaved}
       onClick={handleSave}
       className={cn(
-        "group/save flex size-11 items-center justify-center rounded-full border shadow-[0_6px_20px_rgb(8_30_31/0.22),inset_0_1px_0_rgb(255_255_255/0.12)] backdrop-blur-md",
-        "transition-[color,background-color,border-color,transform] duration-200 ease-luma hover:-translate-y-0.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-brass focus-visible:ring-offset-2 focus-visible:ring-offset-transparent active:translate-y-0 active:scale-[0.96]",
-        isSaved
-          ? "border-brand-brass/72 bg-brand-forest-deep text-[#ddb87e] hover:border-brand-brass hover:bg-[#0b2728]"
-          : "border-white/34 bg-brand-forest-deep/75 text-brand-paper hover:border-brand-brass/68 hover:bg-brand-forest-deep",
+        "group/save flex items-center justify-center transition-[color,background-color,border-color,transform] duration-200 ease-luma focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-brass active:scale-[0.97]",
+        isLedgerVariant
+          ? "min-h-16 w-full gap-3 px-5 text-sm font-semibold focus-visible:ring-inset sm:min-h-20 lg:min-h-full lg:min-w-40"
+          : "size-11 rounded-full border shadow-[0_6px_20px_rgb(8_30_31/0.22),inset_0_1px_0_rgb(255_255_255/0.12)] backdrop-blur-md hover:-translate-y-0.5 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent active:translate-y-0",
+        isLedgerVariant
+          ? isSaved
+            ? "bg-brand-linen text-brand-forest-deep"
+            : "text-brand-forest-deep hover:bg-brand-linen/72"
+          : isSaved
+            ? "border-brand-brass/72 bg-brand-forest-deep text-[#ddb87e] hover:border-brand-brass hover:bg-[#0b2728]"
+            : "border-white/34 bg-brand-forest-deep/75 text-brand-paper hover:border-brand-brass/68 hover:bg-brand-forest-deep",
         className,
       )}
     >
@@ -129,6 +139,9 @@ export function SaveStayButton({
         weight={isSaved ? "fill" : "regular"}
         className="transition-transform duration-200 ease-luma group-hover/save:scale-105 group-hover/save:-rotate-6"
       />
+      {isLedgerVariant ? (
+        <span>{isSaved ? "Saved" : "Save stay"}</span>
+      ) : null}
     </button>
   );
 }

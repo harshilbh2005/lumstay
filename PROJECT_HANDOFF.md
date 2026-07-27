@@ -435,7 +435,19 @@ Important limitation: this is incremental reveal over a synchronous local collec
 - No new image was generated or downloaded for this unit; the existing Casa Serein catalog asset is reused
 - Verified from the production build at 1440×1000 and 390×844 with decoded imagery, exact metadata, visible keyboard focus, 44px navigation, zero horizontal overflow, clean consoles, and a branded unknown-slug 404 carrying `noindex`
 
-Important limitation: Casa Serein is the only full property-detail fixture. The shell intentionally omits rating, pricing, saved state, gallery controls, facilities, rooms, and booking actions so those roadmap items can be researched, verified, and committed separately.
+Important limitation: Casa Serein is the only full property-detail fixture. The shell intentionally omits a responsive gallery, gallery controls, facilities, rooms, and booking actions so those roadmap items can be researched, verified, and committed separately.
+
+### Property hero summary
+
+- Casa Serein’s existing editorial masthead now includes a border-only summary ledger aligned beneath the title
+- The ledger exposes setting, country, aggregate guest rating, review count, and INR starting price without introducing a booking card or conversion panel
+- The property-type and Luma-pick label replace the duplicated location line in the masthead’s folio column
+- A labeled saved action reuses the existing isolated `SaveStayButton` client leaf while the rest of the property page remains server-rendered
+- The saved action supplies `aria-pressed`, visible hover/focus/active states, changed label text, and the existing branded confirmation toast
+- Planned `/saved` links disable prefetch so the temporary interaction does not create avoidable console 404s
+- Verified against the production build at 1440×1000 and 390×844 with exact setting/rating/price output, 99px-or-larger save targets, successful add feedback, reload reset, decoded imagery, zero horizontal overflow, and clean consoles
+
+Important limitation: saved state remains local to the button and intentionally resets on reload. The nightly amount is a mock starting price, not date-specific availability or a total-stay quote. Persistent saved state remains roadmap item 32.
 
 ### Homepage search query handoff
 
@@ -492,6 +504,7 @@ The implemented routes are `/`, `/destinations`, `/edit`, `/search`, and `/prope
 ## Commit history
 
 ```text
+0e3a334 feat: add property detail route shell
 47bb501 feat: expand search property fixtures
 3e55134 feat: add search recovery states
 38d35fe feat: add search loading skeletons
@@ -545,7 +558,7 @@ Build each item separately, research it first, verify it, and commit it before m
 ### Phase 3 — Property and room selection
 
 15. ~~Property details route at `/properties/[slug]`~~ Complete
-16. Property hero summary, location, rating, pricing, and saved state
+16. ~~Property hero summary, location, rating, pricing, and saved state~~ Complete
 17. Responsive property image gallery
 18. Fullscreen gallery lightbox with keyboard and touch navigation
 19. Facilities, atmosphere, policies, practical details, and location sections
@@ -588,4 +601,4 @@ Build each item separately, research it first, verify it, and commit it before m
 
 ## Recommended immediate next step
 
-Build the isolated **property hero summary** for Casa Serein: location, rating, starting price, and a non-persistent saved interaction. Research the information hierarchy first, retain the current editorial masthead and single-image shell, and do not begin the responsive gallery, gallery lightbox, room selection, booking panel, or persistent saved store in the same unit.
+Build the isolated **responsive property image gallery** for Casa Serein. Source any additional mock imagery from Pinterest or another real external source rather than generating it, record source/license metadata in the central catalog, and keep the fullscreen lightbox, room selection, booking panel, and persistent saved store out of this unit.
