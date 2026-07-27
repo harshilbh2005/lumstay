@@ -510,12 +510,25 @@ Important limitation: these are illustrative interface fixtures, not live Casa S
 - Each cancellation summary uses a native disclosure so detailed charges remain available without making every row visually dense
 - Room choice uses one native radio group with 48px visual labels, arrow-key movement, visible keyboard focus, selected-state copy, and no client JavaScript
 - The reference lock uses Kobu’s sharp image-led gallery rhythm as the primary direction, Christopher Ireland Creative’s ruled editorial rows, Scape’s rapid image/name/price scan, and only Trip.com’s clear separation of inclusions, occupancy, policy, and price
-- Rounded marketplace cards, shadows, filter chrome, urgency badges, blue conversion styling, the UI/UX Pro Max liquid-glass recommendation, and the not-yet-built sticky booking panel were explicitly rejected
+- Rounded marketplace cards, shadows, filter chrome, urgency badges, blue conversion styling, the UI/UX Pro Max liquid-glass recommendation, and premature checkout navigation were explicitly rejected
 - Desktop uses asymmetric 5/4/3 image, detail, and rate columns; mobile collapses every room into one readable column with a compact two-image diptych and full-width selection target
 - The existing property-information folios now continue from 04 through 07 after the room section’s 03
 - Verified from the production build at 1440×1000 and 390×844 with all six room images decoded, exact room data, native radio click and arrow-key selection, disclosure expansion, 48px-or-larger controls, visible keyboard focus, zero horizontal overflow, and a clean browser console
 
-Important limitation: room choice is intentionally local browser form state. It resets on reload, does not check availability, does not calculate a stay total, and is not yet reflected in a sticky booking summary or cross-route booking store.
+Important limitation: room choice is intentionally local browser form state. It resets on reload, does not check availability, does not calculate a stay total, and is not stored across routes.
+
+### Casa Serein sticky booking summary
+
+- A compact ruled summary stays directly beneath the 88px global header while the guest moves through the Casa Serein room section
+- The room ledger remains server-rendered; one isolated client leaf observes the existing native radio group through `useSyncExternalStore` and receives only serializable room-summary data
+- The initial state shows the lowest nightly rate and a clear selection prompt; native pointer or arrow-key selection updates the room name, exact rate, breakfast inclusion, and cancellation category
+- The action is intentionally honest and local: “Choose a room” or “Review this room” scrolls to the relevant native room row instead of implying availability, checkout, or a reservation
+- Reduced-motion preferences disable smooth scrolling, the changing room name is announced through a polite live region, and the existing radio labels retain their focus and selected-state semantics
+- BelArosa’s forest/linen/gold luxury restraint is the primary reference direction, with Kobu’s mono editorial metadata and Navan’s compact horizontal summary grouping borrowed as supporting details
+- The property wrapper now uses overflow clipping instead of an overflow scroll container so the global header and local summary can both remain sticky without changing visual containment
+- Verified from the production build at 1440×1000 and 390×844 with exact click and arrow-key updates, summary top position at 88px, sticky-section containment, scroll targeting below the sticky stack, zero horizontal overflow, zero browser errors, and 48px action targets
+
+Important limitation: the panel summarizes only the current page’s illustrative room choice. It does not include dates, guest counts, availability, taxes, total-stay pricing, checkout navigation, persistence, or cross-route booking state.
 
 ### Homepage search query handoff
 
@@ -572,6 +585,7 @@ The implemented routes are `/`, `/destinations`, `/edit`, `/search`, and `/prope
 ## Commit history
 
 ```text
+0bcceac feat: add room selection interface
 6bea367 feat: add Casa Serein room fixtures
 467d4d6 feat: add property information ledger
 7e07882 feat: add fullscreen property gallery
@@ -637,7 +651,7 @@ Build each item separately, research it first, verify it, and commit it before m
 19. ~~Facilities, atmosphere, policies, practical details, and location sections~~ Complete
 20. ~~Room fixtures with distinct images, occupancy, beds, size, facilities, pricing, breakfast, and cancellation terms~~ Complete
 21. ~~Room selection cards/interface~~ Complete
-22. Sticky booking summary/action panel
+22. ~~Sticky booking summary/action panel~~ Complete
 23. Property loading, not-found, error, and unavailable-room states
 
 ### Phase 4 — Booking and checkout
@@ -674,4 +688,4 @@ Build each item separately, research it first, verify it, and commit it before m
 
 ## Recommended immediate next step
 
-Build the isolated **Casa Serein sticky booking summary/action panel**. Research and lock a Refero direction before implementation, progressively reflect the currently selected native room, and keep the interaction local to the property page. Preserve the existing room radio semantics and defer live availability, total-stay calculations, checkout navigation, and cross-route Zustand state to their later roadmap units.
+Build the isolated **property loading, branded not-found, recoverable error, and unavailable-room states** for the property experience. Research and lock the state hierarchy before implementation, keep Casa Serein’s successful detail route visually stable, and distinguish route/data failure from room-level unavailability. Reuse the current property and room fixtures where possible; do not introduce live inventory, checkout navigation, or cross-route booking state early.

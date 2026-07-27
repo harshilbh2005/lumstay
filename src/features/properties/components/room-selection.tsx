@@ -11,6 +11,13 @@ import {
 import { getMediaById } from "@/data/mock";
 import type { Room } from "@/types/domain";
 
+import {
+  StickyBookingSummary,
+  type BookingSummaryRoom,
+} from "./sticky-booking-summary";
+
+const roomSelectionSectionId = "casa-serein-room-selection";
+
 export function RoomSelection({
   rooms,
   propertyName,
@@ -24,9 +31,27 @@ export function RoomSelection({
 
   const minimumGuests = Math.min(...rooms.map((room) => room.maxGuests));
   const maximumGuests = Math.max(...rooms.map((room) => room.maxGuests));
+  const summaryRooms: BookingSummaryRoom[] = [...rooms]
+    .sort((roomA, roomB) => {
+      return roomA.nightlyPrice.amount - roomB.nightlyPrice.amount;
+    })
+    .map((room) => ({
+      id: room.id,
+      name: room.name,
+      formattedPrice: new Intl.NumberFormat("en-IN", {
+        style: "currency",
+        currency: room.nightlyPrice.currency,
+        maximumFractionDigits: 0,
+      }).format(room.nightlyPrice.amount),
+      breakfastLabel: room.breakfastIncluded
+        ? "Breakfast included"
+        : "Breakfast separate",
+      cancellationLabel: room.cancellationPolicy.label,
+    }));
 
   return (
     <section
+      id={roomSelectionSectionId}
       aria-labelledby="room-selection-title"
       className="bg-brand-linen"
     >
@@ -60,6 +85,11 @@ export function RoomSelection({
           </div>
         </div>
 
+        <StickyBookingSummary
+          rooms={summaryRooms}
+          sectionId={roomSelectionSectionId}
+        />
+
         <fieldset className="mt-12 sm:mt-16">
           <legend className="sr-only">
             Choose a room at {propertyName}
@@ -81,8 +111,9 @@ export function RoomSelection({
             return (
               <article
                 key={room.id}
+                id={room.id}
                 aria-labelledby={`${room.id}-title`}
-                className="border-t border-brand-forest-deep/24 py-8 last:border-b sm:py-10 lg:py-12"
+                className="scroll-mt-64 border-t border-brand-forest-deep/24 py-8 last:border-b sm:py-10 lg:scroll-mt-52 lg:py-12"
               >
                 <div className="grid gap-8 lg:grid-cols-12 lg:gap-x-8">
                   <div className="grid aspect-[4/3] min-h-0 grid-cols-[minmax(0,1.8fr)_minmax(5rem,0.72fr)] gap-1 overflow-hidden lg:col-span-5 lg:h-[30rem] lg:aspect-auto">

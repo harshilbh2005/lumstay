@@ -52,7 +52,7 @@ export function PropertyDetailShell({
   }).format(summary.priceFrom.amount);
 
   return (
-    <main className="min-h-screen overflow-hidden bg-brand-paper">
+    <main className="min-h-screen overflow-clip bg-brand-paper">
       <article>
         <header className="container-luma pb-10 pt-8 sm:pb-14 sm:pt-10 lg:pb-16 lg:pt-14">
           <nav aria-label="Breadcrumb">
