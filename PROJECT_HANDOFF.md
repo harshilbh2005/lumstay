@@ -435,7 +435,7 @@ Important limitation: this is incremental reveal over a synchronous local collec
 - No new image was generated or downloaded for this unit; the existing Casa Serein catalog asset is reused
 - Verified from the production build at 1440×1000 and 390×844 with decoded imagery, exact metadata, visible keyboard focus, 44px navigation, zero horizontal overflow, clean consoles, and a branded unknown-slug 404 carrying `noindex`
 
-Important limitation: Casa Serein is the only full property-detail fixture. The shell intentionally omits gallery controls, facilities, rooms, and booking actions so those roadmap items can be researched, verified, and committed separately.
+Important limitation: Casa Serein is the only full property-detail fixture. The shell intentionally omits facilities, rooms, and booking actions so those roadmap items can be researched, verified, and committed separately.
 
 ### Property hero summary
 
@@ -460,7 +460,21 @@ Important limitation: saved state remains local to the button and intentionally 
 - The server-rendered gallery preloads only the lead image, leaves supporting views lazy, and supplies viewport-specific `sizes`
 - Verified against the production build at 1440×1000 and 390×844 with five decoded images, exact desktop mosaic geometry, working mobile horizontal scroll, zero document overflow, no nested interactive controls, and clean browser consoles
 
-Important limitation: the four stock photographs are illustrative editorial mock imagery, not representations of bookable Casa Serein inventory. Fullscreen viewing, keyboard/touch navigation, and image-category controls remain roadmap item 18.
+Important limitation: the four stock photographs are illustrative editorial mock imagery, not representations of bookable Casa Serein inventory. Image categories and source-facing photo credits are intentionally omitted from the guest interface.
+
+### Fullscreen property gallery lightbox
+
+- Every Casa Serein gallery view is now a 44px-or-larger trigger with an explicit zoom affordance, accessible image-specific label, visible focus treatment, and subtle crop-safe hover movement
+- The isolated `PropertyGallery` client boundary uses the existing Base UI dialog foundation while the surrounding property route and detail shell remain Server Components
+- Fullscreen presentation uses a solid deep-forest gallery canvas, sharp contained imagery, restrained mono metadata, a live image counter, image title/location, and a quiet five-position progress rail
+- The active image follows the exact item opened; previous and next navigation wraps continuously across all five views
+- Keyboard behavior includes Left, Right, Home, End, and Escape, while touch users can swipe horizontally or use 52px side controls
+- Close receives initial focus; modal background content is hidden from assistive technology, body scrolling is locked, focus remains contained, and both Escape and the explicit close control return focus to the opening image
+- No autoplay, thumbnails, filter categories, pinch zoom, route mutation, or global state were added
+- Refero reference lock uses Liron Moran Interiors’ muted gallery backdrop as the primary direction, Kobu’s sharp photography and mono metadata, and only Tripadvisor’s familiar side-control/counter behavior
+- Verified from the production build at 1440×1000 and 390×844 with decoded active images, exact fullscreen geometry, keyboard wraparound, swipe navigation, 48px-or-larger controls, focus containment/return, background scroll lock, zero document overflow, and clean browser consoles
+
+Important limitation: lightbox position is local UI state and is not shareable through the URL. The viewer intentionally does not provide pinch-to-zoom, downloads, image categories, or source-facing photo credits.
 
 ### Homepage search query handoff
 
@@ -517,6 +531,7 @@ The implemented routes are `/`, `/destinations`, `/edit`, `/search`, and `/prope
 ## Commit history
 
 ```text
+e6c118e feat: add responsive property gallery
 4fdf91d feat: add property hero summary
 0e3a334 feat: add property detail route shell
 47bb501 feat: expand search property fixtures
@@ -574,7 +589,7 @@ Build each item separately, research it first, verify it, and commit it before m
 15. ~~Property details route at `/properties/[slug]`~~ Complete
 16. ~~Property hero summary, location, rating, pricing, and saved state~~ Complete
 17. ~~Responsive property image gallery~~ Complete
-18. Fullscreen gallery lightbox with keyboard and touch navigation
+18. ~~Fullscreen gallery lightbox with keyboard and touch navigation~~ Complete
 19. Facilities, atmosphere, policies, practical details, and location sections
 20. Room fixtures with distinct images, occupancy, beds, size, facilities, pricing, breakfast, and cancellation terms
 21. Room selection cards/interface
@@ -615,4 +630,4 @@ Build each item separately, research it first, verify it, and commit it before m
 
 ## Recommended immediate next step
 
-Build the isolated **fullscreen gallery lightbox** for Casa Serein with keyboard navigation, touch-friendly previous/next controls, an explicit close action, focus management, and a restrained image counter. Reuse the five cataloged gallery images and keep facilities, room selection, the booking panel, and persistent saved state out of this unit.
+Build the isolated **property facilities, atmosphere, policies, practical details, and location sections** for Casa Serein. Extend the typed mock property-detail fixture only as needed, keep the presentation editorial rather than card-heavy, and leave room fixtures, room selection, the booking panel, and persistent saved state out of this unit.

@@ -10,7 +10,10 @@ import { getMediaById } from "@/data/mock";
 import type { PropertyDetail } from "@/types/domain";
 
 import { SaveStayButton } from "./save-stay-button";
-import { PropertyGallery } from "./property-gallery";
+import {
+  PropertyGallery,
+  type PropertyGalleryMedia,
+} from "./property-gallery";
 
 export function PropertyDetailShell({
   property,
@@ -18,11 +21,23 @@ export function PropertyDetailShell({
   property: PropertyDetail;
 }) {
   const { summary, editorial } = property;
-  const galleryMedia = property.galleryMediaIds.flatMap((mediaId) => {
-    const media = getMediaById(mediaId);
+  const galleryMedia: PropertyGalleryMedia[] =
+    property.galleryMediaIds.flatMap((mediaId) => {
+      const media = getMediaById(mediaId);
 
-    return media ? [media] : [];
-  });
+      return media
+        ? [
+            {
+              id: media.id,
+              src: media.src,
+              title: media.title,
+              alt: media.alt,
+              location: media.location,
+              focalPoint: media.focalPoint,
+            },
+          ]
+        : [];
+    });
 
   if (galleryMedia.length === 0) {
     return null;
