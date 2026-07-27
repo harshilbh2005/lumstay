@@ -63,6 +63,27 @@ export interface PropertyDetail {
     note: string;
   };
   galleryMediaIds: string[];
+  facilityDetails: {
+    name: string;
+    description: string;
+    availability: string;
+  }[];
+  policies: {
+    label: string;
+    value: string;
+  }[];
+  practicalDetails: {
+    label: string;
+    value: string;
+  }[];
+  locationDetails: {
+    elevation: string;
+    overview: string;
+    nearby: {
+      name: string;
+      context: string;
+    }[];
+  };
 }
 
 export interface DestinationSummary {

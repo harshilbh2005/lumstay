@@ -476,6 +476,20 @@ Important limitation: the four stock photographs are illustrative editorial mock
 
 Important limitation: lightbox position is local UI state and is not shareable through the URL. The viewer intentionally does not provide pinch-to-zoom, downloads, image categories, or source-facing photo credits.
 
+### Property information ledger
+
+- Casa Serein now continues past the Luma note with four distinct editorial sections for character, facilities, house policies and practical details, and the Ravello setting
+- The character section reuses the existing property description and atmosphere fixture rather than inventing a parallel marketing taxonomy
+- Three facility rows expand the existing infinity-pool, garden-restaurant, and private-transfer summary into a ruled, comparison-friendly ledger
+- House policies and arrival guidance are presented as calm definition lists on a deep-forest surface, with a visible disclosure that the operational details are prototype data rather than live hotel inventory
+- Location content includes the published Ravello elevation, existing coordinates, Villa Rufolo, the 7 km Amalfi road connection, and Salerno arrival context without adding a decorative or non-functional map
+- Source provenance is recorded in `docs/property-fixtures.md` against the official Hotel Caruso factsheet, Visit Ravello, Fondazione Ravello, and Palazzo Avino; no image or synthetic source content was generated
+- The entire information feature is a Server Component and adds no client JavaScript, state, accordions, cards, or booking controls
+- Refero reference lock uses Kobu’s warm editorial canvas as the primary direction, 19–86’s ruled specification ledger, and BelArosa’s linen/forest section rhythm with restrained brass accents
+- Verified from the production build at 1440×1000 and 390×844 with all four sections present, clean semantic headings and definition lists, visible prototype disclosure, zero horizontal overflow or clipped elements, and clean browser consoles
+
+Important limitation: Casa Serein remains fictional. The operational content is a source-backed Ravello composite for interface testing, not a claim about real inventory, current opening dates, accessibility, availability, or binding booking terms.
+
 ### Homepage search query handoff
 
 - The hero now performs a real client-side transition to `/search`
@@ -519,18 +533,19 @@ The implemented routes are `/`, `/destinations`, `/edit`, `/search`, and `/prope
 ## Current mock-data state
 
 - `mockProperties`: 12 property summaries with local property-type, facility, and atmosphere tags; the homepage intentionally renders the first 3
-- `mockPropertyDetails`: 1 full property fixture for Casa Serein, composed from its existing summary and five central-catalog gallery media IDs
+- `mockPropertyDetails`: 1 full property fixture for Casa Serein, composed from its existing summary, five central-catalog gallery media IDs, 3 sourced facility details, 4 house-policy entries, 4 practical entries, and a Ravello location ledger
 - `mockDestinations`: 7 destination summaries shared by `/destinations` and the hero autocomplete
 - `mockEditorialStories`: 7 editorial story summaries used by `/edit`
 - `mockRooms`: empty array
 - `mockBookings`: empty array
-- No availability, price breakdown, complete facility catalog, cancellation-policy, review, guest, or checkout fixture yet
+- No live availability, price breakdown, complete facility catalog, transactional cancellation schedule, room, review, guest, or checkout fixture yet
 - `src/stores/index.ts` is intentionally empty
 - Saved and trips feature indexes are scaffolds only
 
 ## Commit history
 
 ```text
+7e07882 feat: add fullscreen property gallery
 e6c118e feat: add responsive property gallery
 4fdf91d feat: add property hero summary
 0e3a334 feat: add property detail route shell
@@ -590,7 +605,7 @@ Build each item separately, research it first, verify it, and commit it before m
 16. ~~Property hero summary, location, rating, pricing, and saved state~~ Complete
 17. ~~Responsive property image gallery~~ Complete
 18. ~~Fullscreen gallery lightbox with keyboard and touch navigation~~ Complete
-19. Facilities, atmosphere, policies, practical details, and location sections
+19. ~~Facilities, atmosphere, policies, practical details, and location sections~~ Complete
 20. Room fixtures with distinct images, occupancy, beds, size, facilities, pricing, breakfast, and cancellation terms
 21. Room selection cards/interface
 22. Sticky booking summary/action panel
@@ -630,4 +645,4 @@ Build each item separately, research it first, verify it, and commit it before m
 
 ## Recommended immediate next step
 
-Build the isolated **property facilities, atmosphere, policies, practical details, and location sections** for Casa Serein. Extend the typed mock property-detail fixture only as needed, keep the presentation editorial rather than card-heavy, and leave room fixtures, room selection, the booking panel, and persistent saved state out of this unit.
+Build the isolated **Casa Serein room fixtures** with distinct room images, occupancy, beds, size, facilities, nightly pricing, breakfast inclusion, and cancellation terms. Source any additional room imagery and factual fixture patterns from real stock or first-party hospitality references, record their provenance, and do not generate imagery. Keep the room-selection interface, sticky booking panel, availability behavior, and cross-route state out of this data-only unit.

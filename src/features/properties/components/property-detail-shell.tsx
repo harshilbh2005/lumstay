@@ -1,7 +1,6 @@
 import Link from "next/link";
 import {
   ArrowLeft,
-  ArrowUpRight,
   MapPin,
   Star,
 } from "@phosphor-icons/react/ssr";
@@ -14,6 +13,7 @@ import {
   PropertyGallery,
   type PropertyGalleryMedia,
 } from "./property-gallery";
+import { PropertyInformation } from "./property-information";
 
 export function PropertyDetailShell({
   property,
@@ -183,21 +183,10 @@ export function PropertyDetailShell({
               </p>
             </div>
 
-            <div className="flex items-end lg:col-span-3">
-              <Link
-                href="/search"
-                className="group inline-flex min-h-11 items-center gap-3 border-b border-brand-forest-deep/45 text-sm font-semibold text-brand-forest-deep transition-colors duration-200 hover:border-brand-brass hover:text-brand-forest focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-4"
-              >
-                Return to the collection
-                <ArrowUpRight
-                  aria-hidden="true"
-                  size={16}
-                  className="transition-transform duration-200 ease-luma group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
-                />
-              </Link>
-            </div>
           </div>
         </section>
+
+        <PropertyInformation property={property} />
       </article>
     </main>
   );
