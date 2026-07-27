@@ -1,4 +1,4 @@
-import type { Booking, Room } from "@/types/domain";
+import type { Booking } from "@/types/domain";
 
 export {
   generatedMedia,
@@ -19,6 +19,6 @@ export {
   mockPropertyDetails,
 } from "./property-details";
 export { mockProperties } from "./properties";
+export { getRoomsByPropertyId, mockRooms } from "./rooms";
 
-export const mockRooms: Room[] = [];
 export const mockBookings: Booking[] = [];

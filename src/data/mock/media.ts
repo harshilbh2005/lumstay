@@ -93,7 +93,7 @@ export const lumstayMedia = [
     src: "/images/lumstay/properties/casa-serein-sea-room.jpg",
     title: "Sea-Room Threshold",
     alt: "Sunlit tiled sitting room opening through wide doors to a blue Mediterranean sea view",
-    kind: "property",
+    kind: "room",
     origin: "stock",
     location: "Italy",
     description:
@@ -108,6 +108,114 @@ export const lumstayMedia = [
       pageUrl:
         "https://www.pexels.com/photo/sunlit-italian-villa-interior-with-sea-view-35438897/",
       licenseUrl: pexelsLicenseUrl,
+    },
+  },
+  {
+    id: "casa-serein-garden-room",
+    src: "/images/lumstay/rooms/casa-serein-garden-room-detail.jpg",
+    title: "Garden Room",
+    alt: "Airy plaster-walled bedroom with a low dark-framed bed, woven chair, and warm neutral linens",
+    kind: "room",
+    origin: "stock",
+    location: "Italy",
+    description:
+      "A quiet, textural bedroom used illustratively for Casa Serein's entry room category.",
+    intendedUses: ["room selection", "room gallery", "garden room"],
+    aspectRatio: "3:2",
+    focalPoint: "center",
+    palette: ["warm plaster", "chalk linen", "honey cane", "soft ochre"],
+    source: {
+      provider: "Unsplash",
+      creator: "Francesco Ungaro",
+      pageUrl:
+        "https://unsplash.com/photos/cozy-bedroom-with-simple-decor-and-comfortable-bed-FPhETDe9mL4",
+      licenseUrl: unsplashLicenseUrl,
+    },
+  },
+  {
+    id: "casa-serein-garden-room-detail",
+    src: "/images/lumstay/rooms/casa-serein-garden-room.jpg",
+    title: "Garden Room Sitting Corner",
+    alt: "Warm upholstered sitting corner with sculptural wall lamps beside softly filtered daylight",
+    kind: "room",
+    origin: "stock",
+    location: "Florence, Italy",
+    description:
+      "A close interior detail used to extend the garden room's quiet, neutral material palette.",
+    intendedUses: ["room gallery", "garden room", "interior detail"],
+    aspectRatio: "3:2",
+    focalPoint: "center",
+    palette: ["espresso brown", "cream linen", "warm white", "polished chrome"],
+    source: {
+      provider: "Unsplash",
+      creator: "Erin Brundage",
+      pageUrl:
+        "https://unsplash.com/photos/a-bed-room-with-a-neatly-made-bed-next-to-a-window-w8mrCVlTPhw",
+      licenseUrl: unsplashLicenseUrl,
+    },
+  },
+  {
+    id: "casa-serein-sea-terrace-balcony",
+    src: "/images/lumstay/rooms/casa-serein-sea-terrace-balcony.jpg",
+    title: "Sea Terrace Balcony",
+    alt: "Shadowed bedroom opening through glass doors to a private balcony and calm open sea",
+    kind: "room",
+    origin: "stock",
+    location: "Himarë, Albania",
+    description:
+      "A sea-facing bedroom threshold used illustratively for Casa Serein's terrace room.",
+    intendedUses: ["room selection", "room gallery", "sea terrace room"],
+    aspectRatio: "2:3",
+    focalPoint: "center 58%",
+    palette: ["ink shadow", "rattan", "sea blue", "chalk white"],
+    source: {
+      provider: "Unsplash",
+      creator: "Arthur Charles Pratt",
+      pageUrl:
+        "https://unsplash.com/photos/ocean-view-from-a-bedroom-with-a-balcony-YR9CSC9K9Wc",
+      licenseUrl: unsplashLicenseUrl,
+    },
+  },
+  {
+    id: "casa-serein-suite-bedroom",
+    src: "/images/lumstay/rooms/casa-serein-suite-bedroom.jpg",
+    title: "Serein Suite Bedroom",
+    alt: "Quiet hotel bedroom with white linens, an indigo woven cover, and daylight filtered through sheer curtains",
+    kind: "room",
+    origin: "stock",
+    description:
+      "A restrained bedroom study used illustratively for Casa Serein's largest suite.",
+    intendedUses: ["room selection", "room gallery", "suite"],
+    aspectRatio: "3:2",
+    focalPoint: "center",
+    palette: ["indigo", "paper white", "smoked oak", "warm brass"],
+    source: {
+      provider: "Unsplash",
+      creator: "Wes Hicks",
+      pageUrl:
+        "https://unsplash.com/photos/a-hotel-room-with-a-bed-chair-and-window-T6WRDVQBn8M",
+      licenseUrl: unsplashLicenseUrl,
+    },
+  },
+  {
+    id: "casa-serein-suite-twin-room",
+    src: "/images/lumstay/rooms/casa-serein-twin-sea-room.jpg",
+    title: "Serein Suite Twin Setting",
+    alt: "Bright twin bedroom with pale blue walls, warm timber joinery, and a small sea-view balcony",
+    kind: "room",
+    origin: "stock",
+    description:
+      "A flexible twin configuration used illustratively for the Serein Suite's alternate bed setup.",
+    intendedUses: ["room gallery", "suite", "twin configuration"],
+    aspectRatio: "3:2",
+    focalPoint: "center",
+    palette: ["mineral blue", "pine", "cloud white", "soft grey"],
+    source: {
+      provider: "Unsplash",
+      creator: "Sang Ho",
+      pageUrl:
+        "https://unsplash.com/photos/twin-beds-in-a-bright-room-with-a-sea-view-uXYHodDhiG4",
+      licenseUrl: unsplashLicenseUrl,
     },
   },
   {

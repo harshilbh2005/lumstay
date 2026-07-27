@@ -45,3 +45,8 @@ All stock files are stored locally at up to 2400 px on their longest dimension. 
 | `properties/casa-serein-sea-room.jpg` | Magda Ehlers | [Pexels photo](https://www.pexels.com/photo/sunlit-italian-villa-interior-with-sea-view-35438897/) |
 | `properties/casa-serein-positano-terrace.jpg` | Meghan Marron | [Pexels photo](https://www.pexels.com/photo/terrace-on-sea-coast-13418034/) |
 | `properties/casa-serein-pool-at-dusk.jpg` | Berat Yüksel | [Pexels photo](https://www.pexels.com/photo/elegant-mediterranean-villa-by-the-sea-at-sunset-31751025/) |
+| `rooms/casa-serein-garden-room-detail.jpg` | Francesco Ungaro | [Unsplash photo](https://unsplash.com/photos/cozy-bedroom-with-simple-decor-and-comfortable-bed-FPhETDe9mL4) |
+| `rooms/casa-serein-garden-room.jpg` | Erin Brundage | [Unsplash photo](https://unsplash.com/photos/a-bed-room-with-a-neatly-made-bed-next-to-a-window-w8mrCVlTPhw) |
+| `rooms/casa-serein-sea-terrace-balcony.jpg` | Arthur Charles Pratt | [Unsplash photo](https://unsplash.com/photos/ocean-view-from-a-bedroom-with-a-balcony-YR9CSC9K9Wc) |
+| `rooms/casa-serein-suite-bedroom.jpg` | Wes Hicks | [Unsplash photo](https://unsplash.com/photos/a-hotel-room-with-a-bed-chair-and-window-T6WRDVQBn8M) |
+| `rooms/casa-serein-twin-sea-room.jpg` | Sang Ho | [Unsplash photo](https://unsplash.com/photos/twin-beds-in-a-bright-room-with-a-sea-view-uXYHodDhiG4) |

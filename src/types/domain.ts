@@ -119,13 +119,17 @@ export interface Room {
   propertyId: string;
   name: string;
   description: string;
-  images: string[];
+  mediaIds: string[];
   maxGuests: number;
   bedConfiguration: string;
   sizeSquareMetres: number;
   facilities: string[];
   nightlyPrice: Money;
-  cancellationPolicy: string;
+  cancellationPolicy: {
+    label: string;
+    summary: string;
+    terms: string[];
+  };
   breakfastIncluded: boolean;
 }
 

@@ -490,6 +490,19 @@ Important limitation: lightbox position is local UI state and is not shareable t
 
 Important limitation: Casa Serein remains fictional. The operational content is a source-backed Ravello composite for interface testing, not a claim about real inventory, current opening dates, accessibility, availability, or binding booking terms.
 
+### Casa Serein room fixtures
+
+- `mockRooms` now contains three typed Casa Serein tiers: Garden Room, Sea Terrace Room, and Serein Suite
+- Each tier carries occupancy, bed configuration, floor area, facilities, INR nightly pricing, breakfast inclusion, and a structured cancellation policy with a label, summary, and explicit terms
+- Six distinct room-media references resolve through the central catalog: one existing Pexels sea-room view and five new locally stored Unsplash photographs
+- No imagery was generated; the retained stock set was visually reviewed at source resolution, while one visibly branded candidate and two stylistically dated candidates were rejected
+- Room sizes, bed patterns, terraces, bathrooms, housekeeping, and cancellation-state patterns are adapted from the official Hotel Caruso accommodation pages and factsheet, with Palazzo Avino used as a secondary category cross-check
+- Source provenance and the fictional-fixture disclosure are recorded in `docs/property-fixtures.md`, while every added photograph is credited in `docs/image-library.md` and `src/data/mock/media.ts`
+- `Room` now references central-catalog `mediaIds` and models cancellation details structurally so the upcoming selection interface can present meaningful refundable, stepped-charge, and non-refundable states
+- Verified with lint, TypeScript, `git diff --check`, valid local JPEG inspection, visual review of all five new images, and a successful Next.js production build
+
+Important limitation: these are illustrative interface fixtures, not live Casa Serein inventory. Prices, availability, occupancy rules, cancellation charges, breakfast entitlements, and the room-to-photo associations are not bookable claims and must eventually come from a real property data source.
+
 ### Homepage search query handoff
 
 - The hero now performs a real client-side transition to `/search`
@@ -536,15 +549,16 @@ The implemented routes are `/`, `/destinations`, `/edit`, `/search`, and `/prope
 - `mockPropertyDetails`: 1 full property fixture for Casa Serein, composed from its existing summary, five central-catalog gallery media IDs, 3 sourced facility details, 4 house-policy entries, 4 practical entries, and a Ravello location ledger
 - `mockDestinations`: 7 destination summaries shared by `/destinations` and the hero autocomplete
 - `mockEditorialStories`: 7 editorial story summaries used by `/edit`
-- `mockRooms`: empty array
+- `mockRooms`: 3 Casa Serein room tiers with 6 central-catalog media references, occupancy, beds, size, facilities, INR nightly pricing, breakfast inclusion, and structured cancellation policies
 - `mockBookings`: empty array
-- No live availability, price breakdown, complete facility catalog, transactional cancellation schedule, room, review, guest, or checkout fixture yet
+- No live availability, date-sensitive room pricing, price breakdown, complete facility catalog, review, guest, booking, or checkout fixture yet
 - `src/stores/index.ts` is intentionally empty
 - Saved and trips feature indexes are scaffolds only
 
 ## Commit history
 
 ```text
+467d4d6 feat: add property information ledger
 7e07882 feat: add fullscreen property gallery
 e6c118e feat: add responsive property gallery
 4fdf91d feat: add property hero summary
@@ -606,7 +620,7 @@ Build each item separately, research it first, verify it, and commit it before m
 17. ~~Responsive property image gallery~~ Complete
 18. ~~Fullscreen gallery lightbox with keyboard and touch navigation~~ Complete
 19. ~~Facilities, atmosphere, policies, practical details, and location sections~~ Complete
-20. Room fixtures with distinct images, occupancy, beds, size, facilities, pricing, breakfast, and cancellation terms
+20. ~~Room fixtures with distinct images, occupancy, beds, size, facilities, pricing, breakfast, and cancellation terms~~ Complete
 21. Room selection cards/interface
 22. Sticky booking summary/action panel
 23. Property loading, not-found, error, and unavailable-room states
@@ -645,4 +659,4 @@ Build each item separately, research it first, verify it, and commit it before m
 
 ## Recommended immediate next step
 
-Build the isolated **Casa Serein room fixtures** with distinct room images, occupancy, beds, size, facilities, nightly pricing, breakfast inclusion, and cancellation terms. Source any additional room imagery and factual fixture patterns from real stock or first-party hospitality references, record their provenance, and do not generate imagery. Keep the room-selection interface, sticky booking panel, availability behavior, and cross-route state out of this data-only unit.
+Build the isolated **Casa Serein room-selection cards/interface** from the completed fixtures. Research and lock a Refero direction before implementation, preserve the existing editorial property-page rhythm, and make room differences easy to compare across desktop and mobile. Keep the sticky booking panel, live availability behavior, price-total calculations, and cross-route booking state out of this unit.
