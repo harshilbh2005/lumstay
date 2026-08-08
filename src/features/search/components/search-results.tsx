@@ -31,6 +31,7 @@ import {
 } from "@/features/search/lib/search-filters";
 import {
   getSearchFormValues,
+  getSearchIntentQueryString,
   type SearchContext,
   type SearchParamValue,
 } from "@/features/search/lib/search-context";
@@ -67,6 +68,7 @@ export function SearchResults({
           ? "no-results"
           : null;
   const searchFormValues = getSearchFormValues(searchParams);
+  const propertySearchQuery = getSearchIntentQueryString(searchFormValues);
   const mobileSearchPreservedEntries = [
     ...getAppliedFilterEntries(filters),
     ...getPreservedSortEntries(searchParams),
@@ -200,6 +202,7 @@ export function SearchResults({
                         <li key={property.id}>
                           <PropertyResultCard
                             property={property}
+                            href={`/properties/${property.slug}?${propertySearchQuery}`}
                             index={index}
                             featured={index === 0}
                             orderLabel={resultOrderLabel ?? undefined}

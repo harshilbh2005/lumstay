@@ -1,15 +1,19 @@
 "use client";
 
-import { useCallback, useSyncExternalStore } from "react";
+import { useEffect } from "react";
 import {
   ArrowDown,
   ArrowUpRight,
   Prohibit,
 } from "@phosphor-icons/react";
 
+import { useBookingStore } from "@/components/providers/booking-store-provider";
+import type { BookingRoom } from "@/stores/booking-store";
+
 export type BookingSummaryRoom = {
   id: string;
   name: string;
+  bookingRoom: BookingRoom;
   formattedPrice: string;
   breakfastLabel: string;
   cancellationLabel: string;
@@ -24,35 +28,50 @@ export function StickyBookingSummary({
   rooms: readonly BookingSummaryRoom[];
   sectionId: string;
 }) {
-  const subscribe = useCallback(
-    (onStoreChange: () => void) => {
-      const section = document.getElementById(sectionId);
+  const selectedRoomId = useBookingStore((state) => state.room?.id ?? null);
+  const setRoom = useBookingStore((state) => state.setRoom);
 
-      if (!section) {
-        return () => undefined;
+  useEffect(() => {
+    const section = document.getElementById(sectionId);
+
+    if (!section) {
+      return;
+    }
+
+    function handleRoomChange(event: Event) {
+      const target = event.target;
+
+      if (
+        !(target instanceof HTMLInputElement) ||
+        target.name !== roomSelectionName ||
+        !target.checked
+      ) {
+        return;
       }
 
-      section.addEventListener("change", onStoreChange);
+      const room = rooms.find((candidate) => candidate.id === target.value);
 
-      return () => section.removeEventListener("change", onStoreChange);
-    },
-    [sectionId],
-  );
+      if (room) {
+        setRoom(room.bookingRoom);
+      }
+    }
 
-  const getSnapshot = useCallback(() => {
+    section.addEventListener("change", handleRoomChange);
+
+    return () => section.removeEventListener("change", handleRoomChange);
+  }, [rooms, sectionId, setRoom]);
+
+  useEffect(() => {
     const section = document.getElementById(sectionId);
-    const selectedRoom = section?.querySelector<HTMLInputElement>(
-      `input[name="${roomSelectionName}"]:checked`,
+    const inputs = section?.querySelectorAll<HTMLInputElement>(
+      `input[name="${roomSelectionName}"]`,
     );
 
-    return selectedRoom?.value ?? null;
-  }, [sectionId]);
+    inputs?.forEach((input) => {
+      input.checked = input.value === selectedRoomId;
+    });
+  }, [sectionId, selectedRoomId]);
 
-  const selectedRoomId = useSyncExternalStore(
-    subscribe,
-    getSnapshot,
-    () => null,
-  );
   const selectedRoom =
     rooms.find((room) => room.id === selectedRoomId) ?? null;
   const hasAvailableRooms = rooms.length > 0;

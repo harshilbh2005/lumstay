@@ -3,10 +3,14 @@
 import { MotionConfig } from "motion/react";
 import { Toaster } from "sonner";
 
-export function AppProviders({ children }: Readonly<{ children: React.ReactNode }>) {
+import { BookingStoreProvider } from "@/components/providers/booking-store-provider";
+
+export function AppProviders({
+  children,
+}: Readonly<{ children: React.ReactNode }>) {
   return (
     <MotionConfig reducedMotion="user" transition={{ duration: 0.24 }}>
-      {children}
+      <BookingStoreProvider>{children}</BookingStoreProvider>
       <Toaster
         className="luma-toaster"
         position="top-center"

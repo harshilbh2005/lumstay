@@ -25,17 +25,18 @@ function getEditorialStatus(property: PropertySummary) {
 
 export function PropertyResultCard({
   property,
+  href,
   index,
   featured = false,
   orderLabel,
 }: {
   property: PropertySummary;
+  href: string;
   index: number;
   featured?: boolean;
   orderLabel?: string;
 }) {
   const media = getMediaById(property.mediaId);
-  const propertyHref = `/properties/${property.slug}`;
 
   if (!media) {
     return null;
@@ -63,7 +64,7 @@ export function PropertyResultCard({
           )}
         >
           <Link
-            href={propertyHref}
+            href={href}
             prefetch={false}
             aria-label={`View ${property.name}`}
             className="absolute inset-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-brass focus-visible:ring-inset"
@@ -121,7 +122,7 @@ export function PropertyResultCard({
           </div>
 
           <Link
-            href={propertyHref}
+            href={href}
             prefetch={false}
             className="mt-2 inline-flex min-h-11 w-fit items-center rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-4"
           >
@@ -176,7 +177,7 @@ export function PropertyResultCard({
               / night
             </p>
             <Link
-              href={propertyHref}
+              href={href}
               prefetch={false}
               className="group/link inline-flex min-h-11 items-center gap-3 border-b border-brand-forest-deep/45 text-sm font-semibold text-brand-forest-deep transition-colors duration-200 hover:border-brand-brass hover:text-brand-forest focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-4 active:translate-y-px"
             >

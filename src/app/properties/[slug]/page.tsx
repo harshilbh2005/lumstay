@@ -6,6 +6,8 @@ import {
   getPropertyDetailBySlug,
   mockPropertyDetails,
 } from "@/data/mock";
+import { BookingStoreInitializer } from "@/features/booking/components/booking-store-initializer";
+import { toBookingProperty } from "@/features/booking/lib/booking-store-seed";
 import {
   PropertyDetailShell,
   PropertyErrorDemo,
@@ -51,6 +53,9 @@ export default async function PropertyPage({ params }: PropertyPageProps) {
     <>
       <Suspense fallback={null}>
         <PropertyErrorDemo />
+        <BookingStoreInitializer
+          property={toBookingProperty(property.summary)}
+        />
       </Suspense>
       <PropertyDetailShell property={property} />
     </>

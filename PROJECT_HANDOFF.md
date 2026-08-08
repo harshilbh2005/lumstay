@@ -571,6 +571,20 @@ Important limitation: this unit persists and displays search intent only. It doe
 
 Important limitation: suggestions are local and finite, and recent searches are not persisted between visits. Remote place lookup, typo tolerance, hotel-name search, and personal history remain future data/product work.
 
+### Cross-route booking store
+
+- A per-request Zustand vanilla store now lives beneath the root client provider, so booking state survives App Router navigation without sharing a module-global singleton across server requests
+- The typed draft carries normalized check-in/check-out dates, adult/child/room counts, compact property and room snapshots, hydration status, and a derived accommodation price summary
+- Search-result property links preserve canonical destination, date, guest, and room intent in the property URL; a small client initializer hydrates dates, guests, and the property snapshot while the property route remains statically generated
+- Initialization keys make hydration idempotent, so React Strict Mode or preserved-route effect replays do not clear an existing room choice for the same property and search intent
+- The existing native room radios now update the store through the isolated sticky-summary client leaf, while the radios and summary restore from the same selected-room state after client-side route navigation
+- Price state derives the nightly rate, night count, requested room count, and accommodation subtotal (`nightly rate × nights × rooms`) after every relevant update instead of storing an independently editable total
+- Guest counts are bounded to the existing search limits, invalid date ranges normalize to an unset stay, rooms from another property are rejected, property changes clear incompatible rooms, and an explicit reset returns the draft to its known defaults
+- No new review screen or booking route was introduced; the existing property composition and native room controls remain visually unchanged apart from an accurate non-persistence disclosure
+- Verified with lint, TypeScript, focused vanilla-store assertions, a successful production build, and visible-browser QA at 1440×1000 and 390×844 covering URL handoff, room selection, cross-route restoration, reload reset, native-radio synchronization, zero horizontal overflow, zero console warnings/errors, and zero unexpected request failures
+
+Important limitation: booking state is intentionally memory-only. Dates and guests can be reconstructed from a shareable property URL after reload, but the selected room is cleared; review, guest details, persistence, taxes, fees, cancellation calculations, availability, payment, and confirmation remain later roadmap units.
+
 ## Current homepage order
 
 `src/app/page.tsx` renders:
@@ -594,12 +608,13 @@ The implemented routes are `/`, `/destinations`, `/edit`, `/search`, and `/prope
 - `mockRooms`: 3 Casa Serein room tiers with 6 central-catalog media references, occupancy, beds, size, facilities, INR nightly pricing, breakfast inclusion, structured cancellation policies, and typed availability; 2 are selectable and Serein Suite is explicitly unavailable in the interface preview
 - `mockBookings`: empty array
 - No live availability, date-sensitive room pricing, price breakdown, complete facility catalog, review, guest, booking, or checkout fixture yet
-- `src/stores/index.ts` is intentionally empty
+- `src/stores/booking-store.ts` contains the memory-only cross-route booking draft; the global provider creates one vanilla Zustand store per request/client tree
 - Saved and trips feature indexes are scaffolds only
 
 ## Commit history
 
 ```text
+7a2fa86 feat: add property recovery states
 b31dc03 feat: add sticky booking summary
 0bcceac feat: add room selection interface
 6bea367 feat: add Casa Serein room fixtures
@@ -672,7 +687,7 @@ Build each item separately, research it first, verify it, and commit it before m
 
 ### Phase 4 — Booking and checkout
 
-24. Cross-route booking store with dates, guests, property, room, and price summary
+24. ~~Cross-route booking store with dates, guests, property, room, and price summary~~ Complete
 25. Booking review step
 26. Guest-details form
 27. Checkout and mock payment form
@@ -704,4 +719,4 @@ Build each item separately, research it first, verify it, and commit it before m
 
 ## Recommended immediate next step
 
-Build the isolated **cross-route booking store** for dates, guests, property, room, and price-summary data. Keep the store frontend-only and mock-backed, preserve shareable search intent where URL parameters already exist, and define clear initialization, update, reset, and hydration behavior before connecting a booking review route. Do not build the review page, forms, payment UI, persistence, or live availability in the same unit.
+Build the isolated **booking review step** from the new cross-route draft. Present the selected dates, guests, property, room, accommodation subtotal, breakfast inclusion, and cancellation summary; provide clear edit/recovery paths when required state is missing. Keep guest-details fields, taxes and fees, payment, persistence, and confirmation out of that unit.

@@ -117,3 +117,22 @@ export function getSearchFormValues(
     rooms: getBoundedInteger(params.rooms, 1, 8, 1),
   };
 }
+
+export function getSearchIntentQueryString(values: SearchFormValues) {
+  const params = new URLSearchParams();
+
+  if (values.destination) {
+    params.set("destination", values.destination);
+  }
+
+  if (values.checkIn && values.checkOut) {
+    params.set("checkIn", values.checkIn);
+    params.set("checkOut", values.checkOut);
+  }
+
+  params.set("adults", String(values.adults));
+  params.set("children", String(values.children));
+  params.set("rooms", String(values.rooms));
+
+  return params.toString();
+}

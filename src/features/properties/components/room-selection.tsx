@@ -10,6 +10,7 @@ import {
 } from "@phosphor-icons/react/ssr";
 
 import { getMediaById } from "@/data/mock";
+import { toBookingRoom } from "@/features/booking/lib/booking-store-seed";
 import type { Room } from "@/types/domain";
 
 import {
@@ -42,6 +43,7 @@ export function RoomSelection({
     .map((room) => ({
       id: room.id,
       name: room.name,
+      bookingRoom: toBookingRoom(room),
       formattedPrice: new Intl.NumberFormat("en-IN", {
         style: "currency",
         currency: room.nightlyPrice.currency,
@@ -357,8 +359,8 @@ export function RoomSelection({
 
         <p className="mt-7 max-w-[52rem] border-l border-brand-brass/65 pl-4 text-xs leading-5 text-muted-foreground">
           Illustrative room categories and rates for interface testing. A
-          selection remains on this page only and does not check live
-          availability or reserve inventory.
+          selection is held while you navigate LumaStay, but does not survive
+          a reload, check live availability, or reserve inventory.
         </p>
       </div>
     </section>
