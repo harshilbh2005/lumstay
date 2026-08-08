@@ -23,6 +23,7 @@ import {
   BookingFieldError,
   BookingFormErrorSummary,
 } from "@/features/booking/components/booking-form-errors";
+import { BookingPriceBreakdown } from "@/features/booking/components/booking-price-breakdown";
 import { IncompleteBookingState } from "@/features/booking/components/incomplete-booking-state";
 import { IncompleteGuestDetailsState } from "@/features/booking/components/incomplete-guest-details-state";
 import {
@@ -36,6 +37,7 @@ import {
   getRoomLabel,
   hasCompleteGuestDetails,
 } from "@/features/booking/lib/booking-flow";
+import { hasCompleteBookingPriceSummary } from "@/stores/booking-store";
 
 const fieldClassName =
   "h-12 rounded-none border-brand-forest-deep/32 bg-brand-paper px-4 text-base text-brand-forest-deep shadow-none placeholder:text-brand-stone/70 focus-visible:border-brand-brass focus-visible:ring-brand-brass/24 aria-invalid:focus-visible:border-destructive aria-invalid:focus-visible:ring-destructive/24 md:text-base";
@@ -79,9 +81,7 @@ export function BookingPayment() {
     !room ||
     !dates.checkIn ||
     !dates.checkOut ||
-    !priceSummary.nightlyRate ||
-    !priceSummary.nightCount ||
-    !priceSummary.accommodationSubtotal
+    !hasCompleteBookingPriceSummary(priceSummary)
   ) {
     return (
       <main id="main-content">
@@ -541,26 +541,20 @@ export function BookingPayment() {
                       {guestDetails.email}
                     </dd>
                   </div>
-                  <div className="grid grid-cols-[1fr_auto] gap-5 border-b border-brand-paper/18 py-4">
-                    <dt>
-                      <span className="block text-sm font-semibold text-brand-paper">
-                        Room subtotal
-                      </span>
-                      <span className="mt-1 block text-xs leading-5 text-brand-paper/52">
-                        {roomSubtotalLabel}
-                      </span>
-                    </dt>
-                    <dd className="font-mono text-sm font-medium text-brand-paper tabular-nums">
-                      {formatMoney(priceSummary.accommodationSubtotal)}
-                    </dd>
-                  </div>
-                  <div className="grid grid-cols-[1fr_auto] gap-5 py-4 text-sm">
-                    <dt className="text-brand-paper/68">Taxes and fees</dt>
-                    <dd className="font-mono text-xs tracking-[0.06em] text-brand-brass uppercase">
-                      Not calculated
-                    </dd>
-                  </div>
                 </dl>
+
+                <div className="mt-7 border-t border-brand-paper/18 pt-6">
+                  <BookingPriceBreakdown
+                    headingLevel={3}
+                    idPrefix="payment"
+                    presentation="compact"
+                    priceSummary={priceSummary}
+                    property={property}
+                    room={room}
+                    roomSubtotalLabel={roomSubtotalLabel}
+                    showReviewLink
+                  />
+                </div>
 
                 <div className="mt-4 border-t border-brand-paper/18 pt-5">
                   <p className="font-mono text-[0.5625rem] tracking-[0.11em] text-brand-brass uppercase">

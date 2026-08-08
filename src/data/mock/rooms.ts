@@ -32,6 +32,27 @@ export const mockRooms = [
         "Within 7 days of arrival: 50% of the stay",
         "Arrival day, no-show, or early departure: 100% of the stay",
       ],
+      chargeSchedule: [
+        {
+          timing: "7 or more days before arrival",
+          chargeBasisPoints: 0,
+        },
+        {
+          timing: "Fewer than 7 days before arrival",
+          chargeBasisPoints: 5000,
+        },
+        {
+          timing: "Arrival day, no-show, or early departure",
+          chargeBasisPoints: 10000,
+        },
+      ],
+    },
+    ratePlan: {
+      inclusions: [
+        "Accommodation for registered guests",
+        "Complimentary WiFi",
+      ],
+      exclusions: ["Breakfast is available separately."],
     },
     breakfastIncluded: false,
     availability: {
@@ -71,6 +92,32 @@ export const mockRooms = [
         "6–1 days before arrival: 75% of the stay",
         "Arrival day, no-show, or early departure: 100% of the stay",
       ],
+      chargeSchedule: [
+        {
+          timing: "15 or more days before arrival",
+          chargeBasisPoints: 0,
+        },
+        {
+          timing: "14–7 days before arrival",
+          chargeBasisPoints: 5000,
+        },
+        {
+          timing: "6–1 days before arrival",
+          chargeBasisPoints: 7500,
+        },
+        {
+          timing: "Arrival day, no-show, or early departure",
+          chargeBasisPoints: 10000,
+        },
+      ],
+    },
+    ratePlan: {
+      inclusions: [
+        "Accommodation for registered guests",
+        "Daily breakfast for registered guests",
+        "Complimentary WiFi",
+      ],
+      exclusions: [],
     },
     breakfastIncluded: true,
     availability: {
@@ -110,6 +157,20 @@ export const mockRooms = [
         "Changes and cancellations are non-refundable",
         "No-show or early departure: 100% of the stay",
       ],
+      chargeSchedule: [
+        {
+          timing: "After the mock booking is prepared",
+          chargeBasisPoints: 10000,
+        },
+      ],
+    },
+    ratePlan: {
+      inclusions: [
+        "Accommodation for registered guests",
+        "Daily breakfast for registered guests",
+        "Complimentary WiFi",
+      ],
+      exclusions: [],
     },
     breakfastIncluded: true,
     availability: {

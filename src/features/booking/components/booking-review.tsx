@@ -16,6 +16,7 @@ import {
 import { useBookingStore } from "@/components/providers/booking-store-provider";
 import { getMediaById } from "@/data/mock";
 import { BookingFlowHeader } from "@/features/booking/components/booking-flow-header";
+import { BookingPriceBreakdown } from "@/features/booking/components/booking-price-breakdown";
 import { IncompleteBookingState } from "@/features/booking/components/incomplete-booking-state";
 import {
   formatMoney,
@@ -25,6 +26,7 @@ import {
   getStayQuery,
   roomSelectionSectionId,
 } from "@/features/booking/lib/booking-flow";
+import { hasCompleteBookingPriceSummary } from "@/stores/booking-store";
 
 export function BookingReview() {
   const property = useBookingStore((state) => state.property);
@@ -39,16 +41,14 @@ export function BookingReview() {
     !room ||
     !dates.checkIn ||
     !dates.checkOut ||
-    !priceSummary.nightlyRate ||
-    !priceSummary.nightCount ||
-    !priceSummary.accommodationSubtotal
+    !hasCompleteBookingPriceSummary(priceSummary)
   ) {
     return (
       <main id="main-content">
         <BookingFlowHeader
           activeStep={1}
           title="Review the shape of your stay."
-          description="Check the room, dates, party, and provisional accommodation subtotal before guest details."
+          description="Check the room, dates, party, inclusions, cancellation terms, and complete mock total before guest details."
         />
         <IncompleteBookingState
           property={property}
@@ -73,7 +73,7 @@ export function BookingReview() {
       <BookingFlowHeader
         activeStep={1}
         title="Review the shape of your stay."
-        description="Check the room, dates, party, and provisional accommodation subtotal before guest details."
+        description="Check the room, dates, party, inclusions, cancellation terms, and complete mock total before guest details."
       />
 
       <section aria-labelledby="stay-review-title" className="bg-brand-paper">
@@ -82,7 +82,7 @@ export function BookingReview() {
             <article className="lg:col-span-8">
               <div className="flex flex-col gap-5 border-t border-brand-forest-deep/24 pt-6 sm:flex-row sm:items-end sm:justify-between">
                 <div>
-                  <p className="font-mono text-[0.625rem] tracking-[0.13em] text-brand-brass uppercase">
+                  <p className="font-mono text-[0.625rem] tracking-[0.13em] text-brand-brass-dark uppercase">
                     Selected stay
                   </p>
                   <h2
@@ -141,52 +141,46 @@ export function BookingReview() {
                     {room.name}
                   </h3>
                   <dl className="mt-7 border-y border-brand-forest-deep/18">
-                    <div className="grid grid-cols-[1.75rem_1fr] gap-3 border-b border-brand-forest-deep/18 py-3.5">
-                      <Bed
-                        aria-hidden="true"
-                        size={17}
-                        className="mt-0.5 text-brand-brass"
-                      />
-                      <div>
-                        <dt className="font-mono text-[0.5625rem] tracking-[0.11em] text-brand-stone uppercase">
-                          Beds
-                        </dt>
-                        <dd className="mt-1 text-sm leading-6 font-medium text-brand-forest-deep">
-                          {room.bedConfiguration}
-                        </dd>
-                      </div>
+                    <div className="border-b border-brand-forest-deep/18 py-3.5">
+                      <dt className="flex items-center gap-3 font-mono text-[0.5625rem] tracking-[0.11em] text-brand-stone uppercase">
+                        <Bed
+                          aria-hidden="true"
+                          size={17}
+                          className="text-brand-brass"
+                        />
+                        Beds
+                      </dt>
+                      <dd className="mt-1 pl-7 text-sm leading-6 font-medium text-brand-forest-deep">
+                        {room.bedConfiguration}
+                      </dd>
                     </div>
-                    <div className="grid grid-cols-[1.75rem_1fr] gap-3 border-b border-brand-forest-deep/18 py-3.5">
-                      <Ruler
-                        aria-hidden="true"
-                        size={17}
-                        className="mt-0.5 text-brand-brass"
-                      />
-                      <div>
-                        <dt className="font-mono text-[0.5625rem] tracking-[0.11em] text-brand-stone uppercase">
-                          Room size
-                        </dt>
-                        <dd className="mt-1 text-sm leading-6 font-medium text-brand-forest-deep">
-                          {room.sizeSquareMetres} m²
-                        </dd>
-                      </div>
+                    <div className="border-b border-brand-forest-deep/18 py-3.5">
+                      <dt className="flex items-center gap-3 font-mono text-[0.5625rem] tracking-[0.11em] text-brand-stone uppercase">
+                        <Ruler
+                          aria-hidden="true"
+                          size={17}
+                          className="text-brand-brass"
+                        />
+                        Room size
+                      </dt>
+                      <dd className="mt-1 pl-7 text-sm leading-6 font-medium text-brand-forest-deep">
+                        {room.sizeSquareMetres} m²
+                      </dd>
                     </div>
-                    <div className="grid grid-cols-[1.75rem_1fr] gap-3 py-3.5">
-                      <ForkKnife
-                        aria-hidden="true"
-                        size={17}
-                        className="mt-0.5 text-brand-brass"
-                      />
-                      <div>
-                        <dt className="font-mono text-[0.5625rem] tracking-[0.11em] text-brand-stone uppercase">
-                          Breakfast
-                        </dt>
-                        <dd className="mt-1 text-sm leading-6 font-medium text-brand-forest-deep">
-                          {room.breakfastIncluded
-                            ? "Included in this room rate"
-                            : "Available separately"}
-                        </dd>
-                      </div>
+                    <div className="py-3.5">
+                      <dt className="flex items-center gap-3 font-mono text-[0.5625rem] tracking-[0.11em] text-brand-stone uppercase">
+                        <ForkKnife
+                          aria-hidden="true"
+                          size={17}
+                          className="text-brand-brass"
+                        />
+                        Breakfast
+                      </dt>
+                      <dd className="mt-1 pl-7 text-sm leading-6 font-medium text-brand-forest-deep">
+                        {room.breakfastIncluded
+                          ? "Included in this room rate"
+                          : "Available separately"}
+                      </dd>
                     </div>
                   </dl>
                 </div>
@@ -198,7 +192,7 @@ export function BookingReview() {
               >
                 <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
                   <div>
-                    <p className="font-mono text-[0.625rem] tracking-[0.13em] text-brand-brass uppercase">
+                    <p className="font-mono text-[0.625rem] tracking-[0.13em] text-brand-brass-dark uppercase">
                       Stay details
                     </p>
                     <h3
@@ -285,12 +279,12 @@ export function BookingReview() {
               >
                 <div className="grid gap-6 sm:grid-cols-12 sm:gap-x-7">
                   <div className="sm:col-span-4">
-                    <p className="font-mono text-[0.625rem] tracking-[0.13em] text-brand-brass uppercase">
+                    <p className="font-mono text-[0.625rem] tracking-[0.13em] text-brand-brass-dark uppercase">
                       Cancellation
                     </p>
                     <h3
                       id="cancellation-title"
-                      className="mt-3 font-display text-4xl leading-none tracking-[-0.04em] text-brand-forest-deep"
+                      className="mt-3 scroll-mt-32 font-display text-4xl leading-none tracking-[-0.04em] text-brand-forest-deep"
                     >
                       {room.cancellationPolicy.label}
                     </h3>
@@ -299,9 +293,33 @@ export function BookingReview() {
                     <p className="text-base leading-7 font-medium text-brand-forest-deep">
                       {room.cancellationPolicy.summary}
                     </p>
-                    <p className="mt-3 text-sm leading-6 text-foreground/64">
-                      Full cancellation charges and binding terms are reviewed
-                      before payment. This interface does not hold inventory.
+                    <dl className="mt-5 border-y border-brand-forest-deep/18">
+                      {priceSummary.cancellationCharges.map((charge) => (
+                        <div
+                          key={charge.timing}
+                          className="grid grid-cols-[minmax(0,1fr)_auto] gap-5 border-b border-brand-forest-deep/18 py-4 last:border-b-0"
+                        >
+                          <dt>
+                            <span className="block text-sm font-medium text-brand-forest-deep">
+                              {charge.timing}
+                            </span>
+                            <span className="mt-1 block text-xs leading-5 text-muted-foreground">
+                              {charge.chargeBasisPoints / 100}% of the room
+                              subtotal
+                            </span>
+                          </dt>
+                          <dd className="font-mono text-sm font-medium text-brand-forest-deep tabular-nums">
+                            {charge.chargeBasisPoints === 0
+                              ? "No charge"
+                              : formatMoney(charge.amount)}
+                          </dd>
+                        </div>
+                      ))}
+                    </dl>
+                    <p className="mt-4 text-sm leading-6 text-foreground/64">
+                      These prototype charges exclude estimated taxes and the
+                      Luma service fee. No inventory is held and no binding
+                      cancellation clock is running.
                     </p>
                   </div>
                 </div>
@@ -309,54 +327,19 @@ export function BookingReview() {
             </article>
 
             <aside
-              aria-labelledby="price-summary-title"
+              aria-labelledby="review-price-title"
               className="lg:col-span-4"
             >
               <div className="border-y border-brand-brass/48 bg-brand-forest-deep px-5 py-7 text-brand-paper sm:px-7 sm:py-8 lg:sticky lg:top-[7.5rem]">
-                <p className="font-mono text-[0.625rem] tracking-[0.13em] text-brand-brass uppercase">
-                  Provisional price
-                </p>
-                <h2
-                  id="price-summary-title"
-                  className="mt-3 max-w-[10ch] font-display text-[clamp(2.5rem,4vw,4.5rem)] leading-[0.94] tracking-[-0.045em]"
-                >
-                  Accommodation only.
-                </h2>
-
-                <dl className="mt-8 border-t border-brand-paper/18">
-                  <div className="grid grid-cols-[1fr_auto] gap-5 border-b border-brand-paper/18 py-4">
-                    <dt>
-                      <span className="block text-sm font-semibold text-brand-paper">
-                        Room subtotal
-                      </span>
-                      <span className="mt-1 block text-xs leading-5 text-brand-paper/58">
-                        {roomSubtotalLabel}
-                      </span>
-                    </dt>
-                    <dd className="font-mono text-sm font-medium text-brand-paper tabular-nums">
-                      {formatMoney(priceSummary.accommodationSubtotal)}
-                    </dd>
-                  </div>
-                  <div className="grid grid-cols-[1fr_auto] gap-5 border-b border-brand-paper/18 py-4 text-sm">
-                    <dt className="text-brand-paper/68">Taxes and fees</dt>
-                    <dd className="font-mono text-xs tracking-[0.06em] text-brand-brass uppercase">
-                      Not calculated
-                    </dd>
-                  </div>
-                  <div className="grid grid-cols-[1fr_auto] items-end gap-5 py-5">
-                    <dt>
-                      <span className="block font-display text-2xl tracking-[-0.025em]">
-                        Accommodation subtotal
-                      </span>
-                      <span className="mt-1 block text-xs leading-5 text-brand-paper/52">
-                        No charge is made on this step.
-                      </span>
-                    </dt>
-                    <dd className="font-mono text-xl font-medium text-brand-paper tabular-nums">
-                      {formatMoney(priceSummary.accommodationSubtotal)}
-                    </dd>
-                  </div>
-                </dl>
+                <BookingPriceBreakdown
+                  headingLevel={2}
+                  idPrefix="review"
+                  presentation="feature"
+                  priceSummary={priceSummary}
+                  property={property}
+                  room={room}
+                  roomSubtotalLabel={roomSubtotalLabel}
+                />
 
                 <Link
                   href="/booking/guest-details"
@@ -382,10 +365,11 @@ export function BookingReview() {
           </div>
 
           <p className="mt-12 max-w-[58rem] border-l border-brand-brass/65 pl-4 text-xs leading-5 text-muted-foreground">
-            Prototype review only. Rates, room availability, taxes, fees,
-            cancellation calculations, and reservation status are not live.
-            The selected room remains in memory while you navigate and clears
-            on reload.
+            Prototype review only. Rates, room availability, the displayed tax
+            and fee model, cancellation charges, and reservation status are
+            deterministic interface fixtures rather than live terms. The
+            selected room remains in memory while you navigate and clears on
+            reload.
           </p>
         </div>
       </section>

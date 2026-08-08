@@ -1,5 +1,6 @@
 import type { Booking } from "@/types/domain";
 
+export { mockBookingPricingPolicy } from "./booking-pricing";
 export {
   generatedMedia,
   getMediaById,

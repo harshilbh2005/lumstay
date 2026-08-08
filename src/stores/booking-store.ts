@@ -7,7 +7,7 @@ import {
 } from "date-fns";
 import { createStore } from "zustand/vanilla";
 
-import type { Money } from "@/types/domain";
+import type { BookingPricingPolicy, Money } from "@/types/domain";
 
 export interface BookingDateRange {
   checkIn: string | null;
@@ -37,6 +37,7 @@ export interface BookingProperty {
     country: string;
     region?: string;
   };
+  pricingPolicy: BookingPricingPolicy;
 }
 
 export interface BookingRoom {
@@ -52,7 +53,22 @@ export interface BookingRoom {
   cancellationPolicy: {
     label: string;
     summary: string;
+    terms: string[];
+    chargeSchedule: {
+      timing: string;
+      chargeBasisPoints: number;
+    }[];
   };
+  ratePlan: {
+    inclusions: string[];
+    exclusions: string[];
+  };
+}
+
+export interface BookingCancellationCharge {
+  timing: string;
+  chargeBasisPoints: number;
+  amount: Money;
 }
 
 export interface BookingPriceSummary {
@@ -60,6 +76,23 @@ export interface BookingPriceSummary {
   nightCount: number | null;
   roomCount: number;
   accommodationSubtotal: Money | null;
+  estimatedTaxAmount: Money | null;
+  serviceFeeAmount: Money | null;
+  totalPrice: Money | null;
+  taxRateBasisPoints: number | null;
+  serviceFeePerRoom: Money | null;
+  cancellationCharges: BookingCancellationCharge[];
+}
+
+export interface CompleteBookingPriceSummary extends BookingPriceSummary {
+  nightlyRate: Money;
+  nightCount: number;
+  accommodationSubtotal: Money;
+  estimatedTaxAmount: Money;
+  serviceFeeAmount: Money;
+  totalPrice: Money;
+  taxRateBasisPoints: number;
+  serviceFeePerRoom: Money;
 }
 
 export interface BookingStoreSeed {
@@ -179,8 +212,12 @@ function getNightCount(dates: BookingDateRange) {
 export function getBookingPriceSummary({
   dates,
   guests,
+  property,
   room,
-}: Pick<BookingStoreState, "dates" | "guests" | "room">): BookingPriceSummary {
+}: Pick<
+  BookingStoreState,
+  "dates" | "guests" | "property" | "room"
+>): BookingPriceSummary {
   const nightCount = getNightCount(dates);
   const nightlyRate = room ? { ...room.nightlyPrice } : null;
   const accommodationSubtotal =
@@ -190,13 +227,82 @@ export function getBookingPriceSummary({
           currency: nightlyRate.currency,
         }
       : null;
+  const pricingPolicy = property?.pricingPolicy ?? null;
+  const canApplyPricingPolicy =
+    accommodationSubtotal &&
+    pricingPolicy &&
+    pricingPolicy.serviceFee.amountPerRoom.currency ===
+      accommodationSubtotal.currency;
+  const estimatedTaxAmount = canApplyPricingPolicy
+    ? {
+        amount: Math.round(
+          (accommodationSubtotal.amount *
+            pricingPolicy.estimatedTax.rateBasisPoints) /
+            10000,
+        ),
+        currency: accommodationSubtotal.currency,
+      }
+    : null;
+  const serviceFeeAmount = canApplyPricingPolicy
+    ? {
+        amount:
+          pricingPolicy.serviceFee.amountPerRoom.amount * guests.rooms,
+        currency: accommodationSubtotal.currency,
+      }
+    : null;
+  const totalPrice =
+    accommodationSubtotal && estimatedTaxAmount && serviceFeeAmount
+      ? {
+          amount:
+            accommodationSubtotal.amount +
+            estimatedTaxAmount.amount +
+            serviceFeeAmount.amount,
+          currency: accommodationSubtotal.currency,
+        }
+      : null;
+  const cancellationCharges =
+    accommodationSubtotal && room
+      ? room.cancellationPolicy.chargeSchedule.map((rule) => ({
+          timing: rule.timing,
+          chargeBasisPoints: rule.chargeBasisPoints,
+          amount: {
+            amount: Math.round(
+              (accommodationSubtotal.amount * rule.chargeBasisPoints) / 10000,
+            ),
+            currency: accommodationSubtotal.currency,
+          },
+        }))
+      : [];
 
   return {
     nightlyRate,
     nightCount,
     roomCount: guests.rooms,
     accommodationSubtotal,
+    estimatedTaxAmount,
+    serviceFeeAmount,
+    totalPrice,
+    taxRateBasisPoints: pricingPolicy?.estimatedTax.rateBasisPoints ?? null,
+    serviceFeePerRoom: pricingPolicy
+      ? { ...pricingPolicy.serviceFee.amountPerRoom }
+      : null,
+    cancellationCharges,
   };
+}
+
+export function hasCompleteBookingPriceSummary(
+  priceSummary: BookingPriceSummary,
+): priceSummary is CompleteBookingPriceSummary {
+  return Boolean(
+    priceSummary.nightlyRate &&
+      priceSummary.nightCount &&
+      priceSummary.accommodationSubtotal &&
+      priceSummary.estimatedTaxAmount &&
+      priceSummary.serviceFeeAmount &&
+      priceSummary.totalPrice &&
+      priceSummary.taxRateBasisPoints !== null &&
+      priceSummary.serviceFeePerRoom,
+  );
 }
 
 export function getDefaultBookingState(): BookingStoreState {
@@ -211,7 +317,12 @@ export function getDefaultBookingState(): BookingStoreState {
     property: null,
     room: null,
     guestDetails: { ...defaultGuestDetails },
-    priceSummary: getBookingPriceSummary({ dates, guests, room: null }),
+    priceSummary: getBookingPriceSummary({
+      dates,
+      guests,
+      property: null,
+      room: null,
+    }),
   };
 }
 
@@ -227,7 +338,12 @@ function getSeededBookingState(seed: BookingStoreSeed): BookingStoreState {
     property: seed.property,
     room: null,
     guestDetails: { ...defaultGuestDetails },
-    priceSummary: getBookingPriceSummary({ dates, guests, room: null }),
+    priceSummary: getBookingPriceSummary({
+      dates,
+      guests,
+      property: seed.property,
+      room: null,
+    }),
   };
 }
 
@@ -256,6 +372,7 @@ export function createBookingStore(
           priceSummary: getBookingPriceSummary({
             dates,
             guests: state.guests,
+            property: state.property,
             room: state.room,
           }),
         };
@@ -269,6 +386,7 @@ export function createBookingStore(
           priceSummary: getBookingPriceSummary({
             dates: state.dates,
             guests,
+            property: state.property,
             room: state.room,
           }),
         };
@@ -286,6 +404,7 @@ export function createBookingStore(
           priceSummary: getBookingPriceSummary({
             dates: state.dates,
             guests: state.guests,
+            property,
             room,
           }),
         };
@@ -301,6 +420,7 @@ export function createBookingStore(
           priceSummary: getBookingPriceSummary({
             dates: state.dates,
             guests: state.guests,
+            property: state.property,
             room,
           }),
         };

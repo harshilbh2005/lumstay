@@ -574,23 +574,24 @@ Important limitation: suggestions are local and finite, and recent searches are 
 ### Cross-route booking store
 
 - A per-request Zustand vanilla store now lives beneath the root client provider, so booking state survives App Router navigation without sharing a module-global singleton across server requests
-- The typed draft carries normalized check-in/check-out dates, adult/child/room counts, compact property and room snapshots, trimmed lead-guest identity/contact details, hydration status, and a derived accommodation price summary
+- The typed draft carries normalized check-in/check-out dates, adult/child/room counts, compact property and room snapshots, trimmed lead-guest identity/contact details, hydration status, and a fully derived mock price/cancellation summary
 - Search-result property links preserve canonical destination, date, guest, and room intent in the property URL; a small client initializer hydrates dates, guests, and the property snapshot while the property route remains statically generated
 - Initialization keys make hydration idempotent, so React Strict Mode or preserved-route effect replays do not clear an existing room choice for the same property and search intent
 - The existing native room radios now update the store through the isolated sticky-summary client leaf, while the radios and summary restore from the same selected-room state after client-side route navigation
-- Price state derives the nightly rate, night count, requested room count, and accommodation subtotal (`nightly rate × nights × rooms`) after every relevant update instead of storing an independently editable total
+- Price state derives the nightly rate, night count, requested room count, accommodation subtotal (`nightly rate × nights × rooms`), estimated tax, per-room service fee, final total, and cancellation-charge examples after every relevant update instead of storing independently editable totals
 - Guest counts are bounded to the existing search limits, invalid date ranges normalize to an unset stay, rooms from another property are rejected, property changes clear incompatible rooms, and an explicit reset returns the draft to its known defaults
 - No new review screen or booking route was introduced; the existing property composition and native room controls remain visually unchanged apart from an accurate non-persistence disclosure
 - Verified with lint, TypeScript, focused vanilla-store assertions, a successful production build, and visible-browser QA at 1440×1000 and 390×844 covering URL handoff, room selection, cross-route restoration, reload reset, native-radio synchronization, zero horizontal overflow, zero console warnings/errors, and zero unexpected request failures
 
-Important limitation: booking state is intentionally memory-only. Dates and guests can be reconstructed from a shareable property URL after reload, but the selected room and guest details are cleared; persistence, taxes, fees, cancellation calculations, availability, payment, and confirmation remain later roadmap units.
+Important limitation: booking state is intentionally memory-only. Dates and guests can be reconstructed from a shareable property URL after reload, but the selected room and guest details are cleared; persistence, live pricing/tax data, availability, payment, and confirmation remain later roadmap units.
 
 ### Booking review step
 
 - A new static `/booking/review` route presents the first of four clearly labelled booking steps inside the shared site header/footer shell
 - The Casa Serein sticky summary keeps its local room-scroll action until a room is selected, then becomes a real `Review your stay` App Router link into the review route
 - The complete review reads the existing cross-route draft and presents the selected property, central-catalog room image, room name, beds, room size, breakfast inclusion, check-in/check-out dates, party, room count, duration, and cancellation summary without duplicating fixture data
-- A dark, sticky price ledger derives and itemizes the existing accommodation subtotal (`nightly rate × nights × rooms`), explicitly marks taxes and fees as not calculated, and avoids labelling the subtotal as a final total
+- A dark, sticky price ledger now separates the accommodation subtotal, 12% prototype tax estimate, fixed ₹900-per-room Luma fee, and derived final total while clearly identifying every amount as mock data
+- The cancellation section expands the selected room’s structured percentages into exact accommodation-only charge examples, keeps tax/fee amounts outside those charges, and exposes a sticky-header-safe deep link from later booking steps
 - `Change room` and `Edit dates or guests` links preserve the canonical search intent; the former returns directly to the property room section and the latter returns to `/search`
 - Direct access or reload with no in-memory draft shows a deliberate recovery ledger, while property/room drafts without valid dates expose `Choose dates` and `Return to Casa Serein` paths instead of showing an invalid price
 - The guest-details action is now an enabled App Router link to `/booking/guest-details`, with explicit copy that the next step creates neither a reservation nor a charge
@@ -598,7 +599,7 @@ Important limitation: booking state is intentionally memory-only. Dates and gues
 - UI/UX Pro Max guidance was retained for responsive image sizing, visible focus, and 44–48px controls; its generic blue/gold liquid-glass direction was rejected, as were bento composition and perpetual decorative motion
 - Verified from the production build at 1440×1000 and 390×844 through the real room-selection-to-review transition, with exact three-night subtotal derivation, decoded responsive imagery, 44–48px main controls, visible keyboard focus, zero mobile horizontal overflow, clean browser warnings/errors, explicit no-date recovery, and reload reset behavior
 
-Important limitation: the page remains a frontend-only review of a memory-held draft. It does not persist the selected room, hold inventory, calculate taxes or fees, apply binding cancellation charges, take payment, or create a reservation.
+Important limitation: the page remains a frontend-only review of a memory-held draft. It does not persist the selected room, hold inventory, use live rates/tax law, apply binding cancellation charges, take payment, or create a reservation.
 
 ### Guest-details step
 
@@ -606,8 +607,8 @@ Important limitation: the page remains a frontend-only review of a memory-held d
 - The review action now opens the route, while both the explicit `Back to review` link and the completed progress step return without losing the session-held guest draft
 - The form collects only lead-guest first name, last name, email, and phone, with visible labels, required indicators, correct input types, autocomplete hints, a country-code example, and local React Hook Form/Zod validation
 - Submitting trims and length-bounds the four fields in the Zustand draft and announces a polite saved status without creating an account, reservation, payment record, or external mutation
-- Identity and contact are deliberately separated from payment. Taxes/fees, special requests, submission failures, terms, and confirmation remain assigned to later roadmap units
-- A dark sticky stay ledger preserves property, room, location, check-in/out, party, accommodation subtotal, and the honest `Not calculated` tax state; its payment action remains disabled until item 27 exists
+- Identity and contact are deliberately separated from payment. Special requests, submission failures, terms acceptance, and confirmation remain assigned to later roadmap units
+- A dark sticky stay ledger preserves property, room, location, check-in/out, party, the complete mock price, rate inclusions/exclusions, and the selected cancellation summary; its payment action remains gated by a saved, unchanged guest draft
 - Booking progress, query formatting, money/date/party labels, and missing-draft recovery are now shared between review and guest details; a reloaded guest-details URL marks Review as required instead of falsely complete
 - Refero reference lock uses Kobu's linen canvas, sharp rules, mono metadata, and shadowless editorial restraint as the foundation; Christopher Ireland Creative's ruled form rhythm, Volkshotel's paired field structure, Understory's concise purpose/trust copy, and Expedia's persistent two-column summary are borrowed without their card shadows, extra personal fields, payment UI, urgency, or error styling
 - UI/UX Pro Max guidance was retained for associated labels, submission feedback, internal Next.js links, leaf-level client interactivity, visible focus, and responsive 44–48px controls; its liquid-glass palette/effects were rejected as incompatible with LumaStay
@@ -623,13 +624,13 @@ Important limitation: guest details remain memory-only and are validated only in
 - The deliberately narrow form collects name on card, card number, expiry, and security code with visible labels, autocomplete disabled, mobile-friendly numeric keyboards, and local React Hook Form/Zod validation
 - A prominent test-only notice supplies the standard `4242` card number and states that the interface neither contacts a provider nor accepts real payment details
 - Submitting prepares only a page-local masked summary containing the trimmed cardholder name, last four digits, and expiry; the full card number and security code are cleared immediately, never enter Zustand, and disappear entirely when the route unmounts
-- A sticky stay ledger repeats the guest/contact summary and accommodation subtotal while explicitly marking taxes and fees as `Not calculated`; its scope copy reserves booking submission, response handling, retry states, and confirmation for their later roadmap units
+- A sticky stay ledger repeats the guest/contact summary, complete mock price, rate inclusions/exclusions, and cancellation summary; its scope copy reserves booking submission, response handling, retry states, and confirmation for their later roadmap units
 - Direct access with no stay reuses the deliberate booking recovery state, while a complete stay without saved guest details exposes clear paths back to Guest details and Review
 - Refero reference lock uses Kobu's warm paper, sharp fields, quiet rules, restrained monospace metadata, and shadowless composition as the foundation; Mews' split checkout hierarchy, Trip.com's payment grouping and progress clarity, Christopher Ireland Creative's ruled form cadence, and BelArosa's forest/brass restraint are borrowed without logos, wallets, urgency, rounded card stacks, promotional totals, or real-payment claims
 - UI/UX Pro Max guidance was retained for persistent labels, visible keyboard focus, internal Next.js links, leaf-level client interactivity, mobile input modes, and 44–48px controls; its unrelated liquid-glass, blue, and gold system was rejected as incompatible with LumaStay
 - Verified from the production build at 1440×1000 and 390×844 through the complete search → property → room → review → guest → payment journey, including first-invalid-field focus, visible keyboard focus, hover feedback, masked-only preparation, immediate sensitive-field clearing, route-local summary clearing, recovery states, zero mobile horizontal overflow, zero console warnings/errors, and zero unexpected request failures
 
-Important limitation: this is a frontend-only mock payment preparation form. Its schema accepts only the documented test fixture and does not perform provider validation, encryption, tokenization, a charge, inventory hold, reservation, tax/fee calculation, server validation, loading/failure/retry handling, confirmation, or persistence.
+Important limitation: this is a frontend-only mock payment preparation form. Its schema accepts only the documented test fixture and does not perform provider validation, encryption, tokenization, a charge, inventory hold, reservation, live tax/fee calculation, server validation, loading/failure/retry handling, confirmation, or persistence.
 
 ### Validated booking forms
 
@@ -643,6 +644,18 @@ Important limitation: this is a frontend-only mock payment preparation form. Its
 - Verified from a successful production build at 1440×1000 and 390×844 with empty, partial, corrected, saved, dirty, test-card, and stale-success cases; keyboard focus remained visible and unobscured, controls remained at least 48px high, mobile had zero horizontal overflow, the current console and requests were clean, and axe reported zero violations across both booking pages and zero violations/incomplete results within the payment form
 
 Important limitation: validation is deterministic and client-only. It is suitable for this mock flow, not identity verification or real card acceptance, and it does not replace server-side validation or payment-provider tokenization.
+
+### Transparent mock pricing and cancellation
+
+- A typed `BookingPricingPolicy` fixture defines one clearly disclosed 12% prototype tax estimate and a fixed ₹900 Luma service fee per room for the full stay; `docs/property-fixtures.md` explicitly states that neither amount represents Italian tax law or a live fee
+- Room fixtures now carry explicit rate inclusions/exclusions and structured cancellation percentages alongside their human-readable terms; the compact booking snapshot preserves those structures across App Router navigation
+- The Zustand price summary is fully derived whenever dates, guest-room count, property, or room changes: room subtotal, rounded estimated tax, room-count-sensitive fee, final total, and accommodation-only cancellation examples share one currency and one source of truth
+- A reusable dark editorial price breakdown renders the same open ledger on Review, Guest details, and Payment, with room formula, individual tax/fee rows, decisive final total, inclusions/exclusions, cancellation summary, and no collapsed or hidden charge rows
+- Review adds the full monetary cancellation schedule; Guest details and Payment link back to it with a `scroll-mt-32` offset so the target remains visible beneath the 88px sticky header
+- Reference lock keeps Kobu’s warm shadowless editorial foundation, Midday’s hairline financial ledger, Trip’s exposed tax/fee rows and prominent total, and Airbnb’s co-location of cancellation, inclusions, and price; marketplace cards, colored checkout chrome, countdowns, rewards, hidden fee accordions, and live-tax claims were rejected
+- Verified from the production build at 1440×1000 and 390×844 through the complete property → review → guest → payment journey: the three-night Garden Room resolves to ₹114,600 + ₹13,752 + ₹900 = ₹129,252 on all three pages, a two-room Sea Terrace calculation scales the fee and cancellation examples correctly, the deep link lands below the sticky header, mobile has zero horizontal overflow, the fresh console and requests are clean, the full Review page has zero axe violations, and the payment form and shared pricing surfaces have zero scoped axe violations or incomplete checks
+
+Important limitation: all pricing, inclusions, and cancellation amounts are deterministic interface fixtures. They do not reflect live room rates, availability, tax law, property-settled charges, exchange rates, binding policy deadlines, or a payment-provider quote.
 
 ## Current homepage order
 
@@ -664,15 +677,17 @@ The implemented routes are `/`, `/destinations`, `/edit`, `/search`, `/propertie
 - `mockPropertyDetails`: 1 full property fixture for Casa Serein, composed from its existing summary, five central-catalog gallery media IDs, 3 sourced facility details, 4 house-policy entries, 4 practical entries, and a Ravello location ledger
 - `mockDestinations`: 7 destination summaries shared by `/destinations` and the hero autocomplete
 - `mockEditorialStories`: 7 editorial story summaries used by `/edit`
-- `mockRooms`: 3 Casa Serein room tiers with 6 central-catalog media references, occupancy, beds, size, facilities, INR nightly pricing, breakfast inclusion, structured cancellation policies, and typed availability; 2 are selectable and Serein Suite is explicitly unavailable in the interface preview
+- `mockRooms`: 3 Casa Serein room tiers with 6 central-catalog media references, occupancy, beds, size, facilities, INR nightly pricing, explicit rate inclusions/exclusions, structured cancellation policies and charge percentages, and typed availability; 2 are selectable and Serein Suite is explicitly unavailable in the interface preview
+- `mockBookingPricingPolicy`: one INR interface fixture with a 12% estimated-tax rate and ₹900 service fee per room; it is deliberately not sourced from live tax or property data
 - `mockBookings`: empty array
-- No live availability, date-sensitive room pricing, tax/fee breakdown, complete facility catalog, booking, payment-provider, or confirmation fixture yet
-- `src/stores/booking-store.ts` contains the memory-only cross-route stay and lead-guest draft; mock card values never enter the store, and only a masked prepared summary exists in payment-page component state
+- No live availability, date-sensitive room pricing, tax/fee provider, complete facility catalog, booking, payment-provider, or confirmation fixture yet
+- `src/stores/booking-store.ts` contains the memory-only cross-route stay and lead-guest draft plus a fully derived mock pricing/cancellation summary; mock card values never enter the store, and only a masked prepared summary exists in payment-page component state
 - Saved and trips feature indexes are scaffolds only
 
 ## Commit history
 
 ```text
+3f40dc2 feat: validate booking forms
 a9932f9 feat: add mock payment step
 fd57b35 feat: add guest details step
 01484be feat: add booking review step
@@ -755,7 +770,7 @@ Build each item separately, research it first, verify it, and commit it before m
 26. ~~Guest-details form~~ Complete
 27. ~~Checkout and mock payment form~~ Complete
 28. ~~React Hook Form and Zod validation with accessible inline errors~~ Complete
-29. Taxes, fees, inclusions, cancellation, and total-price breakdown
+29. ~~Taxes, fees, inclusions, cancellation, and total-price breakdown~~ Complete
 30. Submitting/loading, payment-failure, recoverable-error, and retry states
 31. Booking confirmation page with mock reference and itinerary summary
 
@@ -782,4 +797,4 @@ Build each item separately, research it first, verify it, and commit it before m
 
 ## Recommended immediate next step
 
-Add a deterministic mock pricing model for **taxes, fees, inclusions, cancellation, and the final total** across review, guest details, and payment. Keep the accommodation subtotal visibly distinct from the final total, derive every amount from typed shared data, and preserve the existing editorial ledgers. Leave submission/loading, payment failure/retry, confirmation, and persistence to their later roadmap units.
+Add **submitting/loading, payment-failure, recoverable-error, and retry states** to the mock payment step. Keep preparation local and non-transactional, prevent duplicate submission, preserve the complete pricing ledger and masked-only card handling, and make failure/retry behavior deterministic and accessible. Leave booking confirmation, persistence, and real payment integration to their later roadmap units.

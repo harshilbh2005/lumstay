@@ -5,6 +5,24 @@ export interface Money {
   currency: CurrencyCode;
 }
 
+export interface BookingPricingPolicy {
+  estimatedTax: {
+    label: string;
+    rateBasisPoints: number;
+    description: string;
+  };
+  serviceFee: {
+    label: string;
+    amountPerRoom: Money;
+    description: string;
+  };
+}
+
+export interface CancellationChargeRule {
+  timing: string;
+  chargeBasisPoints: number;
+}
+
 export interface Location {
   city: string;
   country: string;
@@ -129,6 +147,11 @@ export interface Room {
     label: string;
     summary: string;
     terms: string[];
+    chargeSchedule: CancellationChargeRule[];
+  };
+  ratePlan: {
+    inclusions: string[];
+    exclusions: string[];
   };
   breakfastIncluded: boolean;
   availability:

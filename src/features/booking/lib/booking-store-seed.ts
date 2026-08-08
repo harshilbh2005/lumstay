@@ -2,6 +2,7 @@ import {
   getSearchFormValues,
   type SearchFormValues,
 } from "@/features/search/lib/search-context";
+import { mockBookingPricingPolicy } from "@/data/mock/booking-pricing";
 import type {
   BookingProperty,
   BookingRoom,
@@ -28,6 +29,15 @@ export function toBookingProperty(
         ? { region: property.location.region }
         : {}),
     },
+    pricingPolicy: {
+      estimatedTax: { ...mockBookingPricingPolicy.estimatedTax },
+      serviceFee: {
+        ...mockBookingPricingPolicy.serviceFee,
+        amountPerRoom: {
+          ...mockBookingPricingPolicy.serviceFee.amountPerRoom,
+        },
+      },
+    },
   };
 }
 
@@ -45,6 +55,14 @@ export function toBookingRoom(room: Room): BookingRoom {
     cancellationPolicy: {
       label: room.cancellationPolicy.label,
       summary: room.cancellationPolicy.summary,
+      terms: [...room.cancellationPolicy.terms],
+      chargeSchedule: room.cancellationPolicy.chargeSchedule.map((rule) => ({
+        ...rule,
+      })),
+    },
+    ratePlan: {
+      inclusions: [...room.ratePlan.inclusions],
+      exclusions: [...room.ratePlan.exclusions],
     },
   };
 }
