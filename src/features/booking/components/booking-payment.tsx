@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useState } from "react";
 import {
   ArrowLeft,
   CalendarBlank,
@@ -13,12 +14,21 @@ import {
   UsersThree,
 } from "@phosphor-icons/react";
 import Link from "next/link";
+import { useForm } from "react-hook-form";
 
 import { useBookingStore } from "@/components/providers/booking-store-provider";
 import { Input } from "@/components/ui/input";
 import { BookingFlowHeader } from "@/features/booking/components/booking-flow-header";
+import {
+  BookingFieldError,
+  BookingFormErrorSummary,
+} from "@/features/booking/components/booking-form-errors";
 import { IncompleteBookingState } from "@/features/booking/components/incomplete-booking-state";
 import { IncompleteGuestDetailsState } from "@/features/booking/components/incomplete-guest-details-state";
+import {
+  mockPaymentSchema,
+  type MockPaymentFormValues,
+} from "@/features/booking/lib/booking-form-validation";
 import {
   formatMoney,
   formatStayDate,
@@ -28,7 +38,7 @@ import {
 } from "@/features/booking/lib/booking-flow";
 
 const fieldClassName =
-  "h-12 rounded-none border-brand-forest-deep/32 bg-brand-paper px-4 text-base text-brand-forest-deep shadow-none placeholder:text-brand-stone/70 focus-visible:border-brand-brass focus-visible:ring-brand-brass/24 md:text-base";
+  "h-12 rounded-none border-brand-forest-deep/32 bg-brand-paper px-4 text-base text-brand-forest-deep shadow-none placeholder:text-brand-stone/70 focus-visible:border-brand-brass focus-visible:ring-brand-brass/24 aria-invalid:focus-visible:border-destructive aria-invalid:focus-visible:ring-destructive/24 md:text-base";
 
 interface PreparedMockCard {
   cardholderName: string;
@@ -46,6 +56,23 @@ export function BookingPayment() {
   const [preparedCard, setPreparedCard] = useState<PreparedMockCard | null>(
     null,
   );
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<MockPaymentFormValues>({
+    resolver: zodResolver(mockPaymentSchema),
+    defaultValues: {
+      mockCardholderName: "",
+      mockCardNumber: "",
+      mockCardExpiry: "",
+      mockCardSecurity: "",
+    },
+    mode: "onSubmit",
+    reValidateMode: "onChange",
+    shouldFocusError: true,
+  });
 
   if (
     !property ||
@@ -89,28 +116,20 @@ export function BookingPayment() {
 
   const guestLabel = getGuestLabel(guests);
   const roomLabel = getRoomLabel(guests.rooms);
+  const errorCount = Object.keys(errors).length;
   const roomSubtotalLabel = `${formatMoney(priceSummary.nightlyRate)} × ${priceSummary.nightCount} ${
     priceSummary.nightCount === 1 ? "night" : "nights"
   } × ${priceSummary.roomCount} ${
     priceSummary.roomCount === 1 ? "room" : "rooms"
   }`;
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-
-    const form = event.currentTarget;
-    const formData = new FormData(form);
-    const cardholderName = String(
-      formData.get("mockCardholderName") ?? "",
-    ).trim();
-    const cardNumber = String(formData.get("mockCardNumber") ?? "");
-    const expiry = String(formData.get("mockCardExpiry") ?? "")
-      .trim()
-      .replace(/\s+/g, " ");
-    const lastFour = cardNumber.replace(/\D/g, "").slice(-4);
-
-    setPreparedCard({ cardholderName, lastFour, expiry });
-    form.reset();
+  function prepareMockPayment(values: MockPaymentFormValues) {
+    setPreparedCard({
+      cardholderName: values.mockCardholderName,
+      lastFour: values.mockCardNumber.replace(/\D/g, "").slice(-4),
+      expiry: values.mockCardExpiry,
+    });
+    reset();
   }
 
   return (
@@ -126,7 +145,7 @@ export function BookingPayment() {
           <div className="grid gap-12 lg:grid-cols-12 lg:gap-x-8">
             <div className="lg:col-span-8">
               <div className="border-t border-brand-forest-deep/24 pt-6">
-                <p className="font-mono text-[0.625rem] tracking-[0.13em] text-brand-brass uppercase">
+                <p className="font-mono text-[0.625rem] tracking-[0.13em] text-brand-brass-dark uppercase">
                   Mock payment
                 </p>
                 <div className="mt-3 grid gap-5 sm:grid-cols-12 sm:gap-x-7">
@@ -176,11 +195,11 @@ export function BookingPayment() {
                     <span className="block text-sm font-semibold text-brand-forest-deep">
                       Credit or debit card
                     </span>
-                    <span className="mt-1 block text-xs leading-5 text-foreground/60">
+                    <span className="mt-1 block text-xs leading-5 text-muted-foreground">
                       Local interface preview only
                     </span>
                   </span>
-                  <span className="font-mono text-[0.5625rem] tracking-[0.1em] text-brand-brass uppercase">
+                  <span className="font-mono text-[0.5625rem] tracking-[0.1em] text-brand-brass-dark uppercase">
                     Selected
                   </span>
                 </div>
@@ -189,17 +208,22 @@ export function BookingPayment() {
               <form
                 className="mt-12"
                 autoComplete="off"
-                onSubmit={handleSubmit}
+                noValidate
+                onSubmit={handleSubmit(prepareMockPayment, () =>
+                  setPreparedCard(null),
+                )}
                 onInput={() => setPreparedCard(null)}
               >
+                <BookingFormErrorSummary errorCount={errorCount} />
+
                 <fieldset>
                   <legend className="w-full border-b border-brand-forest-deep/24 pb-5 font-display text-3xl leading-none tracking-[-0.035em] text-brand-forest-deep sm:text-4xl">
                     Card details
                   </legend>
                   <p className="mt-4 max-w-[42rem] text-sm leading-6 text-foreground/66">
-                    These fields use browser-native constraints for now. Full
-                    accessible inline validation follows in the next roadmap
-                    unit.
+                    These test fields are validated locally. If something needs
+                    attention, the first field is focused and every issue stays
+                    visible beside its field.
                   </p>
 
                   <div className="mt-7 grid gap-7">
@@ -217,12 +241,24 @@ export function BookingPayment() {
                       </div>
                       <Input
                         id="mock-cardholder-name"
-                        name="mockCardholderName"
                         type="text"
                         autoComplete="off"
                         required
                         maxLength={80}
+                        aria-invalid={
+                          errors.mockCardholderName ? true : undefined
+                        }
+                        aria-describedby={
+                          errors.mockCardholderName
+                            ? "mock-cardholder-name-error"
+                            : undefined
+                        }
                         className={`mt-2 ${fieldClassName}`}
+                        {...register("mockCardholderName")}
+                      />
+                      <BookingFieldError
+                        id="mock-cardholder-name-error"
+                        message={errors.mockCardholderName?.message}
                       />
                     </div>
 
@@ -245,25 +281,36 @@ export function BookingPayment() {
                       </div>
                       <Input
                         id="mock-card-number"
-                        name="mockCardNumber"
                         type="text"
                         inputMode="numeric"
                         autoComplete="off"
-                        aria-describedby="test-card-guidance card-number-helper"
+                        aria-invalid={
+                          errors.mockCardNumber ? true : undefined
+                        }
+                        aria-describedby={`test-card-guidance card-number-helper${
+                          errors.mockCardNumber
+                            ? " mock-card-number-error"
+                            : ""
+                        }`}
                         placeholder="4242 4242 4242 4242"
                         required
                         minLength={13}
                         maxLength={23}
                         pattern="[0-9 ]{13,23}"
                         className={`mt-2 font-mono tabular-nums ${fieldClassName}`}
+                        {...register("mockCardNumber")}
                       />
                       <p
                         id="card-number-helper"
-                        className="mt-2 text-xs leading-5 text-foreground/60"
+                        className="mt-2 text-xs leading-5 text-muted-foreground"
                       >
                         Spaces are accepted. The full value is never added to
                         the booking store.
                       </p>
+                      <BookingFieldError
+                        id="mock-card-number-error"
+                        message={errors.mockCardNumber?.message}
+                      />
                     </div>
 
                     <div className="grid gap-7 sm:grid-cols-2">
@@ -281,7 +328,6 @@ export function BookingPayment() {
                         </div>
                         <Input
                           id="mock-card-expiry"
-                          name="mockCardExpiry"
                           type="text"
                           inputMode="numeric"
                           autoComplete="off"
@@ -289,7 +335,20 @@ export function BookingPayment() {
                           required
                           maxLength={7}
                           pattern="(0[1-9]|1[0-2]) ?/ ?[0-9]{2}"
+                          aria-invalid={
+                            errors.mockCardExpiry ? true : undefined
+                          }
+                          aria-describedby={
+                            errors.mockCardExpiry
+                              ? "mock-card-expiry-error"
+                              : undefined
+                          }
                           className={`mt-2 font-mono tabular-nums ${fieldClassName}`}
+                          {...register("mockCardExpiry")}
+                        />
+                        <BookingFieldError
+                          id="mock-card-expiry-error"
+                          message={errors.mockCardExpiry?.message}
                         />
                       </div>
 
@@ -312,7 +371,6 @@ export function BookingPayment() {
                         </div>
                         <Input
                           id="mock-card-security"
-                          name="mockCardSecurity"
                           type="password"
                           inputMode="numeric"
                           autoComplete="off"
@@ -320,7 +378,20 @@ export function BookingPayment() {
                           minLength={3}
                           maxLength={4}
                           pattern="[0-9]{3,4}"
+                          aria-invalid={
+                            errors.mockCardSecurity ? true : undefined
+                          }
+                          aria-describedby={
+                            errors.mockCardSecurity
+                              ? "mock-card-security-error"
+                              : undefined
+                          }
                           className={`mt-2 font-mono tabular-nums ${fieldClassName}`}
+                          {...register("mockCardSecurity")}
+                        />
+                        <BookingFieldError
+                          id="mock-card-security-error"
+                          message={errors.mockCardSecurity?.message}
                         />
                       </div>
                     </div>
@@ -344,7 +415,7 @@ export function BookingPayment() {
                   </button>
                 </div>
 
-                <p className="mt-3 text-xs leading-5 text-foreground/60 sm:text-right">
+                <p className="mt-3 text-xs leading-5 text-muted-foreground sm:text-right">
                   This action only creates a masked summary on this page.
                 </p>
 
@@ -410,33 +481,36 @@ export function BookingPayment() {
                       {room.name}
                     </dd>
                   </div>
-                  <div className="grid gap-4 border-b border-brand-paper/18 py-4 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
-                    <div>
-                      <dt className="flex items-center gap-2 font-mono text-[0.5625rem] tracking-[0.11em] text-brand-paper/52 uppercase">
-                        <CalendarBlank
-                          aria-hidden="true"
-                          size={14}
-                          className="text-brand-brass"
-                        />
-                        Check-in
-                      </dt>
-                      <dd className="mt-2 text-sm font-semibold text-brand-paper">
-                        {formatStayDate(dates.checkIn)}
-                      </dd>
-                    </div>
-                    <div>
-                      <dt className="flex items-center gap-2 font-mono text-[0.5625rem] tracking-[0.11em] text-brand-paper/52 uppercase">
-                        <CalendarBlank
-                          aria-hidden="true"
-                          size={14}
-                          className="text-brand-brass"
-                        />
-                        Check-out
-                      </dt>
-                      <dd className="mt-2 text-sm font-semibold text-brand-paper">
-                        {formatStayDate(dates.checkOut)}
-                      </dd>
-                    </div>
+                  <div className="border-b border-brand-paper/18 py-4">
+                    <dt className="sr-only">Stay dates</dt>
+                    <dd className="grid gap-4 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
+                      <div>
+                        <span className="flex items-center gap-2 font-mono text-[0.5625rem] tracking-[0.11em] text-brand-paper/52 uppercase">
+                          <CalendarBlank
+                            aria-hidden="true"
+                            size={14}
+                            className="text-brand-brass"
+                          />
+                          Check-in
+                        </span>
+                        <span className="mt-2 block text-sm font-semibold text-brand-paper">
+                          {formatStayDate(dates.checkIn)}
+                        </span>
+                      </div>
+                      <div>
+                        <span className="flex items-center gap-2 font-mono text-[0.5625rem] tracking-[0.11em] text-brand-paper/52 uppercase">
+                          <CalendarBlank
+                            aria-hidden="true"
+                            size={14}
+                            className="text-brand-brass"
+                          />
+                          Check-out
+                        </span>
+                        <span className="mt-2 block text-sm font-semibold text-brand-paper">
+                          {formatStayDate(dates.checkOut)}
+                        </span>
+                      </div>
+                    </dd>
                   </div>
                   <div className="border-b border-brand-paper/18 py-4">
                     <dt className="flex items-center gap-2 font-mono text-[0.5625rem] tracking-[0.11em] text-brand-paper/52 uppercase">

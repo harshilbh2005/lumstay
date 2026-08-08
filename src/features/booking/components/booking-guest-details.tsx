@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useState } from "react";
 import {
   ArrowLeft,
   ArrowRight,
@@ -13,11 +14,20 @@ import {
   UsersThree,
 } from "@phosphor-icons/react";
 import Link from "next/link";
+import { useForm } from "react-hook-form";
 
 import { useBookingStore } from "@/components/providers/booking-store-provider";
 import { Input } from "@/components/ui/input";
 import { BookingFlowHeader } from "@/features/booking/components/booking-flow-header";
+import {
+  BookingFieldError,
+  BookingFormErrorSummary,
+} from "@/features/booking/components/booking-form-errors";
 import { IncompleteBookingState } from "@/features/booking/components/incomplete-booking-state";
+import {
+  guestDetailsSchema,
+  type GuestDetailsFormValues,
+} from "@/features/booking/lib/booking-form-validation";
 import {
   formatMoney,
   formatStayDate,
@@ -27,7 +37,7 @@ import {
 } from "@/features/booking/lib/booking-flow";
 
 const fieldClassName =
-  "h-12 rounded-none border-brand-forest-deep/32 bg-brand-paper px-4 text-base text-brand-forest-deep shadow-none placeholder:text-brand-stone/70 focus-visible:border-brand-brass focus-visible:ring-brand-brass/24 md:text-base";
+  "h-12 rounded-none border-brand-forest-deep/32 bg-brand-paper px-4 text-base text-brand-forest-deep shadow-none placeholder:text-brand-stone/70 focus-visible:border-brand-brass focus-visible:ring-brand-brass/24 aria-invalid:focus-visible:border-destructive aria-invalid:focus-visible:ring-destructive/24 md:text-base";
 
 export function BookingGuestDetails() {
   const property = useBookingStore((state) => state.property);
@@ -40,6 +50,18 @@ export function BookingGuestDetails() {
   const [saveStatus, setSaveStatus] = useState<"idle" | "saved">(
     hasCompleteGuestDetails(guestDetails) ? "saved" : "idle",
   );
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors, isDirty },
+  } = useForm<GuestDetailsFormValues>({
+    resolver: zodResolver(guestDetailsSchema),
+    defaultValues: guestDetails,
+    mode: "onSubmit",
+    reValidateMode: "onChange",
+    shouldFocusError: true,
+  });
 
   if (
     !property ||
@@ -69,23 +91,18 @@ export function BookingGuestDetails() {
 
   const guestLabel = getGuestLabel(guests);
   const roomLabel = getRoomLabel(guests.rooms);
+  const errorCount = Object.keys(errors).length;
+  const hasSavedGuestDetails = hasCompleteGuestDetails(guestDetails);
+  const canContinueToPayment = hasSavedGuestDetails && !isDirty;
   const roomSubtotalLabel = `${formatMoney(priceSummary.nightlyRate)} × ${priceSummary.nightCount} ${
     priceSummary.nightCount === 1 ? "night" : "nights"
   } × ${priceSummary.roomCount} ${
     priceSummary.roomCount === 1 ? "room" : "rooms"
   }`;
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-
-    const formData = new FormData(event.currentTarget);
-
-    setGuestDetails({
-      firstName: String(formData.get("firstName") ?? ""),
-      lastName: String(formData.get("lastName") ?? ""),
-      email: String(formData.get("email") ?? ""),
-      phone: String(formData.get("phone") ?? ""),
-    });
+  function saveGuestDetails(values: GuestDetailsFormValues) {
+    setGuestDetails(values);
+    reset(values);
     setSaveStatus("saved");
   }
 
@@ -102,7 +119,7 @@ export function BookingGuestDetails() {
           <div className="grid gap-12 lg:grid-cols-12 lg:gap-x-8">
             <div className="lg:col-span-8">
               <div className="border-t border-brand-forest-deep/24 pt-6">
-                <p className="font-mono text-[0.625rem] tracking-[0.13em] text-brand-brass uppercase">
+                <p className="font-mono text-[0.625rem] tracking-[0.13em] text-brand-brass-dark uppercase">
                   Lead guest
                 </p>
                 <div className="mt-3 grid gap-5 sm:grid-cols-12 sm:gap-x-7">
@@ -139,9 +156,12 @@ export function BookingGuestDetails() {
 
               <form
                 className="mt-12"
-                onSubmit={handleSubmit}
+                noValidate
+                onSubmit={handleSubmit(saveGuestDetails)}
                 onInput={() => setSaveStatus("idle")}
               >
+                <BookingFormErrorSummary errorCount={errorCount} />
+
                 <fieldset>
                   <legend className="w-full border-b border-brand-forest-deep/24 pb-5 font-display text-3xl leading-none tracking-[-0.035em] text-brand-forest-deep sm:text-4xl">
                     Identity
@@ -161,13 +181,20 @@ export function BookingGuestDetails() {
                       </div>
                       <Input
                         id="first-name"
-                        name="firstName"
                         type="text"
                         autoComplete="given-name"
-                        defaultValue={guestDetails.firstName}
                         required
                         maxLength={80}
+                        aria-invalid={errors.firstName ? true : undefined}
+                        aria-describedby={
+                          errors.firstName ? "first-name-error" : undefined
+                        }
                         className={`mt-2 ${fieldClassName}`}
+                        {...register("firstName")}
+                      />
+                      <BookingFieldError
+                        id="first-name-error"
+                        message={errors.firstName?.message}
                       />
                     </div>
 
@@ -185,13 +212,20 @@ export function BookingGuestDetails() {
                       </div>
                       <Input
                         id="last-name"
-                        name="lastName"
                         type="text"
                         autoComplete="family-name"
-                        defaultValue={guestDetails.lastName}
                         required
                         maxLength={80}
+                        aria-invalid={errors.lastName ? true : undefined}
+                        aria-describedby={
+                          errors.lastName ? "last-name-error" : undefined
+                        }
                         className={`mt-2 ${fieldClassName}`}
+                        {...register("lastName")}
+                      />
+                      <BookingFieldError
+                        id="last-name-error"
+                        message={errors.lastName?.message}
                       />
                     </div>
                   </div>
@@ -226,15 +260,22 @@ export function BookingGuestDetails() {
                       </div>
                       <Input
                         id="email"
-                        name="email"
                         type="email"
                         inputMode="email"
                         autoComplete="email"
                         spellCheck={false}
-                        defaultValue={guestDetails.email}
                         required
                         maxLength={254}
+                        aria-invalid={errors.email ? true : undefined}
+                        aria-describedby={
+                          errors.email ? "email-error" : undefined
+                        }
                         className={`mt-2 ${fieldClassName}`}
+                        {...register("email")}
+                      />
+                      <BookingFieldError
+                        id="email-error"
+                        message={errors.email?.message}
                       />
                     </div>
 
@@ -257,22 +298,28 @@ export function BookingGuestDetails() {
                       </div>
                       <Input
                         id="phone"
-                        name="phone"
                         type="tel"
                         inputMode="tel"
                         autoComplete="tel"
-                        aria-describedby="phone-helper"
-                        defaultValue={guestDetails.phone}
+                        aria-invalid={errors.phone ? true : undefined}
+                        aria-describedby={`phone-helper${
+                          errors.phone ? " phone-error" : ""
+                        }`}
                         required
                         maxLength={32}
                         className={`mt-2 ${fieldClassName}`}
+                        {...register("phone")}
                       />
                       <p
                         id="phone-helper"
-                        className="mt-2 text-xs leading-5 text-foreground/60"
+                        className="mt-2 text-xs leading-5 text-muted-foreground"
                       >
                         Example: +91 98765 43210
                       </p>
+                      <BookingFieldError
+                        id="phone-error"
+                        message={errors.phone?.message}
+                      />
                     </div>
                   </div>
                 </fieldset>
@@ -349,33 +396,36 @@ export function BookingGuestDetails() {
                       {room.name}
                     </dd>
                   </div>
-                  <div className="grid gap-4 border-b border-brand-paper/18 py-4 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
-                    <div>
-                      <dt className="flex items-center gap-2 font-mono text-[0.5625rem] tracking-[0.11em] text-brand-paper/52 uppercase">
-                        <CalendarBlank
-                          aria-hidden="true"
-                          size={14}
-                          className="text-brand-brass"
-                        />
-                        Check-in
-                      </dt>
-                      <dd className="mt-2 text-sm font-semibold text-brand-paper">
-                        {formatStayDate(dates.checkIn)}
-                      </dd>
-                    </div>
-                    <div>
-                      <dt className="flex items-center gap-2 font-mono text-[0.5625rem] tracking-[0.11em] text-brand-paper/52 uppercase">
-                        <CalendarBlank
-                          aria-hidden="true"
-                          size={14}
-                          className="text-brand-brass"
-                        />
-                        Check-out
-                      </dt>
-                      <dd className="mt-2 text-sm font-semibold text-brand-paper">
-                        {formatStayDate(dates.checkOut)}
-                      </dd>
-                    </div>
+                  <div className="border-b border-brand-paper/18 py-4">
+                    <dt className="sr-only">Stay dates</dt>
+                    <dd className="grid gap-4 sm:grid-cols-2 lg:grid-cols-1 xl:grid-cols-2">
+                      <div>
+                        <span className="flex items-center gap-2 font-mono text-[0.5625rem] tracking-[0.11em] text-brand-paper/52 uppercase">
+                          <CalendarBlank
+                            aria-hidden="true"
+                            size={14}
+                            className="text-brand-brass"
+                          />
+                          Check-in
+                        </span>
+                        <span className="mt-2 block text-sm font-semibold text-brand-paper">
+                          {formatStayDate(dates.checkIn)}
+                        </span>
+                      </div>
+                      <div>
+                        <span className="flex items-center gap-2 font-mono text-[0.5625rem] tracking-[0.11em] text-brand-paper/52 uppercase">
+                          <CalendarBlank
+                            aria-hidden="true"
+                            size={14}
+                            className="text-brand-brass"
+                          />
+                          Check-out
+                        </span>
+                        <span className="mt-2 block text-sm font-semibold text-brand-paper">
+                          {formatStayDate(dates.checkOut)}
+                        </span>
+                      </div>
+                    </dd>
                   </div>
                   <div className="border-b border-brand-paper/18 py-4">
                     <dt className="flex items-center gap-2 font-mono text-[0.5625rem] tracking-[0.11em] text-brand-paper/52 uppercase">
@@ -411,7 +461,7 @@ export function BookingGuestDetails() {
                   </div>
                 </dl>
 
-                {hasCompleteGuestDetails(guestDetails) ? (
+                {canContinueToPayment ? (
                   <Link
                     href="/booking/payment"
                     aria-describedby="payment-step-status"
@@ -431,7 +481,9 @@ export function BookingGuestDetails() {
                     aria-describedby="payment-step-status"
                     className="mt-4 inline-flex min-h-12 w-full cursor-not-allowed items-center justify-between gap-5 rounded-full border border-brand-paper/28 bg-brand-paper/10 px-6 py-3 text-sm font-semibold text-brand-paper/58"
                   >
-                    Save guest details first
+                    {hasSavedGuestDetails
+                      ? "Save changes first"
+                      : "Save guest details first"}
                     <ArrowRight aria-hidden="true" size={16} />
                   </button>
                 )}
@@ -439,18 +491,20 @@ export function BookingGuestDetails() {
                   id="payment-step-status"
                   className="mt-3 text-xs leading-5 text-brand-paper/52"
                 >
-                  {hasCompleteGuestDetails(guestDetails)
+                  {canContinueToPayment
                     ? "Review the mock payment form next. No card will be charged."
-                    : "Save the lead guest before opening the mock payment step."}
+                    : hasSavedGuestDetails
+                      ? "Save your edits before opening the mock payment step."
+                      : "Save the lead guest before opening the mock payment step."}
                 </p>
               </div>
             </aside>
           </div>
 
           <p className="mt-12 max-w-[58rem] border-l border-brand-brass/65 pl-4 text-xs leading-5 text-muted-foreground">
-            Prototype guest-details step only. The form is session-held and
-            uses browser-native field constraints; full accessible inline
-            validation follows in a later roadmap unit.
+            Prototype guest-details step only. The form is validated locally
+            with accessible inline guidance and remains held only in this
+            booking session.
           </p>
         </div>
       </section>

@@ -80,7 +80,7 @@ export function BookingFlowHeader({
         <div className="grid gap-8 lg:grid-cols-12 lg:gap-x-8">
           <div className="lg:col-span-3">
             <p className="font-mono text-[0.6875rem] tracking-[0.14em] text-brand-stone uppercase">
-              <span className="mr-3 text-brand-brass">Booking</span>
+              <span className="mr-3 text-brand-forest-deep">Booking</span>
               Step {String(activeStep).padStart(2, "0")}
             </p>
           </div>
