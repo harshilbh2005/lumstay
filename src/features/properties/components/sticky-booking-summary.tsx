@@ -1,7 +1,11 @@
 "use client";
 
 import { useCallback, useSyncExternalStore } from "react";
-import { ArrowDown, ArrowUpRight } from "@phosphor-icons/react";
+import {
+  ArrowDown,
+  ArrowUpRight,
+  Prohibit,
+} from "@phosphor-icons/react";
 
 export type BookingSummaryRoom = {
   id: string;
@@ -51,7 +55,8 @@ export function StickyBookingSummary({
   );
   const selectedRoom =
     rooms.find((room) => room.id === selectedRoomId) ?? null;
-  const minimumRate = rooms[0]?.formattedPrice ?? "";
+  const hasAvailableRooms = rooms.length > 0;
+  const minimumRate = rooms[0]?.formattedPrice ?? "Not available";
   const targetRoomId = selectedRoom?.id ?? rooms[0]?.id;
 
   function reviewRoom() {
@@ -80,31 +85,44 @@ export function StickyBookingSummary({
         <div className="grid grid-cols-[minmax(0,1fr)_auto] gap-x-5 gap-y-3 px-4 py-4 sm:grid-cols-[minmax(0,1.35fr)_minmax(7.5rem,0.55fr)_auto] sm:items-center sm:px-5 lg:grid-cols-12 lg:gap-x-6 lg:px-6">
           <div className="min-w-0 lg:col-span-4">
             <p className="font-mono text-[0.5625rem] tracking-[0.13em] text-brand-brass uppercase">
-              {selectedRoom ? "Your room" : "Room selection"}
+              {selectedRoom
+                ? "Your room"
+                : hasAvailableRooms
+                  ? "Room selection"
+                  : "Room status"}
             </p>
             <p
               aria-live="polite"
               aria-atomic="true"
               className="mt-1 truncate font-display text-xl leading-tight tracking-[-0.025em] text-brand-paper sm:text-2xl"
             >
-              {selectedRoom?.name ?? "Choose a room below"}
+              {selectedRoom?.name ??
+                (hasAvailableRooms
+                  ? "Choose a room below"
+                  : "No rooms available")}
             </p>
             <p className="mt-1 text-[0.6875rem] leading-4 text-brand-paper/62 sm:hidden">
               {selectedRoom
                 ? `${selectedRoom.breakfastLabel} · ${selectedRoom.cancellationLabel}`
-                : "Compare the details, then make one selection."}
+                : hasAvailableRooms
+                  ? "Compare the details, then make one selection."
+                  : "The room ledger remains available to review."}
             </p>
           </div>
 
           <div className="text-right sm:text-left lg:col-span-2">
             <p className="font-mono text-[0.5625rem] tracking-[0.12em] text-brand-paper/52 uppercase">
-              {selectedRoom ? "Nightly rate" : "Rooms from"}
+              {selectedRoom
+                ? "Nightly rate"
+                : hasAvailableRooms
+                  ? "Rooms from"
+                  : "Selection"}
             </p>
             <p className="mt-1 font-mono text-sm font-medium text-brand-paper tabular-nums sm:text-base">
               {selectedRoom?.formattedPrice ?? minimumRate}
             </p>
             <p className="mt-0.5 text-[0.625rem] leading-4 text-brand-paper/52">
-              Taxes shown later
+              {hasAvailableRooms ? "Taxes shown later" : "Currently closed"}
             </p>
           </div>
 
@@ -115,18 +133,29 @@ export function StickyBookingSummary({
             <p className="mt-1 text-sm leading-5 text-brand-paper/84">
               {selectedRoom
                 ? `${selectedRoom.breakfastLabel} · ${selectedRoom.cancellationLabel}`
-                : "Breakfast and cancellation vary by room."}
+                : hasAvailableRooms
+                  ? "Breakfast and cancellation vary by room."
+                  : "Review each room for its current status."}
             </p>
           </div>
 
           <button
             type="button"
             onClick={reviewRoom}
+            disabled={!targetRoomId}
             aria-controls={targetRoomId}
-            className="group col-span-2 inline-flex min-h-12 items-center justify-between gap-4 rounded-full border border-brand-paper/68 px-5 py-3 text-sm font-semibold text-brand-paper transition-colors duration-200 hover:border-brand-brass hover:bg-brand-paper hover:text-brand-forest-deep focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-brass focus-visible:ring-offset-2 focus-visible:ring-offset-brand-forest-deep sm:col-span-1 sm:min-w-[10.5rem] lg:col-span-3"
+            className="group col-span-2 inline-flex min-h-12 items-center justify-between gap-4 rounded-full border border-brand-paper/68 px-5 py-3 text-sm font-semibold text-brand-paper transition-colors duration-200 hover:border-brand-brass hover:bg-brand-paper hover:text-brand-forest-deep focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-brass focus-visible:ring-offset-2 focus-visible:ring-offset-brand-forest-deep disabled:cursor-not-allowed disabled:border-brand-paper/24 disabled:text-brand-paper/45 disabled:hover:bg-transparent disabled:hover:text-brand-paper/45 sm:col-span-1 sm:min-w-[10.5rem] lg:col-span-3"
           >
-            <span>{selectedRoom ? "Review this room" : "Choose a room"}</span>
-            {selectedRoom ? (
+            <span>
+              {selectedRoom
+                ? "Review this room"
+                : hasAvailableRooms
+                  ? "Choose a room"
+                  : "Selection closed"}
+            </span>
+            {!hasAvailableRooms ? (
+              <Prohibit aria-hidden="true" size={16} className="shrink-0" />
+            ) : selectedRoom ? (
               <ArrowUpRight
                 aria-hidden="true"
                 size={16}

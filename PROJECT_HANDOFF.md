@@ -1,6 +1,6 @@
 # LumaStay Project Handoff
 
-Last updated: 27 July 2026
+Last updated: 8 August 2026
 
 Repository: `/Users/harshilbrahmani/Developer/Personal/lumstay`
 
@@ -530,6 +530,21 @@ Important limitation: room choice is intentionally local browser form state. It 
 
 Important limitation: the panel summarizes only the current page’s illustrative room choice. It does not include dates, guest counts, availability, taxes, total-stay pricing, checkout navigation, persistence, or cross-route booking state.
 
+### Property route and room-availability states
+
+- `/properties/[slug]` now owns a content-shaped loading skeleton, branded missing-property state, and recoverable error boundary; the successful Casa Serein composition remains unchanged outside the room action state
+- The loading surface mirrors the property masthead, summary ledger, asymmetric gallery, and Luma note instead of using a spinner or generic card placeholders; it exposes `aria-busy` and a screen-reader status
+- Unknown property slugs now reach the segment-specific not-found experience with calm recovery copy, links back to `/search` and `/`, and Next-generated `noindex` metadata
+- The error state uses a shared editorial route-state frame, a prominent retry action, and an alternate path to the collection; real route failures call Next’s `unstable_retry`
+- `?_demo=error` is an intentional local interface-review hook: it triggers the segment boundary, and its retry removes the demo query through a same-route replacement before restoring Casa Serein
+- Room availability is now a typed discriminated union. Garden Room and Sea Terrace Room remain selectable, while Serein Suite stays fully readable but exposes an explicit unavailable notice and disabled native radio action
+- The sticky booking summary receives available rooms only, never targets the unavailable suite, and has a disabled, clearly labelled fallback if a future fixture contains no selectable rooms
+- Refero reference lock uses Kobu’s warm linen, sharp rules, and mono metadata as the foundation; BelArosa’s forest/brass recovery rail; Programa’s calm 404 hierarchy; Trip’s content-shaped skeleton principle; and Navan’s practice of preserving room information when its action changes
+- Liquid-glass surfaces, centered error cards, spinners, a red full-canvas failure state, dimmed unreadable rooms, urgency language, fake live-date claims, generated mock imagery, checkout navigation, and global booking state were explicitly rejected
+- Verified against production builds at 1440×1000 and 390×844 with three room radios, one disabled unavailable room, disabled-radio arrow-key skipping, exact sticky-summary updates, successful error recovery, the segment-specific missing-property copy and `noindex`, 44–48px actions, zero horizontal overflow, and the loading component inside the real property layout
+
+Important limitation: the unavailable room is an explicit fixture state for interface testing, not date-sensitive inventory. Because the property segment streams through `loading.tsx`, Next.js returns the rendered missing-property response with HTTP 200 while adding `noindex`; changing that transport behavior without losing the segment-specific streamed experience remains future routing/SEO work.
+
 ### Homepage search query handoff
 
 - The hero now performs a real client-side transition to `/search`
@@ -576,7 +591,7 @@ The implemented routes are `/`, `/destinations`, `/edit`, `/search`, and `/prope
 - `mockPropertyDetails`: 1 full property fixture for Casa Serein, composed from its existing summary, five central-catalog gallery media IDs, 3 sourced facility details, 4 house-policy entries, 4 practical entries, and a Ravello location ledger
 - `mockDestinations`: 7 destination summaries shared by `/destinations` and the hero autocomplete
 - `mockEditorialStories`: 7 editorial story summaries used by `/edit`
-- `mockRooms`: 3 Casa Serein room tiers with 6 central-catalog media references, occupancy, beds, size, facilities, INR nightly pricing, breakfast inclusion, and structured cancellation policies
+- `mockRooms`: 3 Casa Serein room tiers with 6 central-catalog media references, occupancy, beds, size, facilities, INR nightly pricing, breakfast inclusion, structured cancellation policies, and typed availability; 2 are selectable and Serein Suite is explicitly unavailable in the interface preview
 - `mockBookings`: empty array
 - No live availability, date-sensitive room pricing, price breakdown, complete facility catalog, review, guest, booking, or checkout fixture yet
 - `src/stores/index.ts` is intentionally empty
@@ -585,6 +600,7 @@ The implemented routes are `/`, `/destinations`, `/edit`, `/search`, and `/prope
 ## Commit history
 
 ```text
+b31dc03 feat: add sticky booking summary
 0bcceac feat: add room selection interface
 6bea367 feat: add Casa Serein room fixtures
 467d4d6 feat: add property information ledger
@@ -652,7 +668,7 @@ Build each item separately, research it first, verify it, and commit it before m
 20. ~~Room fixtures with distinct images, occupancy, beds, size, facilities, pricing, breakfast, and cancellation terms~~ Complete
 21. ~~Room selection cards/interface~~ Complete
 22. ~~Sticky booking summary/action panel~~ Complete
-23. Property loading, not-found, error, and unavailable-room states
+23. ~~Property loading, not-found, error, and unavailable-room states~~ Complete
 
 ### Phase 4 — Booking and checkout
 
@@ -688,4 +704,4 @@ Build each item separately, research it first, verify it, and commit it before m
 
 ## Recommended immediate next step
 
-Build the isolated **property loading, branded not-found, recoverable error, and unavailable-room states** for the property experience. Research and lock the state hierarchy before implementation, keep Casa Serein’s successful detail route visually stable, and distinguish route/data failure from room-level unavailability. Reuse the current property and room fixtures where possible; do not introduce live inventory, checkout navigation, or cross-route booking state early.
+Build the isolated **cross-route booking store** for dates, guests, property, room, and price-summary data. Keep the store frontend-only and mock-backed, preserve shareable search intent where URL parameters already exist, and define clear initialization, update, reset, and hydration behavior before connecting a booking review route. Do not build the review page, forms, payment UI, persistence, or live availability in the same unit.

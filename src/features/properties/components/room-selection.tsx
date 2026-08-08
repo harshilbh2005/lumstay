@@ -1,6 +1,7 @@
 import Image from "next/image";
 import {
   Bed,
+  CalendarX,
   CaretDown,
   Check,
   ForkKnife,
@@ -31,7 +32,10 @@ export function RoomSelection({
 
   const minimumGuests = Math.min(...rooms.map((room) => room.maxGuests));
   const maximumGuests = Math.max(...rooms.map((room) => room.maxGuests));
-  const summaryRooms: BookingSummaryRoom[] = [...rooms]
+  const availableRooms = rooms.filter(
+    (room) => room.availability.status === "available",
+  );
+  const summaryRooms: BookingSummaryRoom[] = [...availableRooms]
     .sort((roomA, roomB) => {
       return roomA.nightlyPrice.amount - roomB.nightlyPrice.amount;
     })
@@ -79,8 +83,9 @@ export function RoomSelection({
               the room that suits your stay.
             </p>
             <p className="mt-5 font-mono text-[0.625rem] tracking-[0.12em] text-brand-stone uppercase">
-              {String(rooms.length).padStart(2, "0")} room types ·{" "}
-              {minimumGuests}–{maximumGuests} guests
+              {String(availableRooms.length).padStart(2, "0")} available ·{" "}
+              {String(rooms.length).padStart(2, "0")} types · {minimumGuests}–
+              {maximumGuests} guests
             </p>
           </div>
         </div>
@@ -102,6 +107,12 @@ export function RoomSelection({
             });
             const inputId = `${room.id}-selection`;
             const descriptionId = `${room.id}-description`;
+            const availabilityNoteId = `${room.id}-availability`;
+            const isUnavailable = room.availability.status === "unavailable";
+            const availabilityNote =
+              room.availability.status === "unavailable"
+                ? room.availability.note
+                : null;
             const price = new Intl.NumberFormat("en-IN", {
               style: "currency",
               currency: room.nightlyPrice.currency,
@@ -280,29 +291,63 @@ export function RoomSelection({
                       </ul>
                     </details>
 
-                    <div className="mt-7">
-                      <input
-                        id={inputId}
-                        type="radio"
-                        name="casa-serein-room"
-                        value={room.id}
-                        aria-label={`Select ${room.name}`}
-                        aria-describedby={descriptionId}
-                        className="peer sr-only"
-                      />
-                      <label
-                        htmlFor={inputId}
-                        className="inline-flex min-h-12 w-full cursor-pointer items-center justify-center rounded-full border border-brand-forest-deep bg-brand-forest-deep px-5 py-3 text-center text-sm font-semibold text-brand-paper transition-colors duration-200 hover:border-brand-forest hover:bg-brand-forest focus-visible:outline-none peer-checked:hidden peer-focus-visible:ring-2 peer-focus-visible:ring-ring peer-focus-visible:ring-offset-4"
-                      >
-                        Choose {room.name}
-                      </label>
-                      <label
-                        htmlFor={inputId}
-                        className="hidden min-h-12 w-full cursor-pointer items-center justify-center rounded-full border border-brand-brass bg-brand-paper px-5 py-3 text-center text-sm font-semibold text-brand-forest-deep transition-colors duration-200 hover:bg-accent peer-checked:inline-flex peer-focus-visible:ring-2 peer-focus-visible:ring-ring peer-focus-visible:ring-offset-4"
-                      >
-                        Selected · {room.name}
-                      </label>
-                    </div>
+                    {isUnavailable ? (
+                      <div className="mt-7">
+                        <div
+                          id={availabilityNoteId}
+                          role="status"
+                          className="border-y border-destructive/28 bg-brand-paper/45 py-4"
+                        >
+                          <p className="flex items-center gap-2 font-mono text-[0.625rem] tracking-[0.12em] text-destructive uppercase">
+                            <CalendarX aria-hidden="true" size={16} />
+                            Room unavailable
+                          </p>
+                          <p className="mt-2 text-sm leading-6 text-foreground/72">
+                            {availabilityNote}
+                          </p>
+                        </div>
+                        <input
+                          id={inputId}
+                          type="radio"
+                          name="casa-serein-room"
+                          value={room.id}
+                          disabled
+                          aria-label={`${room.name} is unavailable`}
+                          aria-describedby={`${descriptionId} ${availabilityNoteId}`}
+                          className="peer sr-only"
+                        />
+                        <label
+                          htmlFor={inputId}
+                          className="mt-5 inline-flex min-h-12 w-full cursor-not-allowed items-center justify-center rounded-full border border-brand-stone/38 bg-brand-paper/55 px-5 py-3 text-center text-sm font-semibold text-brand-stone"
+                        >
+                          Unavailable · {room.name}
+                        </label>
+                      </div>
+                    ) : (
+                      <div className="mt-7">
+                        <input
+                          id={inputId}
+                          type="radio"
+                          name="casa-serein-room"
+                          value={room.id}
+                          aria-label={`Select ${room.name}`}
+                          aria-describedby={descriptionId}
+                          className="peer sr-only"
+                        />
+                        <label
+                          htmlFor={inputId}
+                          className="inline-flex min-h-12 w-full cursor-pointer items-center justify-center rounded-full border border-brand-forest-deep bg-brand-forest-deep px-5 py-3 text-center text-sm font-semibold text-brand-paper transition-colors duration-200 hover:border-brand-forest hover:bg-brand-forest focus-visible:outline-none peer-checked:hidden peer-focus-visible:ring-2 peer-focus-visible:ring-ring peer-focus-visible:ring-offset-4"
+                        >
+                          Choose {room.name}
+                        </label>
+                        <label
+                          htmlFor={inputId}
+                          className="hidden min-h-12 w-full cursor-pointer items-center justify-center rounded-full border border-brand-brass bg-brand-paper px-5 py-3 text-center text-sm font-semibold text-brand-forest-deep transition-colors duration-200 hover:bg-accent peer-checked:inline-flex peer-focus-visible:ring-2 peer-focus-visible:ring-ring peer-focus-visible:ring-offset-4"
+                        >
+                          Selected · {room.name}
+                        </label>
+                      </div>
+                    )}
                   </div>
                 </div>
               </article>

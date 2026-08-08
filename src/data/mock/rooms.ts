@@ -34,6 +34,9 @@ export const mockRooms = [
       ],
     },
     breakfastIncluded: false,
+    availability: {
+      status: "available",
+    },
   },
   {
     id: "room-casa-serein-sea-terrace",
@@ -70,6 +73,9 @@ export const mockRooms = [
       ],
     },
     breakfastIncluded: true,
+    availability: {
+      status: "available",
+    },
   },
   {
     id: "room-casa-serein-suite",
@@ -106,6 +112,10 @@ export const mockRooms = [
       ],
     },
     breakfastIncluded: true,
+    availability: {
+      status: "unavailable",
+      note: "Held back in this interface preview; choose another room to continue.",
+    },
   },
 ] satisfies Room[];
 

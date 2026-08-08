@@ -131,6 +131,14 @@ export interface Room {
     terms: string[];
   };
   breakfastIncluded: boolean;
+  availability:
+    | {
+        status: "available";
+      }
+    | {
+        status: "unavailable";
+        note: string;
+      };
 }
 
 export type BookingStatus = "upcoming" | "completed" | "cancelled" | "payment-failed";

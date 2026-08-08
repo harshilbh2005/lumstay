@@ -1,17 +1,21 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { Suspense } from "react";
 
 import {
   getPropertyDetailBySlug,
   mockPropertyDetails,
 } from "@/data/mock";
-import { PropertyDetailShell } from "@/features/properties";
+import {
+  PropertyDetailShell,
+  PropertyErrorDemo,
+} from "@/features/properties";
 
 type PropertyPageProps = {
   params: Promise<{ slug: string }>;
 };
 
-export const dynamicParams = false;
+export const dynamicParams = true;
 
 export function generateStaticParams() {
   return mockPropertyDetails.map((property) => ({
@@ -43,5 +47,12 @@ export default async function PropertyPage({ params }: PropertyPageProps) {
     notFound();
   }
 
-  return <PropertyDetailShell property={property} />;
+  return (
+    <>
+      <Suspense fallback={null}>
+        <PropertyErrorDemo />
+      </Suspense>
+      <PropertyDetailShell property={property} />
+    </>
+  );
 }
