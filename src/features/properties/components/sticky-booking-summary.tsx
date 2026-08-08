@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
+import Link from "next/link";
 import {
   ArrowDown,
   ArrowUpRight,
@@ -20,6 +21,8 @@ export type BookingSummaryRoom = {
 };
 
 const roomSelectionName = "casa-serein-room";
+const summaryActionClassName =
+  "group col-span-2 inline-flex min-h-12 items-center justify-between gap-4 rounded-full border border-brand-paper/68 px-5 py-3 text-sm font-semibold text-brand-paper transition-colors duration-200 hover:border-brand-brass hover:bg-brand-paper hover:text-brand-forest-deep focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-brass focus-visible:ring-offset-2 focus-visible:ring-offset-brand-forest-deep disabled:cursor-not-allowed disabled:border-brand-paper/24 disabled:text-brand-paper/45 disabled:hover:bg-transparent disabled:hover:text-brand-paper/45 sm:col-span-1 sm:min-w-[10.5rem] lg:col-span-3";
 
 export function StickyBookingSummary({
   rooms,
@@ -158,36 +161,37 @@ export function StickyBookingSummary({
             </p>
           </div>
 
-          <button
-            type="button"
-            onClick={reviewRoom}
-            disabled={!targetRoomId}
-            aria-controls={targetRoomId}
-            className="group col-span-2 inline-flex min-h-12 items-center justify-between gap-4 rounded-full border border-brand-paper/68 px-5 py-3 text-sm font-semibold text-brand-paper transition-colors duration-200 hover:border-brand-brass hover:bg-brand-paper hover:text-brand-forest-deep focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-brass focus-visible:ring-offset-2 focus-visible:ring-offset-brand-forest-deep disabled:cursor-not-allowed disabled:border-brand-paper/24 disabled:text-brand-paper/45 disabled:hover:bg-transparent disabled:hover:text-brand-paper/45 sm:col-span-1 sm:min-w-[10.5rem] lg:col-span-3"
-          >
-            <span>
-              {selectedRoom
-                ? "Review this room"
-                : hasAvailableRooms
-                  ? "Choose a room"
-                  : "Selection closed"}
-            </span>
-            {!hasAvailableRooms ? (
-              <Prohibit aria-hidden="true" size={16} className="shrink-0" />
-            ) : selectedRoom ? (
+          {selectedRoom ? (
+            <Link href="/booking/review" className={summaryActionClassName}>
+              <span>Review your stay</span>
               <ArrowUpRight
                 aria-hidden="true"
                 size={16}
                 className="shrink-0 transition-transform duration-200 ease-luma group-hover:translate-x-0.5 group-hover:-translate-y-0.5 motion-reduce:transition-none"
               />
-            ) : (
-              <ArrowDown
-                aria-hidden="true"
-                size={16}
-                className="shrink-0 transition-transform duration-200 ease-luma group-hover:translate-y-0.5 motion-reduce:transition-none"
-              />
-            )}
-          </button>
+            </Link>
+          ) : (
+            <button
+              type="button"
+              onClick={reviewRoom}
+              disabled={!targetRoomId}
+              aria-controls={targetRoomId}
+              className={summaryActionClassName}
+            >
+              <span>
+                {hasAvailableRooms ? "Choose a room" : "Selection closed"}
+              </span>
+              {hasAvailableRooms ? (
+                <ArrowDown
+                  aria-hidden="true"
+                  size={16}
+                  className="shrink-0 transition-transform duration-200 ease-luma group-hover:translate-y-0.5 motion-reduce:transition-none"
+                />
+              ) : (
+                <Prohibit aria-hidden="true" size={16} className="shrink-0" />
+              )}
+            </button>
+          )}
         </div>
       </div>
     </aside>

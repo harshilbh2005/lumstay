@@ -585,6 +585,21 @@ Important limitation: suggestions are local and finite, and recent searches are 
 
 Important limitation: booking state is intentionally memory-only. Dates and guests can be reconstructed from a shareable property URL after reload, but the selected room is cleared; review, guest details, persistence, taxes, fees, cancellation calculations, availability, payment, and confirmation remain later roadmap units.
 
+### Booking review step
+
+- A new static `/booking/review` route presents the first of four clearly labelled booking steps inside the shared site header/footer shell
+- The Casa Serein sticky summary keeps its local room-scroll action until a room is selected, then becomes a real `Review your stay` App Router link into the review route
+- The complete review reads the existing cross-route draft and presents the selected property, central-catalog room image, room name, beds, room size, breakfast inclusion, check-in/check-out dates, party, room count, duration, and cancellation summary without duplicating fixture data
+- A dark, sticky price ledger derives and itemizes the existing accommodation subtotal (`nightly rate × nights × rooms`), explicitly marks taxes and fees as not calculated, and avoids labelling the subtotal as a final total
+- `Change room` and `Edit dates or guests` links preserve the canonical search intent; the former returns directly to the property room section and the latter returns to `/search`
+- Direct access or reload with no in-memory draft shows a deliberate recovery ledger, while property/room drafts without valid dates expose `Choose dates` and `Return to Casa Serein` paths instead of showing an invalid price
+- The guest-details action is deliberately disabled with explanatory copy until roadmap item 26 exists, so the page does not link to a missing route or imply that guest data is already collected
+- Refero reference lock uses Kobu's warm linen canvas, sharp photography, and quiet editorial spacing as the foundation; Christopher Ireland Creative's ruled information rhythm and Navan/Airbnb's two-column review hierarchy and visible edit paths are borrowed without their rounded card stacks, shadows, purple/blue conversion styling, timers, or urgency patterns
+- UI/UX Pro Max guidance was retained for responsive image sizing, visible focus, and 44–48px controls; its generic blue/gold liquid-glass direction was rejected, as were bento composition and perpetual decorative motion
+- Verified from the production build at 1440×1000 and 390×844 through the real room-selection-to-review transition, with exact three-night subtotal derivation, decoded responsive imagery, 44–48px main controls, visible keyboard focus, zero mobile horizontal overflow, clean browser warnings/errors, explicit no-date recovery, and reload reset behavior
+
+Important limitation: the page remains a frontend-only review of a memory-held draft. It does not persist the selected room, hold inventory, collect guest details, calculate taxes or fees, apply binding cancellation charges, take payment, or create a reservation.
+
 ## Current homepage order
 
 `src/app/page.tsx` renders:
@@ -597,7 +612,7 @@ Important limitation: booking state is intentionally memory-only. Dates and gues
 6. `ClosingBookingCta`
 7. `SiteFooter`
 
-The implemented routes are `/`, `/destinations`, `/edit`, `/search`, and `/properties/casa-serein`. Other property slugs and navigation links to planned pages use the branded not-found state until their routes are built.
+The implemented routes are `/`, `/destinations`, `/edit`, `/search`, `/properties/casa-serein`, and `/booking/review`. Other property slugs and navigation links to planned pages use the branded not-found state until their routes are built.
 
 ## Current mock-data state
 
@@ -607,13 +622,14 @@ The implemented routes are `/`, `/destinations`, `/edit`, `/search`, and `/prope
 - `mockEditorialStories`: 7 editorial story summaries used by `/edit`
 - `mockRooms`: 3 Casa Serein room tiers with 6 central-catalog media references, occupancy, beds, size, facilities, INR nightly pricing, breakfast inclusion, structured cancellation policies, and typed availability; 2 are selectable and Serein Suite is explicitly unavailable in the interface preview
 - `mockBookings`: empty array
-- No live availability, date-sensitive room pricing, price breakdown, complete facility catalog, review, guest, booking, or checkout fixture yet
+- No live availability, date-sensitive room pricing, tax/fee breakdown, complete facility catalog, guest, booking, or checkout fixture yet
 - `src/stores/booking-store.ts` contains the memory-only cross-route booking draft; the global provider creates one vanilla Zustand store per request/client tree
 - Saved and trips feature indexes are scaffolds only
 
 ## Commit history
 
 ```text
+526f427 feat: add cross-route booking store
 7a2fa86 feat: add property recovery states
 b31dc03 feat: add sticky booking summary
 0bcceac feat: add room selection interface
@@ -688,7 +704,7 @@ Build each item separately, research it first, verify it, and commit it before m
 ### Phase 4 — Booking and checkout
 
 24. ~~Cross-route booking store with dates, guests, property, room, and price summary~~ Complete
-25. Booking review step
+25. ~~Booking review step~~ Complete
 26. Guest-details form
 27. Checkout and mock payment form
 28. React Hook Form and Zod validation with accessible inline errors
@@ -719,4 +735,4 @@ Build each item separately, research it first, verify it, and commit it before m
 
 ## Recommended immediate next step
 
-Build the isolated **booking review step** from the new cross-route draft. Present the selected dates, guests, property, room, accommodation subtotal, breakfast inclusion, and cancellation summary; provide clear edit/recovery paths when required state is missing. Keep guest-details fields, taxes and fees, payment, persistence, and confirmation out of that unit.
+Build the isolated **guest-details form** for the complete booking draft. Collect lead-guest identity and contact details with accessible labels and clear privacy/context copy, but keep payment fields, tax/fee calculation, final confirmation, persistence, and submission/error behavior out of that unit. Preserve the review route as the edit/back step and continue to recover cleanly when the required booking draft is missing.

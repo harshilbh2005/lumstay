@@ -1,4 +1,5 @@
 export { BookingStoreInitializer } from "./components/booking-store-initializer";
+export { BookingReview } from "./components/booking-review";
 export {
   createBookingStoreSeed,
   getBookingSearchValues,
