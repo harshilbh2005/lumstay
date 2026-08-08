@@ -615,6 +615,22 @@ Important limitation: the page remains a frontend-only review of a memory-held d
 
 Important limitation: guest details remain memory-only and the form currently relies on native browser constraints. It does not persist personal data, send confirmation messages, validate through React Hook Form/Zod, submit a booking, take payment, or create a reservation.
 
+### Checkout and mock payment form
+
+- A new static `/booking/payment` route presents step three inside the shared site shell and opens only after the in-memory stay and normalized lead-guest details are complete
+- The guest-details stay ledger now keeps its payment action disabled until the four guest fields have been saved, then exposes a real App Router link into the mock payment step
+- Review and Guest details remain navigable completed steps, and returning to either route preserves the session-held stay and guest draft
+- The deliberately narrow form collects name on card, card number, expiry, and security code with visible labels, autocomplete disabled, mobile-friendly numeric keyboards, and native required/pattern constraints
+- A prominent test-only notice supplies the standard `4242` card number and states that the interface neither contacts a provider nor accepts real payment details
+- Submitting prepares only a page-local masked summary containing the trimmed cardholder name, last four digits, and expiry; the full card number and security code are cleared immediately, never enter Zustand, and disappear entirely when the route unmounts
+- A sticky stay ledger repeats the guest/contact summary and accommodation subtotal while explicitly marking taxes and fees as `Not calculated`; its scope copy reserves booking submission, response handling, retry states, and confirmation for their later roadmap units
+- Direct access with no stay reuses the deliberate booking recovery state, while a complete stay without saved guest details exposes clear paths back to Guest details and Review
+- Refero reference lock uses Kobu's warm paper, sharp fields, quiet rules, restrained monospace metadata, and shadowless composition as the foundation; Mews' split checkout hierarchy, Trip.com's payment grouping and progress clarity, Christopher Ireland Creative's ruled form cadence, and BelArosa's forest/brass restraint are borrowed without logos, wallets, urgency, rounded card stacks, promotional totals, or real-payment claims
+- UI/UX Pro Max guidance was retained for persistent labels, visible keyboard focus, internal Next.js links, leaf-level client interactivity, mobile input modes, and 44–48px controls; its unrelated liquid-glass, blue, and gold system was rejected as incompatible with LumaStay
+- Verified from the production build at 1440×1000 and 390×844 through the complete search → property → room → review → guest → payment journey, including native invalid-field focus, visible keyboard focus, hover feedback, masked-only preparation, immediate sensitive-field clearing, route-local summary clearing, recovery states, zero mobile horizontal overflow, zero console warnings/errors, and zero unexpected request failures
+
+Important limitation: this is a frontend-only mock payment preparation form. It relies on native browser constraints and does not perform provider/card validation, encryption, tokenization, a charge, inventory hold, reservation, tax/fee calculation, React Hook Form/Zod validation, custom inline errors, loading/failure/retry handling, confirmation, or persistence.
+
 ## Current homepage order
 
 `src/app/page.tsx` renders:
@@ -627,7 +643,7 @@ Important limitation: guest details remain memory-only and the form currently re
 6. `ClosingBookingCta`
 7. `SiteFooter`
 
-The implemented routes are `/`, `/destinations`, `/edit`, `/search`, `/properties/casa-serein`, `/booking/review`, and `/booking/guest-details`. Other property slugs and navigation links to planned pages use the branded not-found state until their routes are built.
+The implemented routes are `/`, `/destinations`, `/edit`, `/search`, `/properties/casa-serein`, `/booking/review`, `/booking/guest-details`, and `/booking/payment`. Other property slugs and navigation links to planned pages use the branded not-found state until their routes are built.
 
 ## Current mock-data state
 
@@ -637,13 +653,14 @@ The implemented routes are `/`, `/destinations`, `/edit`, `/search`, `/propertie
 - `mockEditorialStories`: 7 editorial story summaries used by `/edit`
 - `mockRooms`: 3 Casa Serein room tiers with 6 central-catalog media references, occupancy, beds, size, facilities, INR nightly pricing, breakfast inclusion, structured cancellation policies, and typed availability; 2 are selectable and Serein Suite is explicitly unavailable in the interface preview
 - `mockBookings`: empty array
-- No live availability, date-sensitive room pricing, tax/fee breakdown, complete facility catalog, booking, or checkout fixture yet
-- `src/stores/booking-store.ts` contains the memory-only cross-route booking draft, including the lead-guest identity/contact fields; the global provider creates one vanilla Zustand store per request/client tree
+- No live availability, date-sensitive room pricing, tax/fee breakdown, complete facility catalog, booking, payment-provider, or confirmation fixture yet
+- `src/stores/booking-store.ts` contains the memory-only cross-route stay and lead-guest draft; mock card values never enter the store, and only a masked prepared summary exists in payment-page component state
 - Saved and trips feature indexes are scaffolds only
 
 ## Commit history
 
 ```text
+fd57b35 feat: add guest details step
 01484be feat: add booking review step
 526f427 feat: add cross-route booking store
 7a2fa86 feat: add property recovery states
@@ -722,7 +739,7 @@ Build each item separately, research it first, verify it, and commit it before m
 24. ~~Cross-route booking store with dates, guests, property, room, and price summary~~ Complete
 25. ~~Booking review step~~ Complete
 26. ~~Guest-details form~~ Complete
-27. Checkout and mock payment form
+27. ~~Checkout and mock payment form~~ Complete
 28. React Hook Form and Zod validation with accessible inline errors
 29. Taxes, fees, inclusions, cancellation, and total-price breakdown
 30. Submitting/loading, payment-failure, recoverable-error, and retry states
@@ -751,4 +768,4 @@ Build each item separately, research it first, verify it, and commit it before m
 
 ## Recommended immediate next step
 
-Build the isolated **checkout and mock payment form** for the complete booking draft. Reuse the shared booking progress and stay ledger, keep the existing review and guest-details steps navigable, and collect only the mock payment fields needed for item 27. Keep React Hook Form/Zod errors, taxes/fees, submission failure/retry, final confirmation, persistence, and any claim of a real charge or reservation assigned to their later roadmap units.
+Upgrade the guest-details and mock-payment forms with **React Hook Form and Zod validation plus accessible inline errors**. Preserve the existing field copy, layout, native semantics, session safety, and masked-only payment handling; add `aria-invalid`/`aria-describedby` relationships, focus the first invalid field, and write concise actionable messages. Keep taxes/fees, booking submission, payment failure/retry, confirmation, and persistence assigned to their later roadmap units.

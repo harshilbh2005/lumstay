@@ -3,12 +3,12 @@
 import { useState, type FormEvent } from "react";
 import {
   ArrowLeft,
-  ArrowRight,
   CalendarBlank,
   CheckCircle,
+  CreditCard,
   EnvelopeSimple,
+  LockKey,
   MapPin,
-  Phone,
   ShieldCheck,
   UsersThree,
 } from "@phosphor-icons/react";
@@ -18,6 +18,7 @@ import { useBookingStore } from "@/components/providers/booking-store-provider";
 import { Input } from "@/components/ui/input";
 import { BookingFlowHeader } from "@/features/booking/components/booking-flow-header";
 import { IncompleteBookingState } from "@/features/booking/components/incomplete-booking-state";
+import { IncompleteGuestDetailsState } from "@/features/booking/components/incomplete-guest-details-state";
 import {
   formatMoney,
   formatStayDate,
@@ -29,16 +30,21 @@ import {
 const fieldClassName =
   "h-12 rounded-none border-brand-forest-deep/32 bg-brand-paper px-4 text-base text-brand-forest-deep shadow-none placeholder:text-brand-stone/70 focus-visible:border-brand-brass focus-visible:ring-brand-brass/24 md:text-base";
 
-export function BookingGuestDetails() {
+interface PreparedMockCard {
+  cardholderName: string;
+  lastFour: string;
+  expiry: string;
+}
+
+export function BookingPayment() {
   const property = useBookingStore((state) => state.property);
   const room = useBookingStore((state) => state.room);
   const dates = useBookingStore((state) => state.dates);
   const guests = useBookingStore((state) => state.guests);
   const guestDetails = useBookingStore((state) => state.guestDetails);
   const priceSummary = useBookingStore((state) => state.priceSummary);
-  const setGuestDetails = useBookingStore((state) => state.setGuestDetails);
-  const [saveStatus, setSaveStatus] = useState<"idle" | "saved">(
-    hasCompleteGuestDetails(guestDetails) ? "saved" : "idle",
+  const [preparedCard, setPreparedCard] = useState<PreparedMockCard | null>(
+    null,
   );
 
   if (
@@ -53,16 +59,30 @@ export function BookingGuestDetails() {
     return (
       <main id="main-content">
         <BookingFlowHeader
-          activeStep={2}
+          activeStep={3}
           completedThrough={0}
-          title="Tell us who is travelling."
-          description="Add the lead guest and the best contact details for this stay. Payment follows later."
+          title="Prepare a way to pay."
+          description="Enter test card details for this prototype. No payment service is contacted and nothing is charged."
         />
         <IncompleteBookingState
           property={property}
           dates={dates}
           guests={guests}
         />
+      </main>
+    );
+  }
+
+  if (!hasCompleteGuestDetails(guestDetails)) {
+    return (
+      <main id="main-content">
+        <BookingFlowHeader
+          activeStep={3}
+          completedThrough={1}
+          title="Prepare a way to pay."
+          description="Enter test card details for this prototype. No payment service is contacted and nothing is charged."
+        />
+        <IncompleteGuestDetailsState />
       </main>
     );
   }
@@ -78,43 +98,47 @@ export function BookingGuestDetails() {
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    const formData = new FormData(event.currentTarget);
+    const form = event.currentTarget;
+    const formData = new FormData(form);
+    const cardholderName = String(
+      formData.get("mockCardholderName") ?? "",
+    ).trim();
+    const cardNumber = String(formData.get("mockCardNumber") ?? "");
+    const expiry = String(formData.get("mockCardExpiry") ?? "")
+      .trim()
+      .replace(/\s+/g, " ");
+    const lastFour = cardNumber.replace(/\D/g, "").slice(-4);
 
-    setGuestDetails({
-      firstName: String(formData.get("firstName") ?? ""),
-      lastName: String(formData.get("lastName") ?? ""),
-      email: String(formData.get("email") ?? ""),
-      phone: String(formData.get("phone") ?? ""),
-    });
-    setSaveStatus("saved");
+    setPreparedCard({ cardholderName, lastFour, expiry });
+    form.reset();
   }
 
   return (
     <main id="main-content">
       <BookingFlowHeader
-        activeStep={2}
-        title="Tell us who is travelling."
-        description="Add the lead guest and the best contact details for this stay. Payment follows later."
+        activeStep={3}
+        title="Prepare a way to pay."
+        description="Enter test card details for this prototype. No payment service is contacted and nothing is charged."
       />
 
-      <section aria-labelledby="guest-details-title" className="bg-brand-paper">
+      <section aria-labelledby="payment-title" className="bg-brand-paper">
         <div className="container-luma py-[var(--space-section)]">
           <div className="grid gap-12 lg:grid-cols-12 lg:gap-x-8">
             <div className="lg:col-span-8">
               <div className="border-t border-brand-forest-deep/24 pt-6">
                 <p className="font-mono text-[0.625rem] tracking-[0.13em] text-brand-brass uppercase">
-                  Lead guest
+                  Mock payment
                 </p>
                 <div className="mt-3 grid gap-5 sm:grid-cols-12 sm:gap-x-7">
                   <h2
-                    id="guest-details-title"
-                    className="max-w-[11ch] font-display text-[clamp(2.75rem,5vw,5.25rem)] leading-[0.92] font-medium tracking-[-0.05em] text-brand-forest-deep sm:col-span-7"
+                    id="payment-title"
+                    className="max-w-[10ch] font-display text-[clamp(2.75rem,5vw,5.25rem)] leading-[0.92] font-medium tracking-[-0.05em] text-brand-forest-deep sm:col-span-7"
                   >
-                    Who should we keep in touch with?
+                    A card for the prototype, not a charge.
                   </h2>
                   <p className="max-w-[30rem] text-base leading-7 text-foreground/72 sm:col-span-5 sm:pt-2">
-                    Use the name of the lead guest and contact details that can
-                    be reached about this stay.
+                    Prepare one masked payment summary for this page. Full card
+                    details are cleared immediately after you save them.
                   </p>
                 </div>
               </div>
@@ -127,113 +151,77 @@ export function BookingGuestDetails() {
                 />
                 <div>
                   <p className="text-sm font-semibold text-brand-forest-deep">
-                    Kept only in this booking session
+                    Use test values only
                   </p>
-                  <p className="mt-1 text-sm leading-6 text-foreground/66">
-                    This prototype stores these details in memory while you
-                    navigate. It does not create an account, reservation, or
-                    payment record.
+                  <p
+                    id="test-card-guidance"
+                    className="mt-1 text-sm leading-6 text-foreground/66"
+                  >
+                    Try 4242 4242 4242 4242, any future expiry, and any
+                    three-digit security code. Never enter real payment details
+                    in this prototype.
                   </p>
+                </div>
+              </div>
+
+              <div className="mt-12 border-t border-brand-forest-deep/24 pt-7">
+                <p className="font-mono text-[0.625rem] tracking-[0.13em] text-brand-stone uppercase">
+                  Payment method
+                </p>
+                <div className="mt-4 grid min-h-16 grid-cols-[auto_1fr_auto] items-center gap-4 border-y border-brand-forest-deep/24 bg-brand-paper px-4 py-3 sm:px-5">
+                  <span className="grid size-9 place-items-center rounded-full border border-brand-forest-deep/24 text-brand-brass">
+                    <CreditCard aria-hidden="true" size={18} />
+                  </span>
+                  <span>
+                    <span className="block text-sm font-semibold text-brand-forest-deep">
+                      Credit or debit card
+                    </span>
+                    <span className="mt-1 block text-xs leading-5 text-foreground/60">
+                      Local interface preview only
+                    </span>
+                  </span>
+                  <span className="font-mono text-[0.5625rem] tracking-[0.1em] text-brand-brass uppercase">
+                    Selected
+                  </span>
                 </div>
               </div>
 
               <form
                 className="mt-12"
+                autoComplete="off"
                 onSubmit={handleSubmit}
-                onInput={() => setSaveStatus("idle")}
+                onInput={() => setPreparedCard(null)}
               >
                 <fieldset>
                   <legend className="w-full border-b border-brand-forest-deep/24 pb-5 font-display text-3xl leading-none tracking-[-0.035em] text-brand-forest-deep sm:text-4xl">
-                    Identity
-                  </legend>
-                  <div className="mt-7 grid gap-7 sm:grid-cols-2">
-                    <div>
-                      <div className="flex items-baseline justify-between gap-4">
-                        <label
-                          htmlFor="first-name"
-                          className="text-sm font-semibold text-brand-forest-deep"
-                        >
-                          First name
-                        </label>
-                        <span className="font-mono text-[0.5625rem] tracking-[0.1em] text-brand-stone uppercase">
-                          Required
-                        </span>
-                      </div>
-                      <Input
-                        id="first-name"
-                        name="firstName"
-                        type="text"
-                        autoComplete="given-name"
-                        defaultValue={guestDetails.firstName}
-                        required
-                        maxLength={80}
-                        className={`mt-2 ${fieldClassName}`}
-                      />
-                    </div>
-
-                    <div>
-                      <div className="flex items-baseline justify-between gap-4">
-                        <label
-                          htmlFor="last-name"
-                          className="text-sm font-semibold text-brand-forest-deep"
-                        >
-                          Last name
-                        </label>
-                        <span className="font-mono text-[0.5625rem] tracking-[0.1em] text-brand-stone uppercase">
-                          Required
-                        </span>
-                      </div>
-                      <Input
-                        id="last-name"
-                        name="lastName"
-                        type="text"
-                        autoComplete="family-name"
-                        defaultValue={guestDetails.lastName}
-                        required
-                        maxLength={80}
-                        className={`mt-2 ${fieldClassName}`}
-                      />
-                    </div>
-                  </div>
-                </fieldset>
-
-                <fieldset className="mt-12">
-                  <legend className="w-full border-b border-brand-forest-deep/24 pb-5 font-display text-3xl leading-none tracking-[-0.035em] text-brand-forest-deep sm:text-4xl">
-                    Contact
+                    Card details
                   </legend>
                   <p className="mt-4 max-w-[42rem] text-sm leading-6 text-foreground/66">
-                    Use contact details the lead guest can access while
-                    travelling. Include a country code with the phone number.
+                    These fields use browser-native constraints for now. Full
+                    accessible inline validation follows in the next roadmap
+                    unit.
                   </p>
 
-                  <div className="mt-7 grid gap-7 sm:grid-cols-2">
+                  <div className="mt-7 grid gap-7">
                     <div>
                       <div className="flex items-baseline justify-between gap-4">
                         <label
-                          htmlFor="email"
-                          className="flex items-center gap-2 text-sm font-semibold text-brand-forest-deep"
+                          htmlFor="mock-cardholder-name"
+                          className="text-sm font-semibold text-brand-forest-deep"
                         >
-                          <EnvelopeSimple
-                            aria-hidden="true"
-                            size={15}
-                            className="text-brand-brass"
-                          />
-                          Email address
+                          Name on card
                         </label>
                         <span className="font-mono text-[0.5625rem] tracking-[0.1em] text-brand-stone uppercase">
                           Required
                         </span>
                       </div>
                       <Input
-                        id="email"
-                        name="email"
-                        type="email"
-                        inputMode="email"
-                        autoComplete="email"
-                        spellCheck={false}
-                        defaultValue={guestDetails.email}
+                        id="mock-cardholder-name"
+                        name="mockCardholderName"
+                        type="text"
+                        autoComplete="off"
                         required
-                        maxLength={254}
+                        maxLength={80}
                         className={`mt-2 ${fieldClassName}`}
                       />
                     </div>
@@ -241,78 +229,151 @@ export function BookingGuestDetails() {
                     <div>
                       <div className="flex items-baseline justify-between gap-4">
                         <label
-                          htmlFor="phone"
+                          htmlFor="mock-card-number"
                           className="flex items-center gap-2 text-sm font-semibold text-brand-forest-deep"
                         >
-                          <Phone
+                          <CreditCard
                             aria-hidden="true"
                             size={15}
                             className="text-brand-brass"
                           />
-                          Phone number
+                          Card number
                         </label>
                         <span className="font-mono text-[0.5625rem] tracking-[0.1em] text-brand-stone uppercase">
-                          Required
+                          Test only
                         </span>
                       </div>
                       <Input
-                        id="phone"
-                        name="phone"
-                        type="tel"
-                        inputMode="tel"
-                        autoComplete="tel"
-                        aria-describedby="phone-helper"
-                        defaultValue={guestDetails.phone}
+                        id="mock-card-number"
+                        name="mockCardNumber"
+                        type="text"
+                        inputMode="numeric"
+                        autoComplete="off"
+                        aria-describedby="test-card-guidance card-number-helper"
+                        placeholder="4242 4242 4242 4242"
                         required
-                        maxLength={32}
-                        className={`mt-2 ${fieldClassName}`}
+                        minLength={13}
+                        maxLength={23}
+                        pattern="[0-9 ]{13,23}"
+                        className={`mt-2 font-mono tabular-nums ${fieldClassName}`}
                       />
                       <p
-                        id="phone-helper"
+                        id="card-number-helper"
                         className="mt-2 text-xs leading-5 text-foreground/60"
                       >
-                        Example: +91 98765 43210
+                        Spaces are accepted. The full value is never added to
+                        the booking store.
                       </p>
+                    </div>
+
+                    <div className="grid gap-7 sm:grid-cols-2">
+                      <div>
+                        <div className="flex items-baseline justify-between gap-4">
+                          <label
+                            htmlFor="mock-card-expiry"
+                            className="text-sm font-semibold text-brand-forest-deep"
+                          >
+                            Expiry
+                          </label>
+                          <span className="font-mono text-[0.5625rem] tracking-[0.1em] text-brand-stone uppercase">
+                            MM / YY
+                          </span>
+                        </div>
+                        <Input
+                          id="mock-card-expiry"
+                          name="mockCardExpiry"
+                          type="text"
+                          inputMode="numeric"
+                          autoComplete="off"
+                          placeholder="12 / 30"
+                          required
+                          maxLength={7}
+                          pattern="(0[1-9]|1[0-2]) ?/ ?[0-9]{2}"
+                          className={`mt-2 font-mono tabular-nums ${fieldClassName}`}
+                        />
+                      </div>
+
+                      <div>
+                        <div className="flex items-baseline justify-between gap-4">
+                          <label
+                            htmlFor="mock-card-security"
+                            className="flex items-center gap-2 text-sm font-semibold text-brand-forest-deep"
+                          >
+                            <LockKey
+                              aria-hidden="true"
+                              size={15}
+                              className="text-brand-brass"
+                            />
+                            Security code
+                          </label>
+                          <span className="font-mono text-[0.5625rem] tracking-[0.1em] text-brand-stone uppercase">
+                            3–4 digits
+                          </span>
+                        </div>
+                        <Input
+                          id="mock-card-security"
+                          name="mockCardSecurity"
+                          type="password"
+                          inputMode="numeric"
+                          autoComplete="off"
+                          required
+                          minLength={3}
+                          maxLength={4}
+                          pattern="[0-9]{3,4}"
+                          className={`mt-2 font-mono tabular-nums ${fieldClassName}`}
+                        />
+                      </div>
                     </div>
                   </div>
                 </fieldset>
 
                 <div className="mt-10 flex flex-col-reverse gap-4 border-t border-brand-forest-deep/24 pt-7 sm:flex-row sm:items-center sm:justify-between">
                   <Link
-                    href="/booking/review"
+                    href="/booking/guest-details"
                     className="inline-flex min-h-12 w-fit items-center gap-2 rounded-sm px-2 text-sm font-semibold text-brand-forest-deep underline decoration-brand-brass/65 underline-offset-4 transition-colors duration-200 hover:text-brand-brass focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-4"
                   >
                     <ArrowLeft aria-hidden="true" size={16} />
-                    Back to review
+                    Back to guest details
                   </Link>
                   <button
                     type="submit"
                     className="group inline-flex min-h-12 items-center justify-between gap-8 rounded-full border border-brand-forest-deep bg-brand-forest-deep px-6 py-3 text-sm font-semibold text-brand-paper transition-colors duration-200 hover:bg-brand-forest focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-4"
                   >
-                    Save guest details
-                    <ArrowRight
-                      aria-hidden="true"
-                      size={16}
-                      className="transition-transform duration-200 ease-luma group-hover:translate-x-0.5 motion-reduce:transition-none"
-                    />
+                    Prepare mock payment
+                    <LockKey aria-hidden="true" size={16} />
                   </button>
                 </div>
+
+                <p className="mt-3 text-xs leading-5 text-foreground/60 sm:text-right">
+                  This action only creates a masked summary on this page.
+                </p>
 
                 <div
                   aria-live="polite"
                   aria-atomic="true"
-                  className="mt-4 min-h-6 text-sm leading-6"
+                  className="mt-6 min-h-24"
                 >
-                  {saveStatus === "saved" ? (
-                    <p className="flex items-center gap-2 font-semibold text-brand-forest-deep">
+                  {preparedCard ? (
+                    <div className="grid gap-4 border-y border-brand-forest-deep/22 bg-brand-linen px-5 py-5 sm:grid-cols-[auto_1fr_auto] sm:items-center sm:px-6">
                       <CheckCircle
                         aria-hidden="true"
-                        size={18}
+                        size={22}
                         weight="fill"
                         className="text-brand-brass"
                       />
-                      Guest details saved for this booking session.
-                    </p>
+                      <div>
+                        <p className="text-sm font-semibold text-brand-forest-deep">
+                          Mock payment details prepared
+                        </p>
+                        <p className="mt-1 text-sm leading-6 text-foreground/66">
+                          {preparedCard.cardholderName} · card ending in {" "}
+                          {preparedCard.lastFour}
+                        </p>
+                      </div>
+                      <p className="font-mono text-[0.625rem] tracking-[0.09em] text-brand-stone uppercase">
+                        Expires {preparedCard.expiry}
+                      </p>
+                    </div>
                   ) : null}
                 </div>
               </form>
@@ -390,6 +451,22 @@ export function BookingGuestDetails() {
                       {guestLabel} · {roomLabel}
                     </dd>
                   </div>
+                  <div className="border-b border-brand-paper/18 py-4">
+                    <dt className="flex items-center gap-2 font-mono text-[0.5625rem] tracking-[0.11em] text-brand-paper/52 uppercase">
+                      <EnvelopeSimple
+                        aria-hidden="true"
+                        size={14}
+                        className="text-brand-brass"
+                      />
+                      Lead guest
+                    </dt>
+                    <dd className="mt-2 text-sm font-semibold text-brand-paper">
+                      {guestDetails.firstName} {guestDetails.lastName}
+                    </dd>
+                    <dd className="mt-1 break-all text-xs leading-5 text-brand-paper/58">
+                      {guestDetails.email}
+                    </dd>
+                  </div>
                   <div className="grid grid-cols-[1fr_auto] gap-5 border-b border-brand-paper/18 py-4">
                     <dt>
                       <span className="block text-sm font-semibold text-brand-paper">
@@ -411,46 +488,23 @@ export function BookingGuestDetails() {
                   </div>
                 </dl>
 
-                {hasCompleteGuestDetails(guestDetails) ? (
-                  <Link
-                    href="/booking/payment"
-                    aria-describedby="payment-step-status"
-                    className="group mt-4 inline-flex min-h-12 w-full items-center justify-between gap-5 rounded-full border border-brand-paper bg-brand-paper px-6 py-3 text-sm font-semibold text-brand-forest-deep transition-colors duration-200 hover:bg-brand-linen focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-brass focus-visible:ring-offset-4 focus-visible:ring-offset-brand-forest-deep"
-                  >
-                    Continue to payment
-                    <ArrowRight
-                      aria-hidden="true"
-                      size={16}
-                      className="transition-transform duration-200 ease-luma group-hover:translate-x-0.5 motion-reduce:transition-none"
-                    />
-                  </Link>
-                ) : (
-                  <button
-                    type="button"
-                    disabled
-                    aria-describedby="payment-step-status"
-                    className="mt-4 inline-flex min-h-12 w-full cursor-not-allowed items-center justify-between gap-5 rounded-full border border-brand-paper/28 bg-brand-paper/10 px-6 py-3 text-sm font-semibold text-brand-paper/58"
-                  >
-                    Save guest details first
-                    <ArrowRight aria-hidden="true" size={16} />
-                  </button>
-                )}
-                <p
-                  id="payment-step-status"
-                  className="mt-3 text-xs leading-5 text-brand-paper/52"
-                >
-                  {hasCompleteGuestDetails(guestDetails)
-                    ? "Review the mock payment form next. No card will be charged."
-                    : "Save the lead guest before opening the mock payment step."}
-                </p>
+                <div className="mt-4 border-t border-brand-paper/18 pt-5">
+                  <p className="font-mono text-[0.5625rem] tracking-[0.11em] text-brand-brass uppercase">
+                    This step stops here
+                  </p>
+                  <p className="mt-2 text-xs leading-5 text-brand-paper/58">
+                    Booking submission, payment responses, retry states, and
+                    confirmation follow in later roadmap units.
+                  </p>
+                </div>
               </div>
             </aside>
           </div>
 
           <p className="mt-12 max-w-[58rem] border-l border-brand-brass/65 pl-4 text-xs leading-5 text-muted-foreground">
-            Prototype guest-details step only. The form is session-held and
-            uses browser-native field constraints; full accessible inline
-            validation follows in a later roadmap unit.
+            Prototype payment form only. No payment provider receives these
+            values, no card is charged, and no reservation is created. The
+            masked page summary clears when this route unmounts or reloads.
           </p>
         </div>
       </section>

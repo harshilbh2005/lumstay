@@ -2,7 +2,11 @@ import Link from "next/link";
 
 const bookingSteps = [
   { number: "01", label: "Review", href: "/booking/review" },
-  { number: "02", label: "Guest details", href: null },
+  {
+    number: "02",
+    label: "Guest details",
+    href: "/booking/guest-details",
+  },
   { number: "03", label: "Payment", href: null },
   { number: "04", label: "Confirm", href: null },
 ] as const;

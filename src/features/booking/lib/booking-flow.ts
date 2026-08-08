@@ -3,6 +3,7 @@ import { format, parseISO } from "date-fns";
 import { getSearchIntentQueryString } from "@/features/search/lib/search-context";
 import type {
   BookingDateRange,
+  BookingGuestDetails,
   BookingGuests,
   BookingProperty,
 } from "@/stores/booking-store";
@@ -30,6 +31,12 @@ export function getGuestLabel(guests: BookingGuests) {
 
 export function getRoomLabel(roomCount: number) {
   return `${roomCount} ${roomCount === 1 ? "room" : "rooms"}`;
+}
+
+export function hasCompleteGuestDetails(
+  guestDetails: BookingGuestDetails,
+) {
+  return Object.values(guestDetails).every(Boolean);
 }
 
 export function getStayQuery(
