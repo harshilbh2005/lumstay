@@ -20,6 +20,13 @@ export interface BookingGuests {
   rooms: number;
 }
 
+export interface BookingGuestDetails {
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone: string;
+}
+
 export interface BookingProperty {
   id: string;
   slug: string;
@@ -69,6 +76,7 @@ export interface BookingStoreState {
   guests: BookingGuests;
   property: BookingProperty | null;
   room: BookingRoom | null;
+  guestDetails: BookingGuestDetails;
   priceSummary: BookingPriceSummary;
 }
 
@@ -78,6 +86,7 @@ export interface BookingStoreActions {
   setGuests: (guests: BookingGuests) => void;
   setProperty: (property: BookingProperty | null) => void;
   setRoom: (room: BookingRoom | null) => void;
+  setGuestDetails: (guestDetails: BookingGuestDetails) => void;
   resetBooking: () => void;
 }
 
@@ -88,6 +97,13 @@ const defaultGuests: BookingGuests = {
   adults: 2,
   children: 0,
   rooms: 1,
+};
+
+const defaultGuestDetails: BookingGuestDetails = {
+  firstName: "",
+  lastName: "",
+  email: "",
+  phone: "",
 };
 
 function getCanonicalDate(value: string | null) {
@@ -131,6 +147,21 @@ function normalizeGuests(guests: BookingGuests): BookingGuests {
     adults: getBoundedInteger(guests.adults, 1, 8),
     children: getBoundedInteger(guests.children, 0, 6),
     rooms: getBoundedInteger(guests.rooms, 1, 8),
+  };
+}
+
+function normalizeGuestDetail(value: string, maximumLength: number) {
+  return value.trim().slice(0, maximumLength);
+}
+
+function normalizeGuestDetails(
+  guestDetails: BookingGuestDetails,
+): BookingGuestDetails {
+  return {
+    firstName: normalizeGuestDetail(guestDetails.firstName, 80),
+    lastName: normalizeGuestDetail(guestDetails.lastName, 80),
+    email: normalizeGuestDetail(guestDetails.email, 254),
+    phone: normalizeGuestDetail(guestDetails.phone, 32),
   };
 }
 
@@ -179,6 +210,7 @@ export function getDefaultBookingState(): BookingStoreState {
     guests,
     property: null,
     room: null,
+    guestDetails: { ...defaultGuestDetails },
     priceSummary: getBookingPriceSummary({ dates, guests, room: null }),
   };
 }
@@ -194,6 +226,7 @@ function getSeededBookingState(seed: BookingStoreSeed): BookingStoreState {
     guests,
     property: seed.property,
     room: null,
+    guestDetails: { ...defaultGuestDetails },
     priceSummary: getBookingPriceSummary({ dates, guests, room: null }),
   };
 }
@@ -272,6 +305,8 @@ export function createBookingStore(
           }),
         };
       }),
+    setGuestDetails: (guestDetails) =>
+      set({ guestDetails: normalizeGuestDetails(guestDetails) }),
     resetBooking: () => set(getDefaultBookingState()),
   }));
 }

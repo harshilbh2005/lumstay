@@ -574,7 +574,7 @@ Important limitation: suggestions are local and finite, and recent searches are 
 ### Cross-route booking store
 
 - A per-request Zustand vanilla store now lives beneath the root client provider, so booking state survives App Router navigation without sharing a module-global singleton across server requests
-- The typed draft carries normalized check-in/check-out dates, adult/child/room counts, compact property and room snapshots, hydration status, and a derived accommodation price summary
+- The typed draft carries normalized check-in/check-out dates, adult/child/room counts, compact property and room snapshots, trimmed lead-guest identity/contact details, hydration status, and a derived accommodation price summary
 - Search-result property links preserve canonical destination, date, guest, and room intent in the property URL; a small client initializer hydrates dates, guests, and the property snapshot while the property route remains statically generated
 - Initialization keys make hydration idempotent, so React Strict Mode or preserved-route effect replays do not clear an existing room choice for the same property and search intent
 - The existing native room radios now update the store through the isolated sticky-summary client leaf, while the radios and summary restore from the same selected-room state after client-side route navigation
@@ -583,7 +583,7 @@ Important limitation: suggestions are local and finite, and recent searches are 
 - No new review screen or booking route was introduced; the existing property composition and native room controls remain visually unchanged apart from an accurate non-persistence disclosure
 - Verified with lint, TypeScript, focused vanilla-store assertions, a successful production build, and visible-browser QA at 1440×1000 and 390×844 covering URL handoff, room selection, cross-route restoration, reload reset, native-radio synchronization, zero horizontal overflow, zero console warnings/errors, and zero unexpected request failures
 
-Important limitation: booking state is intentionally memory-only. Dates and guests can be reconstructed from a shareable property URL after reload, but the selected room is cleared; review, guest details, persistence, taxes, fees, cancellation calculations, availability, payment, and confirmation remain later roadmap units.
+Important limitation: booking state is intentionally memory-only. Dates and guests can be reconstructed from a shareable property URL after reload, but the selected room and guest details are cleared; persistence, taxes, fees, cancellation calculations, availability, payment, and confirmation remain later roadmap units.
 
 ### Booking review step
 
@@ -593,12 +593,27 @@ Important limitation: booking state is intentionally memory-only. Dates and gues
 - A dark, sticky price ledger derives and itemizes the existing accommodation subtotal (`nightly rate × nights × rooms`), explicitly marks taxes and fees as not calculated, and avoids labelling the subtotal as a final total
 - `Change room` and `Edit dates or guests` links preserve the canonical search intent; the former returns directly to the property room section and the latter returns to `/search`
 - Direct access or reload with no in-memory draft shows a deliberate recovery ledger, while property/room drafts without valid dates expose `Choose dates` and `Return to Casa Serein` paths instead of showing an invalid price
-- The guest-details action is deliberately disabled with explanatory copy until roadmap item 26 exists, so the page does not link to a missing route or imply that guest data is already collected
+- The guest-details action is now an enabled App Router link to `/booking/guest-details`, with explicit copy that the next step creates neither a reservation nor a charge
 - Refero reference lock uses Kobu's warm linen canvas, sharp photography, and quiet editorial spacing as the foundation; Christopher Ireland Creative's ruled information rhythm and Navan/Airbnb's two-column review hierarchy and visible edit paths are borrowed without their rounded card stacks, shadows, purple/blue conversion styling, timers, or urgency patterns
 - UI/UX Pro Max guidance was retained for responsive image sizing, visible focus, and 44–48px controls; its generic blue/gold liquid-glass direction was rejected, as were bento composition and perpetual decorative motion
 - Verified from the production build at 1440×1000 and 390×844 through the real room-selection-to-review transition, with exact three-night subtotal derivation, decoded responsive imagery, 44–48px main controls, visible keyboard focus, zero mobile horizontal overflow, clean browser warnings/errors, explicit no-date recovery, and reload reset behavior
 
-Important limitation: the page remains a frontend-only review of a memory-held draft. It does not persist the selected room, hold inventory, collect guest details, calculate taxes or fees, apply binding cancellation charges, take payment, or create a reservation.
+Important limitation: the page remains a frontend-only review of a memory-held draft. It does not persist the selected room, hold inventory, calculate taxes or fees, apply binding cancellation charges, take payment, or create a reservation.
+
+### Guest-details step
+
+- A new static `/booking/guest-details` route presents step two inside the shared site shell and reads the same complete cross-route booking draft as review
+- The review action now opens the route, while both the explicit `Back to review` link and the completed progress step return without losing the session-held guest draft
+- The form collects only lead-guest first name, last name, email, and phone, with visible labels, required indicators, correct input types, autocomplete hints, a country-code example, and native browser constraints
+- Submitting trims and length-bounds the four fields in the Zustand draft and announces a polite saved status without creating an account, reservation, payment record, or external mutation
+- Identity and contact are deliberately separated from payment. React Hook Form, Zod, custom inline errors, taxes/fees, special requests, submission failures, terms, and confirmation remain assigned to later roadmap units
+- A dark sticky stay ledger preserves property, room, location, check-in/out, party, accommodation subtotal, and the honest `Not calculated` tax state; its payment action remains disabled until item 27 exists
+- Booking progress, query formatting, money/date/party labels, and missing-draft recovery are now shared between review and guest details; a reloaded guest-details URL marks Review as required instead of falsely complete
+- Refero reference lock uses Kobu's linen canvas, sharp rules, mono metadata, and shadowless editorial restraint as the foundation; Christopher Ireland Creative's ruled form rhythm, Volkshotel's paired field structure, Understory's concise purpose/trust copy, and Expedia's persistent two-column summary are borrowed without their card shadows, extra personal fields, payment UI, urgency, or error styling
+- UI/UX Pro Max guidance was retained for associated labels, submission feedback, internal Next.js links, leaf-level client interactivity, visible focus, and responsive 44–48px controls; its liquid-glass palette/effects were rejected as incompatible with LumaStay
+- Verified from the production build at 1440×1000 and 390×844 through the real search → property → room → review → guest-details journey, including save feedback, review round-trip restoration, mobile stacking, disabled payment scope, clean console output, and reload recovery
+
+Important limitation: guest details remain memory-only and the form currently relies on native browser constraints. It does not persist personal data, send confirmation messages, validate through React Hook Form/Zod, submit a booking, take payment, or create a reservation.
 
 ## Current homepage order
 
@@ -612,7 +627,7 @@ Important limitation: the page remains a frontend-only review of a memory-held d
 6. `ClosingBookingCta`
 7. `SiteFooter`
 
-The implemented routes are `/`, `/destinations`, `/edit`, `/search`, `/properties/casa-serein`, and `/booking/review`. Other property slugs and navigation links to planned pages use the branded not-found state until their routes are built.
+The implemented routes are `/`, `/destinations`, `/edit`, `/search`, `/properties/casa-serein`, `/booking/review`, and `/booking/guest-details`. Other property slugs and navigation links to planned pages use the branded not-found state until their routes are built.
 
 ## Current mock-data state
 
@@ -622,13 +637,14 @@ The implemented routes are `/`, `/destinations`, `/edit`, `/search`, `/propertie
 - `mockEditorialStories`: 7 editorial story summaries used by `/edit`
 - `mockRooms`: 3 Casa Serein room tiers with 6 central-catalog media references, occupancy, beds, size, facilities, INR nightly pricing, breakfast inclusion, structured cancellation policies, and typed availability; 2 are selectable and Serein Suite is explicitly unavailable in the interface preview
 - `mockBookings`: empty array
-- No live availability, date-sensitive room pricing, tax/fee breakdown, complete facility catalog, guest, booking, or checkout fixture yet
-- `src/stores/booking-store.ts` contains the memory-only cross-route booking draft; the global provider creates one vanilla Zustand store per request/client tree
+- No live availability, date-sensitive room pricing, tax/fee breakdown, complete facility catalog, booking, or checkout fixture yet
+- `src/stores/booking-store.ts` contains the memory-only cross-route booking draft, including the lead-guest identity/contact fields; the global provider creates one vanilla Zustand store per request/client tree
 - Saved and trips feature indexes are scaffolds only
 
 ## Commit history
 
 ```text
+01484be feat: add booking review step
 526f427 feat: add cross-route booking store
 7a2fa86 feat: add property recovery states
 b31dc03 feat: add sticky booking summary
@@ -705,7 +721,7 @@ Build each item separately, research it first, verify it, and commit it before m
 
 24. ~~Cross-route booking store with dates, guests, property, room, and price summary~~ Complete
 25. ~~Booking review step~~ Complete
-26. Guest-details form
+26. ~~Guest-details form~~ Complete
 27. Checkout and mock payment form
 28. React Hook Form and Zod validation with accessible inline errors
 29. Taxes, fees, inclusions, cancellation, and total-price breakdown
@@ -735,4 +751,4 @@ Build each item separately, research it first, verify it, and commit it before m
 
 ## Recommended immediate next step
 
-Build the isolated **guest-details form** for the complete booking draft. Collect lead-guest identity and contact details with accessible labels and clear privacy/context copy, but keep payment fields, tax/fee calculation, final confirmation, persistence, and submission/error behavior out of that unit. Preserve the review route as the edit/back step and continue to recover cleanly when the required booking draft is missing.
+Build the isolated **checkout and mock payment form** for the complete booking draft. Reuse the shared booking progress and stay ledger, keep the existing review and guest-details steps navigable, and collect only the mock payment fields needed for item 27. Keep React Hook Form/Zod errors, taxes/fees, submission failure/retry, final confirmation, persistence, and any claim of a real charge or reservation assigned to their later roadmap units.

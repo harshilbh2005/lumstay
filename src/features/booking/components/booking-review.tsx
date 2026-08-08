@@ -1,6 +1,5 @@
 "use client";
 
-import { format, parseISO } from "date-fns";
 import Image from "next/image";
 import Link from "next/link";
 import {
@@ -16,225 +15,16 @@ import {
 
 import { useBookingStore } from "@/components/providers/booking-store-provider";
 import { getMediaById } from "@/data/mock";
-import { getSearchIntentQueryString } from "@/features/search/lib/search-context";
-import type {
-  BookingDateRange,
-  BookingGuests,
-  BookingProperty,
-} from "@/stores/booking-store";
-import type { Money } from "@/types/domain";
-
-const roomSelectionSectionId = "casa-serein-room-selection";
-
-const bookingSteps = [
-  { number: "01", label: "Review", detail: "Your stay" },
-  { number: "02", label: "Guest details", detail: "Next" },
-  { number: "03", label: "Payment", detail: "Later" },
-  { number: "04", label: "Confirm", detail: "Final" },
-] as const;
-
-function formatMoney(money: Money) {
-  return new Intl.NumberFormat("en-IN", {
-    style: "currency",
-    currency: money.currency,
-    maximumFractionDigits: 0,
-  }).format(money.amount);
-}
-
-function formatStayDate(date: string) {
-  return format(parseISO(date), "EEE, dd MMM yyyy");
-}
-
-function getGuestLabel(guests: BookingGuests) {
-  const guestCount = guests.adults + guests.children;
-
-  return `${guestCount} ${guestCount === 1 ? "guest" : "guests"}`;
-}
-
-function getRoomLabel(roomCount: number) {
-  return `${roomCount} ${roomCount === 1 ? "room" : "rooms"}`;
-}
-
-function getStayQuery(
-  property: BookingProperty | null,
-  dates: BookingDateRange,
-  guests: BookingGuests,
-) {
-  return getSearchIntentQueryString({
-    destination: property
-      ? `${property.location.city}, ${property.location.country}`
-      : "",
-    checkIn: dates.checkIn ?? "",
-    checkOut: dates.checkOut ?? "",
-    adults: guests.adults,
-    children: guests.children,
-    rooms: guests.rooms,
-  });
-}
-
-function BookingReviewHeader() {
-  return (
-    <section className="border-b border-brand-forest-deep/18 bg-brand-linen">
-      <div className="container-luma py-12 sm:py-16 lg:py-20">
-        <div className="grid gap-8 lg:grid-cols-12 lg:gap-x-8">
-          <div className="lg:col-span-3">
-            <p className="font-mono text-[0.6875rem] tracking-[0.14em] text-brand-stone uppercase">
-              <span className="mr-3 text-brand-brass">Booking</span>
-              Step 01
-            </p>
-          </div>
-
-          <div className="lg:col-span-6">
-            <h1 className="max-w-[12ch] font-display text-[clamp(3rem,6.4vw,6.5rem)] leading-[0.9] font-medium tracking-[-0.055em] text-brand-forest-deep">
-              Review the shape of your stay.
-            </h1>
-          </div>
-
-          <div className="lg:col-span-3 lg:pt-1">
-            <p className="max-w-[28rem] text-base leading-7 text-foreground/72">
-              Check the room, dates, party, and provisional accommodation
-              subtotal before guest details.
-            </p>
-          </div>
-        </div>
-
-        <ol
-          aria-label="Booking progress"
-          className="mt-10 grid grid-cols-2 border-t border-brand-forest-deep/22 sm:mt-14 sm:grid-cols-4"
-        >
-          {bookingSteps.map((step, index) => (
-            <li
-              key={step.number}
-              aria-current={index === 0 ? "step" : undefined}
-              className={`grid min-h-20 grid-cols-[auto_1fr] content-center gap-x-3 border-b border-brand-forest-deep/22 px-3 py-4 sm:min-h-24 sm:border-b-0 sm:border-r sm:px-4 sm:last:border-r-0 ${
-                index % 2 === 0 ? "border-r" : ""
-              } ${index === 0 ? "bg-brand-forest-deep text-brand-paper" : ""}`}
-            >
-              <span
-                className={`font-mono text-[0.625rem] tracking-[0.12em] uppercase ${
-                  index === 0 ? "text-brand-brass" : "text-brand-stone"
-                }`}
-              >
-                {step.number}
-              </span>
-              <span>
-                <span className="block text-sm font-semibold">{step.label}</span>
-                <span
-                  className={`mt-1 block font-mono text-[0.5625rem] tracking-[0.1em] uppercase ${
-                    index === 0 ? "text-brand-paper/52" : "text-brand-stone"
-                  }`}
-                >
-                  {step.detail}
-                </span>
-              </span>
-            </li>
-          ))}
-        </ol>
-      </div>
-    </section>
-  );
-}
-
-function IncompleteBookingReview({
-  property,
-  dates,
-  guests,
-}: {
-  property: BookingProperty | null;
-  dates: BookingDateRange;
-  guests: BookingGuests;
-}) {
-  const searchQuery = getStayQuery(property, dates, guests);
-  const searchHref = `/search?${searchQuery}`;
-  const propertyHref = property
-    ? `/properties/${property.slug}?${searchQuery}#${roomSelectionSectionId}`
-    : null;
-  const hasDates = Boolean(dates.checkIn && dates.checkOut);
-  const eyebrow = !property
-    ? "No stay in review"
-    : !hasDates
-      ? "Dates need attention"
-      : "Room selection needed";
-  const title = !property
-    ? "Begin with a stay worth keeping."
-    : !hasDates
-      ? "Choose the nights before you review."
-      : `Choose a room at ${property.name}.`;
-  const description = !property
-    ? "This review is held only while you move through LumaStay. Start from search, then open a property and choose a room."
-    : !hasDates
-      ? "We have the property in hand, but a complete check-in and check-out range is required to calculate the accommodation subtotal."
-      : "Your property and stay dates are ready. Select one available room to complete this review.";
-  const primaryHref = !property || !hasDates ? searchHref : propertyHref!;
-  const primaryLabel = !property
-    ? "Explore stays"
-    : !hasDates
-      ? "Choose dates"
-      : "Choose a room";
-
-  return (
-    <section
-      aria-labelledby="incomplete-review-title"
-      className="bg-brand-paper"
-    >
-      <div className="container-luma py-[var(--space-section)]">
-        <div className="grid border-y border-brand-forest-deep/22 lg:grid-cols-12">
-          <div className="border-b border-brand-forest-deep/22 bg-brand-forest-deep px-5 py-8 text-brand-paper lg:col-span-3 lg:border-r lg:border-b-0 lg:px-7 lg:py-10">
-            <p className="font-mono text-[0.625rem] tracking-[0.14em] text-brand-brass uppercase">
-              Review status
-            </p>
-            <p className="mt-4 max-w-[16rem] font-display text-3xl leading-[1.02] tracking-[-0.035em]">
-              {eyebrow}
-            </p>
-          </div>
-
-          <div className="px-5 py-10 sm:px-8 sm:py-14 lg:col-span-6 lg:px-12 lg:py-16">
-            <h2
-              id="incomplete-review-title"
-              className="max-w-[13ch] font-display text-[clamp(2.5rem,5vw,5.25rem)] leading-[0.94] font-medium tracking-[-0.05em] text-brand-forest-deep"
-            >
-              {title}
-            </h2>
-            <p className="mt-6 max-w-[37rem] text-base leading-7 text-foreground/72">
-              {description}
-            </p>
-            <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
-              <Link
-                href={primaryHref}
-                className="group inline-flex min-h-12 items-center justify-between gap-5 rounded-full border border-brand-forest-deep bg-brand-forest-deep px-6 py-3 text-sm font-semibold text-brand-paper transition-colors duration-200 hover:bg-brand-forest focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-4"
-              >
-                {primaryLabel}
-                <ArrowRight
-                  aria-hidden="true"
-                  size={16}
-                  className="transition-transform duration-200 ease-luma group-hover:translate-x-0.5 motion-reduce:transition-none"
-                />
-              </Link>
-              {property && propertyHref && primaryHref !== propertyHref ? (
-                <Link
-                  href={propertyHref}
-                  className="inline-flex min-h-12 items-center justify-center rounded-full border border-brand-forest-deep/36 px-6 py-3 text-sm font-semibold text-brand-forest-deep transition-colors duration-200 hover:border-brand-forest-deep hover:bg-brand-linen focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-4"
-                >
-                  Return to {property.name}
-                </Link>
-              ) : null}
-            </div>
-          </div>
-
-          <div className="border-t border-brand-forest-deep/22 px-5 py-8 lg:col-span-3 lg:border-t-0 lg:border-l lg:px-7 lg:py-10">
-            <p className="font-mono text-[0.625rem] tracking-[0.13em] text-brand-stone uppercase">
-              Why this happened
-            </p>
-            <p className="mt-4 text-sm leading-6 text-foreground/68">
-              Booking review data is memory-only in this prototype. Reloading
-              the page clears the selected room by design.
-            </p>
-          </div>
-        </div>
-      </div>
-    </section>
-  );
-}
+import { BookingFlowHeader } from "@/features/booking/components/booking-flow-header";
+import { IncompleteBookingState } from "@/features/booking/components/incomplete-booking-state";
+import {
+  formatMoney,
+  formatStayDate,
+  getGuestLabel,
+  getRoomLabel,
+  getStayQuery,
+  roomSelectionSectionId,
+} from "@/features/booking/lib/booking-flow";
 
 export function BookingReview() {
   const property = useBookingStore((state) => state.property);
@@ -255,8 +45,12 @@ export function BookingReview() {
   ) {
     return (
       <main id="main-content">
-        <BookingReviewHeader />
-        <IncompleteBookingReview
+        <BookingFlowHeader
+          activeStep={1}
+          title="Review the shape of your stay."
+          description="Check the room, dates, party, and provisional accommodation subtotal before guest details."
+        />
+        <IncompleteBookingState
           property={property}
           dates={dates}
           guests={guests}
@@ -276,7 +70,11 @@ export function BookingReview() {
 
   return (
     <main id="main-content">
-      <BookingReviewHeader />
+      <BookingFlowHeader
+        activeStep={1}
+        title="Review the shape of your stay."
+        description="Check the room, dates, party, and provisional accommodation subtotal before guest details."
+      />
 
       <section aria-labelledby="stay-review-title" className="bg-brand-paper">
         <div className="container-luma py-[var(--space-section)]">
@@ -560,21 +358,24 @@ export function BookingReview() {
                   </div>
                 </dl>
 
-                <button
-                  type="button"
-                  disabled
+                <Link
+                  href="/booking/guest-details"
                   aria-describedby="guest-details-status"
-                  className="mt-4 inline-flex min-h-12 w-full cursor-not-allowed items-center justify-between gap-5 rounded-full border border-brand-paper/28 bg-brand-paper/10 px-6 py-3 text-sm font-semibold text-brand-paper/58"
+                  className="group mt-4 inline-flex min-h-12 w-full items-center justify-between gap-5 rounded-full border border-brand-paper bg-brand-paper px-6 py-3 text-sm font-semibold text-brand-forest-deep transition-colors duration-200 hover:bg-brand-linen focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-brass focus-visible:ring-offset-4 focus-visible:ring-offset-brand-forest-deep"
                 >
                   Continue to guest details
-                  <ArrowRight aria-hidden="true" size={16} />
-                </button>
+                  <ArrowRight
+                    aria-hidden="true"
+                    size={16}
+                    className="transition-transform duration-200 ease-luma group-hover:translate-x-0.5 motion-reduce:transition-none"
+                  />
+                </Link>
                 <p
                   id="guest-details-status"
                   className="mt-3 text-xs leading-5 text-brand-paper/52"
                 >
-                  Guest details are the next interface step and are not
-                  collected on this review page.
+                  Add the lead guest and booking contact details next. No
+                  reservation or charge is created on that step.
                 </p>
               </div>
             </aside>
