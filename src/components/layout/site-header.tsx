@@ -54,7 +54,6 @@ export function SiteHeader() {
 
           <Link
             href="/trips"
-            prefetch={false}
             className="hidden h-11 items-center rounded-control px-3 text-[0.8125rem] font-semibold tracking-[0.01em] text-foreground/80 transition-colors duration-200 ease-luma hover:bg-secondary hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background lg:flex"
           >
             Trips

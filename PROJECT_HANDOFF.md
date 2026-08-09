@@ -431,7 +431,7 @@ Important limitation: this is incremental reveal over a synchronous local collec
 - Thin route handles async Next.js 16 params, static param generation, route metadata, and unknown-slug `notFound()` behavior
 - Restrained editorial shell uses a folio-led masthead, one decisive existing architectural image, a caption ledger, and a Luma note
 - Existing property links disable speculative prefetch so listings without full fixtures continue to reach the branded 404 only when deliberately opened
-- Header Trips links disable prefetch while that route remains planned; Saved now reaches the implemented `/saved` route with normal prefetch behavior
+- Header Saved and Trips links now reach their implemented routes with normal prefetch behavior
 - No new image was generated or downloaded for this unit; the existing Casa Serein catalog asset is reused
 - Verified from the production build at 1440×1000 and 390×844 with decoded imagery, exact metadata, visible keyboard focus, 44px navigation, zero horizontal overflow, clean consoles, and a branded unknown-slug 404 carrying `noindex`
 
@@ -713,26 +713,39 @@ Important limitation: saved stays are mock, browser-local preferences. They do n
 - A single compact 6.4-second branded notice names the removed stay and offers Undo; restoring inserts the property at its original collection index instead of promoting it to the newest position
 - Keyboard focus moves to the next or previous Remove action after deletion, to the empty-state CTA after deleting the last stay, and back to the restored row after Undo; the delayed Undo focus handoff yields to any deliberate focus movement by the guest
 - Surviving rows reflow with transform-only layout motion while removal itself is immediate, avoiding blank reserved space or a full-row ghost over the empty state; global reduced-motion handling remains intact
-- Saved links in the global header, footer, and branded confirmation notice now use normal prefetch behavior because the route exists; Trips and other planned destinations retain disabled prefetch where appropriate
+- Saved links in the global header, footer, and branded confirmation notice use normal prefetch behavior; Trips now does the same because `/trips` is implemented, while still-planned destinations retain disabled prefetch where appropriate
 - The page foundation retains Kobu’s warm linen, sharp property photography, quiet mono metadata, and generous gallery spacing; item 34 adds MANNA’s image-led gallery restraint, Kinfolk’s decisive CTA treatment, and Julienne’s immediate count update plus compact Undo pattern without generic centered empty cards, confirmation dialogs, saturated success chrome, account claims, or marketplace density
 - UI/UX Pro Max guidance was retained for responsive `next/image` sizing, 44px targets, visible keyboard focus, and zero overflow; its aurora gradients, conversion-page structure, and perpetual atmospheric motion were rejected as incompatible with LumaStay
 - Verified with lint, TypeScript, a successful Next.js 16 production build, and visible Playwright QA at 1440×1000, 768×1024, and 375×812: exact persisted ordering, immediate removal, original-index Undo, single-item and zero-item counts, keyboard focus recovery, Kyoto media decoding, 44px+ CTA sizing, clean console, and zero horizontal overflow all pass
 
-Important limitation: the collection is editable only through single-stay save/remove actions. There is no bulk editing, named-list organization, cross-tab synchronization, account-backed cloud sync, or Trips/history integration.
+Important limitation: the collection is editable only through single-stay save/remove actions. There is no bulk editing, named-list organization, cross-tab synchronization, account-backed cloud sync, or automatic handoff between saved stays and booking history.
 
 ### Mock booking-history fixtures
 
 - A typed, serializable booking-history contract now uses a discriminated union for confirmed, cancelled, and payment-failed records; status-specific payment fields prevent a failed attempt from being mistaken for a reservation
-- Six deterministic records exercise the future Trips experience: two upcoming stays, two completed stays, one fully refunded cancellation, and one retryable declined-payment attempt
+- Six deterministic records exercise the Trips experience: two upcoming stays, two completed stays, one fully refunded cancellation, and one retryable declined-payment attempt
 - `MOCK_BOOKING_HISTORY_REFERENCE_DATE` anchors status meaning to `2026-08-09`, so fixtures and later screenshots do not change when the viewer's clock changes
 - Confirmed and cancelled records use stable `LUMA-MOCK-*` references; the failed attempt exposes only a distinct `LUMA-ATTEMPT-*` identifier and has an explicitly null booking reference
 - Each record includes a central-catalog property snapshot, media-backed room snapshot, stay dates, structured party, lead guest, rate inclusions/exclusions, cancellation summary, and transparent INR price ledger
 - Price snapshots reuse the existing 12% prototype tax estimate and ₹900 per-room service-fee policy; exact accommodation, tax, fee, total, cancellation-fee, and refund amounts are fixed and reviewable
 - Small selectors resolve a record by ID or all records for one status, while the central mock-data barrel now exports the fixtures instead of an empty placeholder
-- The app-builder workflow kept this unit inside the data boundary: no `/trips` route, client store, persistence, backend layer, or visual component was introduced
+- The app-builder workflow kept that fixture unit inside the data boundary: it introduced no `/trips` route, client store, persistence, backend layer, or visual component; the separate page unit below now consumes the fixtures
 - Verified with lint, TypeScript, focused fixture assertions for all six records and four states, `git diff --check`, and a successful Next.js 16 production build; Refero and browser QA were not applicable because this unit adds no rendered surface
 
 Important limitation: these records are frontend-only interface fixtures. They do not represent account history, live reservations, inventory, payments, refunds, provider responses, or user-generated confirmation persistence, and the fixed status reference date must be advanced deliberately if the product timeline changes.
+
+### Trips/history page
+
+- A new statically prerendered `/trips` route composes the shared header/footer around a Server Component history surface; it adds no client store, browser persistence, account assumption, or backend request
+- The masthead introduces a compact status index that anchors to four visibly separate chapters: two image-led upcoming stays, two compact completed records, one quiet cancelled/refunded record, and one deep-forest failed-payment attempt
+- Every record is derived from the deterministic `mockBookings` fixtures and central media catalog, with the interface date fixed to `09 Aug 2026`; references, stay dates, party, room, paid/refunded totals, and cancellation outcome remain reviewable without recomputing status from the viewer's clock
+- The failed attempt is deliberately outside the reservation ledger: it says that no trip, booking reference, charge, or hold exists, exposes only the `LUMA-ATTEMPT-*` identifier, and offers a repeat-search URL carrying the original AlUla dates and party instead of a misleading payment-retry action
+- Header and footer Trips links now use normal Next.js prefetch behavior because the route exists; other still-planned destinations retain their current handling
+- The reference lock combines Kobu's warm linen gallery/ledger foundation, Trip's fast status and itinerary scan, Onefinestay's image/detail balance, and Mews' precise state separation. Account sidebars, marketplace tabs/card stacks, brand-blue actions, and controls implying live management were rejected
+- UI/UX Pro Max guidance was retained for responsive `next/image` sizing, visible focus, 44px+ targets, sticky-anchor clearance, and zero overflow; its aurora gradients, generic conversion-page structure, and perpetual atmospheric motion were rejected in favor of the existing LumaStay tokens and editorial restraint
+- Verified with lint, TypeScript, a successful Next.js 16 production build, and visible Playwright QA at 1440×1000 and 390×844: all six images decode, each article has an accessible label, all four anchors clear the sticky header, the repeat-search intent reaches `/search`, keyboard targets measure 44–80px with visible focus rings, both viewports have zero horizontal overflow, axe reports zero violations, and the production console reports zero errors or warnings
+
+Important limitation: history is a fixed frontend presentation of mock records, not an account-backed ledger or a continuation of the session-only confirmation flow. Individual booking details and booking-history empty, loading, and error states remain roadmap items 37 and 38.
 
 ## Current homepage order
 
@@ -746,7 +759,7 @@ Important limitation: these records are frontend-only interface fixtures. They d
 6. `ClosingBookingCta`
 7. `SiteFooter`
 
-The implemented routes are `/`, `/destinations`, `/edit`, `/search`, `/saved`, `/properties/casa-serein`, `/booking/review`, `/booking/guest-details`, `/booking/payment`, and `/booking/confirmation`. Other property slugs and navigation links to planned pages use the branded not-found state until their routes are built.
+The implemented routes are `/`, `/destinations`, `/edit`, `/search`, `/saved`, `/trips`, `/properties/casa-serein`, `/booking/review`, `/booking/guest-details`, `/booking/payment`, and `/booking/confirmation`. Other property slugs and navigation links to planned pages use the branded not-found state until their routes are built.
 
 ## Current mock-data state
 
@@ -760,11 +773,12 @@ The implemented routes are `/`, `/destinations`, `/edit`, `/search`, `/saved`, `
 - No live availability, date-sensitive room pricing, tax/fee provider, complete facility catalog, booking, payment provider, account history, or durable user-generated confirmation record exists
 - `src/stores/booking-store.ts` contains the memory-only cross-route stay and lead-guest draft, fully derived mock pricing/cancellation summary, and an immutable session confirmation snapshot created only from a prepared mock-payment result; full card and security values never enter the store
 - `src/stores/saved-stays-store.ts` contains the separate versioned browser-local property-ID collection used by every saved control and the `/saved` collection page
-- The trips feature index remains a scaffold
+- `src/features/trips/index.ts` exports the server-rendered Trips history page; its records and deterministic formatting remain feature-local while the typed fixtures stay in the central mock-data boundary
 
 ## Commit history
 
 ```text
+46143ed feat: add mock booking history
 1acfe24 feat: add saved empty state and undo
 83457f4 feat: add saved stays collection
 0dc6fda feat: persist saved stays
@@ -864,7 +878,7 @@ Build each item separately, research it first, verify it, and commit it before m
 33. ~~Saved properties page at `/saved`~~ Complete
 34. ~~Saved empty state and remove/undo behavior~~ Complete
 35. ~~Mock booking-history fixtures~~ Complete
-36. Trips/history page at `/trips` with upcoming, completed, cancelled, and payment-failed states
+36. ~~Trips/history page at `/trips` with upcoming, completed, cancelled, and payment-failed states~~ Complete
 37. Individual booking-detail page
 38. Booking-history empty, loading, and error states
 
@@ -881,4 +895,4 @@ Build each item separately, research it first, verify it, and commit it before m
 
 ## Recommended immediate next step
 
-Build the **Trips/history page at `/trips`** for roadmap item 36. Use the deterministic booking-history fixture reference date and all four states, keep payment-failed attempts clearly separate from reservations, and do not build the individual booking-detail route in the same unit.
+Build the **individual booking-detail page** for roadmap item 37. Reuse the deterministic history contract and central media catalog, keep payment-failed attempts outside reservation-detail semantics, and do not add the booking-history empty/loading/error states from item 38 in the same unit.
