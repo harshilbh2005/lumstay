@@ -50,7 +50,6 @@ function SaveConfirmation({
       {isSaved ? (
         <Link
           href="/saved"
-          prefetch={false}
           aria-label="View saved stays"
           onClick={() => toast.dismiss(toastId)}
           className="group/notice flex min-h-11 items-center gap-2 rounded-full border border-white/16 bg-white/8 px-3.5 text-xs font-semibold text-brand-paper/88 transition-[background-color,border-color,color] duration-200 hover:border-brand-brass/48 hover:bg-white/12 hover:text-brand-paper focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-brass"

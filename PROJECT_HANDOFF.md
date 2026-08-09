@@ -265,7 +265,7 @@ Important limitation: destination suggestions are currently drawn from local moc
 - Added/removed states and a “View saved” action
 - Motion respects the global reduced-motion configuration
 
-Saved state now comes from the persistent Zustand store completed in roadmap item 32. The `/saved` collection page remains a separate roadmap unit.
+Saved state now comes from the persistent Zustand store completed in roadmap item 32 and resolves into the `/saved` collection completed in roadmap item 33. Dedicated remove/undo behavior remains separate.
 
 ### Beyond the Room experience gallery
 
@@ -431,7 +431,7 @@ Important limitation: this is incremental reveal over a synchronous local collec
 - Thin route handles async Next.js 16 params, static param generation, route metadata, and unknown-slug `notFound()` behavior
 - Restrained editorial shell uses a folio-led masthead, one decisive existing architectural image, a caption ledger, and a Luma note
 - Existing property links disable speculative prefetch so listings without full fixtures continue to reach the branded 404 only when deliberately opened
-- Header Saved and Trips links also disable prefetch, preventing avoidable desktop console 404s while those routes remain planned
+- Header Trips links disable prefetch while that route remains planned; Saved now reaches the implemented `/saved` route with normal prefetch behavior
 - No new image was generated or downloaded for this unit; the existing Casa Serein catalog asset is reused
 - Verified from the production build at 1440×1000 and 390×844 with decoded imagery, exact metadata, visible keyboard focus, 44px navigation, zero horizontal overflow, clean consoles, and a branded unknown-slug 404 carrying `noindex`
 
@@ -444,7 +444,7 @@ Important limitation: Casa Serein is the only full property-detail fixture. The 
 - The property-type and Luma-pick label replace the duplicated location line in the masthead’s folio column
 - A labeled saved action reuses the existing isolated `SaveStayButton` client leaf while the rest of the property page remains server-rendered
 - The saved action supplies `aria-pressed`, visible hover/focus/active states, changed label text, and the existing branded confirmation toast
-- Planned `/saved` links disable prefetch so the temporary interaction does not create avoidable console 404s
+- Saved actions and confirmation notices now reach the implemented `/saved` collection with normal prefetch behavior
 - Verified against the production build at 1440×1000 and 390×844 with exact setting/rating/price output, 99px-or-larger save targets, successful add feedback, reload reset, decoded imagery, zero horizontal overflow, and clean consoles
 
 Saved state now persists locally and synchronizes across every mounted instance of the property. The nightly amount remains a mock starting price, not date-specific availability or a total-stay quote.
@@ -698,7 +698,23 @@ Important limitation: this is an interface-only itinerary held in memory for the
 - The existing top-center added/removed feedback, saved icon treatment, labels, and `/saved` action remain visually unchanged, so this non-visual infrastructure unit did not require a new Refero reference lock
 - Verified with lint, TypeScript, focused vanilla-store and versioned-persistence assertions, a successful production build, and visible Playwright CLI QA at 1440×1000 and 390×844 covering save, reload restoration, homepage/search synchronization, removal propagation, exact storage shape, zero mobile horizontal overflow, clean requests, and zero console warnings/errors
 
-Important limitation: saved stays are mock, browser-local preferences. They do not sync to an account, another browser, or another tab in real time, and clearing site storage resets them. The `/saved` page, its empty state, and remove/undo collection behavior remain roadmap items 33–34.
+Important limitation: saved stays are mock, browser-local preferences. They do not sync to an account, another browser, or another tab in real time, and clearing site storage resets them. Dedicated empty-state composition and remove/undo collection behavior remain roadmap item 34.
+
+### Saved properties page
+
+- A new static `/saved` route presents a personal collection masthead and an editorial saved-stay ledger inside the shared site header/footer shell
+- The route resolves all 12 property and media fixtures on the server, passes only display-ready serializable fields into one isolated client collection, and preserves the persisted newest-first saved-ID order
+- Unknown or stale browser IDs are filtered without breaking the page, while visible count copy reflects only fixtures that can actually be rendered
+- Explicit rehydration handling keeps the server and first client render aligned: a content-shaped two-row skeleton and live “Reading your list” status appear until local persistence has resolved, preventing an empty-list flash
+- Populated desktop rows alternate a 7/5 image-and-copy composition; mobile collapses to one sharp image-led column with location, saved folio, rating, description, atmosphere, facilities, price, and a 44px stay action
+- The route uses existing central-catalog imagery and mock property data, adds no duplicate media paths, snapshots, backend, account state, or new image assets
+- A restrained ruled fallback provides an honest path back to `/search` when no valid saved IDs exist, but the dedicated empty-state design remains intentionally assigned to item 34
+- Saved links in the global header, footer, and branded confirmation notice now use normal prefetch behavior because the route exists; Trips and other planned destinations retain disabled prefetch where appropriate
+- The Refero lock uses Kobu’s warm linen, sharp property photography, quiet mono metadata, and generous gallery spacing as the primary direction; Christopher Ireland Creative’s ruled editorial rhythm and Airbnb/Trip’s immediate collection count, location, rating, and price scan are borrowed without rounded wishlist tiles, sidebars, discount badges, card shadows, marketplace density, or removal controls
+- UI/UX Pro Max guidance was retained for responsive `next/image` sizing, 44px targets, visible keyboard focus, and zero overflow; its blue/gold liquid-glass direction was rejected as incompatible with LumaStay
+- Verified from the production build at 1440×1000 and 390×844 with exact newest-first ordering, three decoded saved images, stale-ID filtering logic, the baseline no-items recovery path, server-rendered hydration fallback, alternating desktop geometry, single-column mobile collapse, a visible brass focus ring, 44px actions, zero horizontal overflow, zero console warnings/errors, and zero unexpected request failures
+
+Important limitation: the page is read-only in this roadmap unit. Removing a stay from the collection, undo feedback, a richer empty state, cross-tab synchronization, and account-backed cloud sync are not implemented.
 
 ## Current homepage order
 
@@ -712,7 +728,7 @@ Important limitation: saved stays are mock, browser-local preferences. They do n
 6. `ClosingBookingCta`
 7. `SiteFooter`
 
-The implemented routes are `/`, `/destinations`, `/edit`, `/search`, `/properties/casa-serein`, `/booking/review`, `/booking/guest-details`, `/booking/payment`, and `/booking/confirmation`. Other property slugs and navigation links to planned pages use the branded not-found state until their routes are built.
+The implemented routes are `/`, `/destinations`, `/edit`, `/search`, `/saved`, `/properties/casa-serein`, `/booking/review`, `/booking/guest-details`, `/booking/payment`, and `/booking/confirmation`. Other property slugs and navigation links to planned pages use the branded not-found state until their routes are built.
 
 ## Current mock-data state
 
@@ -725,12 +741,14 @@ The implemented routes are `/`, `/destinations`, `/edit`, `/search`, `/propertie
 - `mockBookings`: empty array
 - No live availability, date-sensitive room pricing, tax/fee provider, complete facility catalog, booking, payment provider, or durable confirmation fixture exists
 - `src/stores/booking-store.ts` contains the memory-only cross-route stay and lead-guest draft, fully derived mock pricing/cancellation summary, and an immutable session confirmation snapshot created only from a prepared mock-payment result; full card and security values never enter the store
-- `src/stores/saved-stays-store.ts` contains the separate versioned browser-local property-ID collection used by every saved control; `/saved` is not implemented yet
+- `src/stores/saved-stays-store.ts` contains the separate versioned browser-local property-ID collection used by every saved control and the `/saved` collection page
 - The trips feature index remains a scaffold
 
 ## Commit history
 
 ```text
+0dc6fda feat: persist saved stays
+9b4e0d8 feat: add mock booking confirmation
 ff36c89 feat: add mock payment recovery states
 5b9d6ae feat: add transparent booking pricing
 3f40dc2 feat: validate booking forms
@@ -823,7 +841,7 @@ Build each item separately, research it first, verify it, and commit it before m
 ### Phase 5 — Saved properties and trips
 
 32. ~~Persistent mock saved-state store, preferably Zustand with local persistence~~ Complete
-33. Saved properties page at `/saved`
+33. ~~Saved properties page at `/saved`~~ Complete
 34. Saved empty state and remove/undo behavior
 35. Mock booking-history fixtures
 36. Trips/history page at `/trips` with upcoming, completed, cancelled, and payment-failed states
@@ -843,4 +861,4 @@ Build each item separately, research it first, verify it, and commit it before m
 
 ## Recommended immediate next step
 
-Build the **saved properties page at `/saved`** for roadmap item 33. Resolve the persisted property IDs against the central mock collection, preserve the established editorial listing language, and leave the dedicated empty and remove/undo states for item 34.
+Build the dedicated **saved empty state and remove/undo behavior** for roadmap item 34. Keep the current server-resolved collection and persistent ID store as the source of truth, make removal reversible, and do not expand into account sync or trips/history work.

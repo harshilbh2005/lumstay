@@ -83,7 +83,7 @@ export function SiteFooter() {
                     <li key={item.href}>
                       <Link
                         href={item.href}
-                        prefetch={false}
+                        prefetch={item.href === "/saved" ? null : false}
                         className={footerLinkClassName}
                       >
                         {item.label}
