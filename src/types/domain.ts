@@ -166,14 +166,111 @@ export interface Room {
 
 export type BookingStatus = "upcoming" | "completed" | "cancelled" | "payment-failed";
 
-export interface Booking {
+export interface BookingPropertySnapshot {
   id: string;
-  reference: string;
-  propertyId: string;
-  roomId: string;
+  slug: string;
+  name: string;
+  location: {
+    city: string;
+    country: string;
+    region?: string;
+  };
+  mediaId: string;
+}
+
+export interface BookingRoomSnapshot {
+  id: string;
+  name: string;
+  mediaId: string;
+  bedConfiguration: string;
+  sizeSquareMetres: number;
+  breakfastIncluded: boolean;
+  cancellationPolicy: {
+    label: string;
+    summary: string;
+  };
+  ratePlan: {
+    inclusions: readonly string[];
+    exclusions: readonly string[];
+  };
+}
+
+export interface BookingGuestParty {
+  adults: number;
+  children: number;
+  rooms: number;
+}
+
+export interface BookingPriceSnapshot {
+  nightlyRate: Money;
+  nightCount: number;
+  roomCount: number;
+  accommodationSubtotal: Money;
+  estimatedTax: {
+    label: string;
+    rateBasisPoints: number;
+    amount: Money;
+  };
+  serviceFee: {
+    label: string;
+    amountPerRoom: Money;
+    amount: Money;
+  };
+  total: Money;
+}
+
+export interface BookingHistoryBase {
+  id: string;
+  createdAt: string;
+  property: BookingPropertySnapshot;
+  room: BookingRoomSnapshot;
   checkIn: string;
   checkOut: string;
-  guests: number;
-  total: Money;
-  status: BookingStatus;
+  guests: BookingGuestParty;
+  leadGuestName: string;
+  price: BookingPriceSnapshot;
 }
+
+export interface ConfirmedBooking extends BookingHistoryBase {
+  status: "upcoming" | "completed";
+  reference: string;
+  payment: {
+    status: "paid";
+    paidAt: string;
+    lastFour: string;
+  };
+}
+
+export interface CancelledBooking extends BookingHistoryBase {
+  status: "cancelled";
+  reference: string;
+  cancellation: {
+    cancelledAt: string;
+    reason: string;
+    fee: Money;
+  };
+  payment: {
+    status: "refunded";
+    paidAt: string;
+    refundedAt: string;
+    lastFour: string;
+    refundAmount: Money;
+  };
+}
+
+export type MockPaymentFailureReason = "card-declined" | "connection-interrupted";
+
+export interface PaymentFailedBooking extends BookingHistoryBase {
+  status: "payment-failed";
+  reference: null;
+  attemptReference: string;
+  payment: {
+    status: "failed";
+    failedAt: string;
+    lastFour: string;
+    failureReason: MockPaymentFailureReason;
+    retryable: boolean;
+  };
+}
+
+export type Booking = ConfirmedBooking | CancelledBooking | PaymentFailedBooking;

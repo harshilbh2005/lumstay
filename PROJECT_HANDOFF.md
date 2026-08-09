@@ -720,6 +720,20 @@ Important limitation: saved stays are mock, browser-local preferences. They do n
 
 Important limitation: the collection is editable only through single-stay save/remove actions. There is no bulk editing, named-list organization, cross-tab synchronization, account-backed cloud sync, or Trips/history integration.
 
+### Mock booking-history fixtures
+
+- A typed, serializable booking-history contract now uses a discriminated union for confirmed, cancelled, and payment-failed records; status-specific payment fields prevent a failed attempt from being mistaken for a reservation
+- Six deterministic records exercise the future Trips experience: two upcoming stays, two completed stays, one fully refunded cancellation, and one retryable declined-payment attempt
+- `MOCK_BOOKING_HISTORY_REFERENCE_DATE` anchors status meaning to `2026-08-09`, so fixtures and later screenshots do not change when the viewer's clock changes
+- Confirmed and cancelled records use stable `LUMA-MOCK-*` references; the failed attempt exposes only a distinct `LUMA-ATTEMPT-*` identifier and has an explicitly null booking reference
+- Each record includes a central-catalog property snapshot, media-backed room snapshot, stay dates, structured party, lead guest, rate inclusions/exclusions, cancellation summary, and transparent INR price ledger
+- Price snapshots reuse the existing 12% prototype tax estimate and ₹900 per-room service-fee policy; exact accommodation, tax, fee, total, cancellation-fee, and refund amounts are fixed and reviewable
+- Small selectors resolve a record by ID or all records for one status, while the central mock-data barrel now exports the fixtures instead of an empty placeholder
+- The app-builder workflow kept this unit inside the data boundary: no `/trips` route, client store, persistence, backend layer, or visual component was introduced
+- Verified with lint, TypeScript, focused fixture assertions for all six records and four states, `git diff --check`, and a successful Next.js 16 production build; Refero and browser QA were not applicable because this unit adds no rendered surface
+
+Important limitation: these records are frontend-only interface fixtures. They do not represent account history, live reservations, inventory, payments, refunds, provider responses, or user-generated confirmation persistence, and the fixed status reference date must be advanced deliberately if the product timeline changes.
+
 ## Current homepage order
 
 `src/app/page.tsx` renders:
@@ -742,8 +756,8 @@ The implemented routes are `/`, `/destinations`, `/edit`, `/search`, `/saved`, `
 - `mockEditorialStories`: 7 editorial story summaries used by `/edit`
 - `mockRooms`: 3 Casa Serein room tiers with 6 central-catalog media references, occupancy, beds, size, facilities, INR nightly pricing, explicit rate inclusions/exclusions, structured cancellation policies and charge percentages, and typed availability; 2 are selectable and Serein Suite is explicitly unavailable in the interface preview
 - `mockBookingPricingPolicy`: one INR interface fixture with a 12% estimated-tax rate and ₹900 service fee per room; it is deliberately not sourced from live tax or property data
-- `mockBookings`: empty array
-- No live availability, date-sensitive room pricing, tax/fee provider, complete facility catalog, booking, payment provider, or durable confirmation fixture exists
+- `mockBookings`: 6 deterministic history records anchored to `2026-08-09`: 2 upcoming, 2 completed, 1 cancelled with a full mock refund, and 1 payment-failed attempt with no booking reference
+- No live availability, date-sensitive room pricing, tax/fee provider, complete facility catalog, booking, payment provider, account history, or durable user-generated confirmation record exists
 - `src/stores/booking-store.ts` contains the memory-only cross-route stay and lead-guest draft, fully derived mock pricing/cancellation summary, and an immutable session confirmation snapshot created only from a prepared mock-payment result; full card and security values never enter the store
 - `src/stores/saved-stays-store.ts` contains the separate versioned browser-local property-ID collection used by every saved control and the `/saved` collection page
 - The trips feature index remains a scaffold
@@ -751,6 +765,7 @@ The implemented routes are `/`, `/destinations`, `/edit`, `/search`, `/saved`, `
 ## Commit history
 
 ```text
+1acfe24 feat: add saved empty state and undo
 83457f4 feat: add saved stays collection
 0dc6fda feat: persist saved stays
 9b4e0d8 feat: add mock booking confirmation
@@ -848,7 +863,7 @@ Build each item separately, research it first, verify it, and commit it before m
 32. ~~Persistent mock saved-state store, preferably Zustand with local persistence~~ Complete
 33. ~~Saved properties page at `/saved`~~ Complete
 34. ~~Saved empty state and remove/undo behavior~~ Complete
-35. Mock booking-history fixtures
+35. ~~Mock booking-history fixtures~~ Complete
 36. Trips/history page at `/trips` with upcoming, completed, cancelled, and payment-failed states
 37. Individual booking-detail page
 38. Booking-history empty, loading, and error states
@@ -866,4 +881,4 @@ Build each item separately, research it first, verify it, and commit it before m
 
 ## Recommended immediate next step
 
-Build the **mock booking-history fixtures** for roadmap item 35. Keep the fixtures frontend-only, deterministic, varied enough to exercise upcoming, completed, cancelled, and payment-failed states in the later Trips page, and do not build the `/trips` interface in the same unit.
+Build the **Trips/history page at `/trips`** for roadmap item 36. Use the deterministic booking-history fixture reference date and all four states, keep payment-failed attempts clearly separate from reservations, and do not build the individual booking-detail route in the same unit.

@@ -1,6 +1,10 @@
-import type { Booking } from "@/types/domain";
-
 export { mockBookingPricingPolicy } from "./booking-pricing";
+export {
+  getMockBookingById,
+  getMockBookingsByStatus,
+  MOCK_BOOKING_HISTORY_REFERENCE_DATE,
+  mockBookings,
+} from "./bookings";
 export {
   generatedMedia,
   getMediaById,
@@ -21,5 +25,3 @@ export {
 } from "./property-details";
 export { mockProperties } from "./properties";
 export { getRoomsByPropertyId, mockRooms } from "./rooms";
-
-export const mockBookings: Booking[] = [];
