@@ -265,7 +265,7 @@ Important limitation: destination suggestions are currently drawn from local moc
 - Added/removed states and a “View saved” action
 - Motion respects the global reduced-motion configuration
 
-Important limitation: saved state currently lives inside each `SaveStayButton` with `useState`. It is not persistent, is not shared across cards/routes, and `/saved` is not implemented.
+Saved state now comes from the persistent Zustand store completed in roadmap item 32. The `/saved` collection page remains a separate roadmap unit.
 
 ### Beyond the Room experience gallery
 
@@ -447,7 +447,7 @@ Important limitation: Casa Serein is the only full property-detail fixture. The 
 - Planned `/saved` links disable prefetch so the temporary interaction does not create avoidable console 404s
 - Verified against the production build at 1440×1000 and 390×844 with exact setting/rating/price output, 99px-or-larger save targets, successful add feedback, reload reset, decoded imagery, zero horizontal overflow, and clean consoles
 
-Important limitation: saved state remains local to the button and intentionally resets on reload. The nightly amount is a mock starting price, not date-specific availability or a total-stay quote. Persistent saved state remains roadmap item 32.
+Saved state now persists locally and synchronizes across every mounted instance of the property. The nightly amount remains a mock starting price, not date-specific availability or a total-stay quote.
 
 ### Responsive property image gallery
 
@@ -687,6 +687,19 @@ Important limitation: every response is a deterministic client-side simulation s
 
 Important limitation: this is an interface-only itinerary held in memory for the current browser session. No property receives a reservation, no payment is authorized or charged, no inventory is held, no email is sent, and no Trips/history entry is created. Reloading clears the confirmation record.
 
+### Persistent mock saved-state store
+
+- Saved stays now use a dedicated root-level Zustand vanilla store that is completely separate from the memory-only booking and confirmation draft
+- The versioned `lumastay:saved-stays` localStorage payload persists only stable property IDs; display data continues to resolve from the central property fixtures instead of becoming a stale browser snapshot
+- Persistence normalizes malformed values, removes duplicates, bounds the collection, migrates earlier storage versions into the current shape, and falls back to session-only behavior when browser storage is unavailable
+- Rehydration is explicitly skipped during server rendering and deferred until the root client provider mounts, preventing localStorage access on the server and avoiding saved-button hydration mismatches
+- Saved controls remain briefly disabled until rehydration finishes, then every homepage, search-result, and property-detail instance reads the shared state and exposes the same `aria-pressed` value
+- Save, remove, toggle, and clear actions are available for later saved-page and undo work; newly saved property IDs are ordered first while duplicate saves remain idempotent
+- The existing top-center added/removed feedback, saved icon treatment, labels, and `/saved` action remain visually unchanged, so this non-visual infrastructure unit did not require a new Refero reference lock
+- Verified with lint, TypeScript, focused vanilla-store and versioned-persistence assertions, a successful production build, and visible Playwright CLI QA at 1440×1000 and 390×844 covering save, reload restoration, homepage/search synchronization, removal propagation, exact storage shape, zero mobile horizontal overflow, clean requests, and zero console warnings/errors
+
+Important limitation: saved stays are mock, browser-local preferences. They do not sync to an account, another browser, or another tab in real time, and clearing site storage resets them. The `/saved` page, its empty state, and remove/undo collection behavior remain roadmap items 33–34.
+
 ## Current homepage order
 
 `src/app/page.tsx` renders:
@@ -712,7 +725,8 @@ The implemented routes are `/`, `/destinations`, `/edit`, `/search`, `/propertie
 - `mockBookings`: empty array
 - No live availability, date-sensitive room pricing, tax/fee provider, complete facility catalog, booking, payment provider, or durable confirmation fixture exists
 - `src/stores/booking-store.ts` contains the memory-only cross-route stay and lead-guest draft, fully derived mock pricing/cancellation summary, and an immutable session confirmation snapshot created only from a prepared mock-payment result; full card and security values never enter the store
-- Saved and trips feature indexes are scaffolds only
+- `src/stores/saved-stays-store.ts` contains the separate versioned browser-local property-ID collection used by every saved control; `/saved` is not implemented yet
+- The trips feature index remains a scaffold
 
 ## Commit history
 
@@ -808,7 +822,7 @@ Build each item separately, research it first, verify it, and commit it before m
 
 ### Phase 5 — Saved properties and trips
 
-32. Persistent mock saved-state store, preferably Zustand with local persistence
+32. ~~Persistent mock saved-state store, preferably Zustand with local persistence~~ Complete
 33. Saved properties page at `/saved`
 34. Saved empty state and remove/undo behavior
 35. Mock booking-history fixtures
@@ -829,4 +843,4 @@ Build each item separately, research it first, verify it, and commit it before m
 
 ## Recommended immediate next step
 
-Add the **persistent mock saved-state store** for roadmap item 32, preferably with Zustand persistence. Keep saved stays separate from the memory-only booking/confirmation draft, define a stable storage shape and hydration behavior, and preserve the existing immediate saved feedback before building the `/saved` page in item 33.
+Build the **saved properties page at `/saved`** for roadmap item 33. Resolve the persisted property IDs against the central mock collection, preserve the established editorial listing language, and leave the dedicated empty and remove/undo states for item 34.

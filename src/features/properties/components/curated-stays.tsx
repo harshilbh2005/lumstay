@@ -63,6 +63,7 @@ function PropertyCard({
             {property.isNew ? "Just added" : property.isLumaPick ? "Luma pick" : "Considered stay"}
           </div>
           <SaveStayButton
+            propertyId={property.id}
             propertyName={property.name}
             className="pointer-events-auto shrink-0"
           />

@@ -1,2 +1,1 @@
-// Public exports for saved-property collections and persistence belong here.
-export {};
+export { useSavedStaysStore } from "@/components/providers/saved-stays-store-provider";

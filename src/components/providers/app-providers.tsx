@@ -4,13 +4,16 @@ import { MotionConfig } from "motion/react";
 import { Toaster } from "sonner";
 
 import { BookingStoreProvider } from "@/components/providers/booking-store-provider";
+import { SavedStaysStoreProvider } from "@/components/providers/saved-stays-store-provider";
 
 export function AppProviders({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <MotionConfig reducedMotion="user" transition={{ duration: 0.24 }}>
-      <BookingStoreProvider>{children}</BookingStoreProvider>
+      <SavedStaysStoreProvider>
+        <BookingStoreProvider>{children}</BookingStoreProvider>
+      </SavedStaysStoreProvider>
       <Toaster
         className="luma-toaster"
         position="top-center"

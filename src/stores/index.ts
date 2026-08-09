@@ -18,3 +18,14 @@ export {
   type BookingStoreSeed,
   type BookingStoreState,
 } from "./booking-store";
+
+export {
+  createSavedStaysStore,
+  getDefaultSavedStaysState,
+  SAVED_STAYS_STORAGE_KEY,
+  SAVED_STAYS_STORAGE_VERSION,
+  type SavedStaysPersistedState,
+  type SavedStaysStore,
+  type SavedStaysStoreApi,
+  type SavedStaysStoreState,
+} from "./saved-stays-store";

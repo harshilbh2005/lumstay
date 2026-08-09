@@ -148,6 +148,7 @@ export function PropertyDetailShell({
               </div>
 
               <SaveStayButton
+                propertyId={summary.id}
                 propertyName={summary.name}
                 variant="ledger"
               />

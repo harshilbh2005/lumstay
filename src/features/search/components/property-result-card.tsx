@@ -89,6 +89,7 @@ export function PropertyResultCard({
               {getEditorialStatus(property)}
             </span>
             <SaveStayButton
+              propertyId={property.id}
               propertyName={property.name}
               className="pointer-events-auto shrink-0"
             />

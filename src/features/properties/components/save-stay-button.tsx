@@ -1,11 +1,11 @@
 "use client";
 
-import * as React from "react";
 import Link from "next/link";
 import { ArrowRight, Heart } from "@phosphor-icons/react";
 import { motion } from "motion/react";
 import { toast } from "sonner";
 
+import { useSavedStaysStore } from "@/features/saved";
 import { cn } from "@/lib/utils";
 
 function SaveConfirmation({
@@ -80,21 +80,31 @@ function SaveConfirmation({
 }
 
 export function SaveStayButton({
+  propertyId,
   propertyName,
   className,
   variant = "image",
 }: {
+  propertyId: string;
   propertyName: string;
   className?: string;
   variant?: "image" | "ledger";
 }) {
-  const [isSaved, setIsSaved] = React.useState(false);
+  const hydrationStatus = useSavedStaysStore(
+    (state) => state.hydrationStatus,
+  );
+  const isSaved = useSavedStaysStore((state) =>
+    state.savedPropertyIds.includes(propertyId),
+  );
+  const toggleSavedStay = useSavedStaysStore(
+    (state) => state.toggleSavedStay,
+  );
   const isLedgerVariant = variant === "ledger";
+  const isHydrated = hydrationStatus === "hydrated";
 
   function handleSave() {
-    const nextSavedState = !isSaved;
+    const nextSavedState = toggleSavedStay(propertyId);
 
-    setIsSaved(nextSavedState);
     toast.custom(
       (toastId) => (
         <SaveConfirmation
@@ -104,7 +114,7 @@ export function SaveStayButton({
         />
       ),
       {
-        id: `saved-stay-${propertyName}`,
+        id: `saved-stay-${propertyId}`,
         duration: 3200,
         position: "top-center",
         unstyled: true,
@@ -115,11 +125,17 @@ export function SaveStayButton({
   return (
     <button
       type="button"
-      aria-label={`${isSaved ? "Remove" : "Save"} ${propertyName}`}
+      aria-label={
+        isHydrated
+          ? `${isSaved ? "Remove" : "Save"} ${propertyName}`
+          : `Loading saved status for ${propertyName}`
+      }
       aria-pressed={isSaved}
+      aria-busy={!isHydrated}
+      disabled={!isHydrated}
       onClick={handleSave}
       className={cn(
-        "group/save flex items-center justify-center transition-[color,background-color,border-color,transform] duration-200 ease-luma focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-brass active:scale-[0.97]",
+        "group/save flex items-center justify-center transition-[color,background-color,border-color,transform] duration-200 ease-luma focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-brass active:scale-[0.97] disabled:cursor-default disabled:active:scale-100",
         isLedgerVariant
           ? "min-h-16 w-full gap-3 px-5 text-sm font-semibold focus-visible:ring-inset sm:min-h-20 lg:min-h-full lg:min-w-40"
           : "size-11 rounded-full border shadow-[0_6px_20px_rgb(8_30_31/0.22),inset_0_1px_0_rgb(255_255_255/0.12)] backdrop-blur-md hover:-translate-y-0.5 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent active:translate-y-0",
