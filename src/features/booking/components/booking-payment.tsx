@@ -14,6 +14,7 @@ import {
   UsersThree,
 } from "@phosphor-icons/react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 
 import { useBookingStore } from "@/components/providers/booking-store-provider";
@@ -49,12 +50,16 @@ const fieldClassName =
   "h-12 rounded-none border-brand-forest-deep/32 bg-brand-paper px-4 text-base text-brand-forest-deep shadow-none placeholder:text-brand-stone/70 focus-visible:border-brand-brass focus-visible:ring-brand-brass/24 aria-invalid:focus-visible:border-destructive aria-invalid:focus-visible:ring-destructive/24 md:text-base";
 
 export function BookingPayment() {
+  const router = useRouter();
   const property = useBookingStore((state) => state.property);
   const room = useBookingStore((state) => state.room);
   const dates = useBookingStore((state) => state.dates);
   const guests = useBookingStore((state) => state.guests);
   const guestDetails = useBookingStore((state) => state.guestDetails);
   const priceSummary = useBookingStore((state) => state.priceSummary);
+  const createMockConfirmation = useBookingStore(
+    (state) => state.createMockConfirmation,
+  );
   const [paymentAttempt, setPaymentAttempt] =
     useState<MockPaymentAttempt | null>(null);
   const {
@@ -178,6 +183,16 @@ export function BookingPayment() {
           }
         : currentAttempt,
     );
+  }
+
+  function createMockItinerary() {
+    if (paymentAttempt?.status !== "prepared") {
+      return;
+    }
+
+    if (createMockConfirmation(paymentAttempt.card)) {
+      router.push("/booking/confirmation");
+    }
   }
 
   return (
@@ -492,6 +507,7 @@ export function BookingPayment() {
                   {paymentAttempt ? (
                     <BookingPaymentAttemptFeedback
                       attempt={paymentAttempt}
+                      onCreateConfirmation={createMockItinerary}
                       onEdit={editMockPayment}
                       onRetry={retryInterruptedPayment}
                     />
@@ -611,8 +627,8 @@ export function BookingPayment() {
                     This step stops here
                   </p>
                   <p className="mt-2 text-xs leading-5 text-brand-paper/58">
-                    Mock payment responses now remain on this page. Booking
-                    confirmation follows in the next roadmap unit.
+                    A prepared test result can create a memory-only itinerary.
+                    It still creates no reservation or charge.
                   </p>
                 </div>
               </div>

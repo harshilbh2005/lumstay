@@ -95,6 +95,26 @@ export interface CompleteBookingPriceSummary extends BookingPriceSummary {
   serviceFeePerRoom: Money;
 }
 
+export interface BookingMaskedPayment {
+  cardholderName: string;
+  lastFour: string;
+  expiry: string;
+}
+
+export interface BookingConfirmation {
+  reference: string;
+  property: BookingProperty;
+  room: BookingRoom;
+  dates: {
+    checkIn: string;
+    checkOut: string;
+  };
+  guests: BookingGuests;
+  guestDetails: BookingGuestDetails;
+  priceSummary: CompleteBookingPriceSummary;
+  maskedPayment: BookingMaskedPayment;
+}
+
 export interface BookingStoreSeed {
   initializationKey: string;
   dates: BookingDateRange;
@@ -111,6 +131,7 @@ export interface BookingStoreState {
   room: BookingRoom | null;
   guestDetails: BookingGuestDetails;
   priceSummary: BookingPriceSummary;
+  confirmation: BookingConfirmation | null;
 }
 
 export interface BookingStoreActions {
@@ -120,6 +141,7 @@ export interface BookingStoreActions {
   setProperty: (property: BookingProperty | null) => void;
   setRoom: (room: BookingRoom | null) => void;
   setGuestDetails: (guestDetails: BookingGuestDetails) => void;
+  createMockConfirmation: (maskedPayment: BookingMaskedPayment) => boolean;
   resetBooking: () => void;
 }
 
@@ -196,6 +218,107 @@ function normalizeGuestDetails(
     email: normalizeGuestDetail(guestDetails.email, 254),
     phone: normalizeGuestDetail(guestDetails.phone, 32),
   };
+}
+
+function getReferenceCode(value: string, fallback: string) {
+  const code = value
+    .split(/[^a-z0-9]+/i)
+    .filter(Boolean)
+    .map((part) => part[0])
+    .join("")
+    .slice(0, 3)
+    .toUpperCase();
+
+  return code || fallback;
+}
+
+export function getMockBookingReference({
+  property,
+  room,
+  checkIn,
+}: {
+  property: BookingProperty;
+  room: BookingRoom;
+  checkIn: string;
+}) {
+  const stayCode = checkIn.replaceAll("-", "").slice(2);
+  const propertyCode = getReferenceCode(property.name, "STY");
+  const roomCode = getReferenceCode(room.name, "RM");
+
+  return `LUMA-MOCK-${propertyCode}-${roomCode}-${stayCode}`;
+}
+
+function cloneBookingProperty(property: BookingProperty): BookingProperty {
+  return {
+    ...property,
+    location: { ...property.location },
+    pricingPolicy: {
+      estimatedTax: { ...property.pricingPolicy.estimatedTax },
+      serviceFee: {
+        ...property.pricingPolicy.serviceFee,
+        amountPerRoom: {
+          ...property.pricingPolicy.serviceFee.amountPerRoom,
+        },
+      },
+    },
+  };
+}
+
+function cloneBookingRoom(room: BookingRoom): BookingRoom {
+  return {
+    ...room,
+    nightlyPrice: { ...room.nightlyPrice },
+    cancellationPolicy: {
+      ...room.cancellationPolicy,
+      terms: [...room.cancellationPolicy.terms],
+      chargeSchedule: room.cancellationPolicy.chargeSchedule.map((rule) => ({
+        ...rule,
+      })),
+    },
+    ratePlan: {
+      inclusions: [...room.ratePlan.inclusions],
+      exclusions: [...room.ratePlan.exclusions],
+    },
+  };
+}
+
+function cloneCompletePriceSummary(
+  priceSummary: CompleteBookingPriceSummary,
+): CompleteBookingPriceSummary {
+  return {
+    ...priceSummary,
+    nightlyRate: { ...priceSummary.nightlyRate },
+    accommodationSubtotal: { ...priceSummary.accommodationSubtotal },
+    estimatedTaxAmount: { ...priceSummary.estimatedTaxAmount },
+    serviceFeeAmount: { ...priceSummary.serviceFeeAmount },
+    totalPrice: { ...priceSummary.totalPrice },
+    serviceFeePerRoom: { ...priceSummary.serviceFeePerRoom },
+    cancellationCharges: priceSummary.cancellationCharges.map((charge) => ({
+      ...charge,
+      amount: { ...charge.amount },
+    })),
+  };
+}
+
+function normalizeMaskedPayment(
+  maskedPayment: BookingMaskedPayment,
+): BookingMaskedPayment | null {
+  const cardholderName = normalizeGuestDetail(
+    maskedPayment.cardholderName,
+    80,
+  );
+  const lastFour = maskedPayment.lastFour.replace(/\D/g, "");
+  const expiry = maskedPayment.expiry.replace(/\s/g, "");
+
+  if (
+    !cardholderName ||
+    !/^\d{4}$/.test(lastFour) ||
+    !/^(0[1-9]|1[0-2])\/\d{2}$/.test(expiry)
+  ) {
+    return null;
+  }
+
+  return { cardholderName, lastFour, expiry };
 }
 
 function getNightCount(dates: BookingDateRange) {
@@ -317,6 +440,7 @@ export function getDefaultBookingState(): BookingStoreState {
     property: null,
     room: null,
     guestDetails: { ...defaultGuestDetails },
+    confirmation: null,
     priceSummary: getBookingPriceSummary({
       dates,
       guests,
@@ -338,6 +462,7 @@ function getSeededBookingState(seed: BookingStoreSeed): BookingStoreState {
     property: seed.property,
     room: null,
     guestDetails: { ...defaultGuestDetails },
+    confirmation: null,
     priceSummary: getBookingPriceSummary({
       dates,
       guests,
@@ -369,6 +494,7 @@ export function createBookingStore(
 
         return {
           dates,
+          confirmation: null,
           priceSummary: getBookingPriceSummary({
             dates,
             guests: state.guests,
@@ -383,6 +509,7 @@ export function createBookingStore(
 
         return {
           guests,
+          confirmation: null,
           priceSummary: getBookingPriceSummary({
             dates: state.dates,
             guests,
@@ -401,6 +528,7 @@ export function createBookingStore(
         return {
           property,
           room,
+          confirmation: null,
           priceSummary: getBookingPriceSummary({
             dates: state.dates,
             guests: state.guests,
@@ -417,6 +545,7 @@ export function createBookingStore(
 
         return {
           room,
+          confirmation: null,
           priceSummary: getBookingPriceSummary({
             dates: state.dates,
             guests: state.guests,
@@ -426,7 +555,53 @@ export function createBookingStore(
         };
       }),
     setGuestDetails: (guestDetails) =>
-      set({ guestDetails: normalizeGuestDetails(guestDetails) }),
+      set({
+        guestDetails: normalizeGuestDetails(guestDetails),
+        confirmation: null,
+      }),
+    createMockConfirmation: (maskedPayment) => {
+      let didCreate = false;
+
+      set((state) => {
+        const normalizedPayment = normalizeMaskedPayment(maskedPayment);
+
+        if (
+          !normalizedPayment ||
+          !state.property ||
+          !state.room ||
+          !state.dates.checkIn ||
+          !state.dates.checkOut ||
+          !Object.values(state.guestDetails).every(Boolean) ||
+          !hasCompleteBookingPriceSummary(state.priceSummary)
+        ) {
+          return state;
+        }
+
+        didCreate = true;
+
+        return {
+          confirmation: {
+            reference: getMockBookingReference({
+              property: state.property,
+              room: state.room,
+              checkIn: state.dates.checkIn,
+            }),
+            property: cloneBookingProperty(state.property),
+            room: cloneBookingRoom(state.room),
+            dates: {
+              checkIn: state.dates.checkIn,
+              checkOut: state.dates.checkOut,
+            },
+            guests: { ...state.guests },
+            guestDetails: { ...state.guestDetails },
+            priceSummary: cloneCompletePriceSummary(state.priceSummary),
+            maskedPayment: normalizedPayment,
+          },
+        };
+      });
+
+      return didCreate;
+    },
     resetBooking: () => set(getDefaultBookingState()),
   }));
 }

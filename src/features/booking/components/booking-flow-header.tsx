@@ -7,7 +7,7 @@ const bookingSteps = [
     label: "Guest details",
     href: "/booking/guest-details",
   },
-  { number: "03", label: "Payment", href: null },
+  { number: "03", label: "Payment", href: "/booking/payment" },
   { number: "04", label: "Confirm", href: null },
 ] as const;
 

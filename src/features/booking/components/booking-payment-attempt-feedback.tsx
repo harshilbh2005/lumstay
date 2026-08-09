@@ -1,5 +1,6 @@
 import {
   ArrowClockwise,
+  ArrowRight,
   CheckCircle,
   SpinnerGap,
   WarningCircle,
@@ -11,10 +12,12 @@ import type { MockPaymentAttempt } from "@/features/booking/lib/mock-payment-sim
 export function BookingPaymentAttemptFeedback({
   attempt,
   onEdit,
+  onCreateConfirmation,
   onRetry,
 }: {
   attempt: MockPaymentAttempt;
   onEdit: () => void;
+  onCreateConfirmation: () => void;
   onRetry: () => void;
 }) {
   if (attempt.status === "processing") {
@@ -119,7 +122,7 @@ export function BookingPaymentAttemptFeedback({
       role="status"
       aria-live="polite"
       aria-atomic="true"
-      className="grid gap-4 border-y border-brand-forest-deep/22 bg-brand-linen px-5 py-5 sm:grid-cols-[auto_1fr_auto] sm:items-center sm:px-6"
+      className="grid gap-4 border-y border-brand-forest-deep/22 bg-brand-linen px-5 py-5 sm:grid-cols-[auto_1fr] sm:items-center sm:px-6 lg:grid-cols-[auto_1fr_auto]"
     >
       <CheckCircle
         aria-hidden="true"
@@ -136,9 +139,23 @@ export function BookingPaymentAttemptFeedback({
           {attempt.card.lastFour}. No reservation or charge was created.
         </p>
       </div>
-      <p className="font-mono text-[0.625rem] tracking-[0.09em] text-brand-stone uppercase">
-        Expires {attempt.card.expiry}
-      </p>
+      <div className="sm:col-start-2 lg:col-start-auto">
+        <p className="font-mono text-[0.625rem] tracking-[0.09em] text-brand-stone uppercase lg:text-right">
+          Expires {attempt.card.expiry}
+        </p>
+        <button
+          type="button"
+          onClick={onCreateConfirmation}
+          className="group mt-3 inline-flex min-h-12 w-full items-center justify-between gap-5 rounded-full border border-brand-forest-deep bg-brand-forest-deep px-5 py-3 text-sm font-semibold text-brand-paper transition-colors duration-200 hover:bg-brand-forest focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-4 lg:w-auto"
+        >
+          Create mock itinerary
+          <ArrowRight
+            aria-hidden="true"
+            size={16}
+            className="transition-transform duration-200 ease-luma group-hover:translate-x-0.5 motion-reduce:transition-none"
+          />
+        </button>
+      </div>
     </div>
   );
 }

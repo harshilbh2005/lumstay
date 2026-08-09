@@ -671,6 +671,22 @@ Important limitation: all pricing, inclusions, and cancellation amounts are dete
 
 Important limitation: every response is a deterministic client-side simulation selected by the documented security-code fixture. No provider, network authorization, inventory hold, reservation, refund, confirmation, or durable payment record exists.
 
+### Booking confirmation page
+
+- A new static `/booking/confirmation` route presents step four only after the prepared mock-payment state exposes an explicit `Create mock itinerary` action
+- That action creates one deterministic, immutable snapshot in the existing per-request Zustand store: property, room, dates, guests, lead-guest details, complete derived price, masked test-card details, and a clearly labelled `LUMA-MOCK-…` reference
+- The reference derives from the property, room, and check-in date, so the interface stays reproducible without inventing a backend identifier, timestamp, reservation, or random token
+- Full card and security values still clear before processing and never enter the cross-route store; confirmation retains only cardholder name, last four digits, and normalized expiry
+- Any later stay, room, guest, or property edit invalidates the snapshot, while the confirmation route renders from the captured record so its itinerary does not drift with unrelated current-draft reads
+- The populated page combines an editorial prototype-record heading, prominent mock reference, selected-room image, property/location, room configuration, breakfast, check-in/out, party, duration, lead guest, masked test card, the complete price ledger, cancellation summary, and honest next paths to discovery and home
+- Direct access or reload shows a deliberate session-recovery ledger instead of reconstructing or pretending a confirmation; the reference is never written to browser storage, the URL, mock booking history, or a server
+- Booking progress now links completed Payment from the confirmation step, while Review and Guest details retain their existing completed-step navigation
+- Reference lock uses Kobu's linen, shadowless editorial restraint as the foundation; 19–86's ruled document rhythm, BelArosa's forest/linen/brass contrast, and Onefinestay's confirmation-to-itinerary hierarchy are borrowed without marketplace cards, confetti, live support/email claims, reservation-management actions, or “booked” language
+- The app-builder workflow kept the feature inside the existing booking boundary: a thin route, one client confirmation component, and a narrowly extended memory-only store rather than a new persistence or backend layer
+- Verified from the production build at 1440×1000 and 390×844 through the real property → review → guest → prepared payment → confirmation journey: the deterministic `LUMA-MOCK-CS-GR-260912` reference, ₹129,252 total, masked card, decoded room image, 44–80px controls, clean console, and zero horizontal overflow all remain correct; reload removes the reference and restores recovery; the populated confirmation main surface has zero axe violations and zero incomplete checks
+
+Important limitation: this is an interface-only itinerary held in memory for the current browser session. No property receives a reservation, no payment is authorized or charged, no inventory is held, no email is sent, and no Trips/history entry is created. Reloading clears the confirmation record.
+
 ## Current homepage order
 
 `src/app/page.tsx` renders:
@@ -683,7 +699,7 @@ Important limitation: every response is a deterministic client-side simulation s
 6. `ClosingBookingCta`
 7. `SiteFooter`
 
-The implemented routes are `/`, `/destinations`, `/edit`, `/search`, `/properties/casa-serein`, `/booking/review`, `/booking/guest-details`, and `/booking/payment`. Other property slugs and navigation links to planned pages use the branded not-found state until their routes are built.
+The implemented routes are `/`, `/destinations`, `/edit`, `/search`, `/properties/casa-serein`, `/booking/review`, `/booking/guest-details`, `/booking/payment`, and `/booking/confirmation`. Other property slugs and navigation links to planned pages use the branded not-found state until their routes are built.
 
 ## Current mock-data state
 
@@ -694,13 +710,14 @@ The implemented routes are `/`, `/destinations`, `/edit`, `/search`, `/propertie
 - `mockRooms`: 3 Casa Serein room tiers with 6 central-catalog media references, occupancy, beds, size, facilities, INR nightly pricing, explicit rate inclusions/exclusions, structured cancellation policies and charge percentages, and typed availability; 2 are selectable and Serein Suite is explicitly unavailable in the interface preview
 - `mockBookingPricingPolicy`: one INR interface fixture with a 12% estimated-tax rate and ₹900 service fee per room; it is deliberately not sourced from live tax or property data
 - `mockBookings`: empty array
-- No live availability, date-sensitive room pricing, tax/fee provider, complete facility catalog, booking, payment-provider, or confirmation fixture yet
-- `src/stores/booking-store.ts` contains the memory-only cross-route stay and lead-guest draft plus a fully derived mock pricing/cancellation summary; mock card values never enter the store, while the payment page keeps only a route-local masked attempt and deterministic outcome category
+- No live availability, date-sensitive room pricing, tax/fee provider, complete facility catalog, booking, payment provider, or durable confirmation fixture exists
+- `src/stores/booking-store.ts` contains the memory-only cross-route stay and lead-guest draft, fully derived mock pricing/cancellation summary, and an immutable session confirmation snapshot created only from a prepared mock-payment result; full card and security values never enter the store
 - Saved and trips feature indexes are scaffolds only
 
 ## Commit history
 
 ```text
+ff36c89 feat: add mock payment recovery states
 5b9d6ae feat: add transparent booking pricing
 3f40dc2 feat: validate booking forms
 a9932f9 feat: add mock payment step
@@ -787,7 +804,7 @@ Build each item separately, research it first, verify it, and commit it before m
 28. ~~React Hook Form and Zod validation with accessible inline errors~~ Complete
 29. ~~Taxes, fees, inclusions, cancellation, and total-price breakdown~~ Complete
 30. ~~Submitting/loading, payment-failure, recoverable-error, and retry states~~ Complete
-31. Booking confirmation page with mock reference and itinerary summary
+31. ~~Booking confirmation page with mock reference and itinerary summary~~ Complete
 
 ### Phase 5 — Saved properties and trips
 
@@ -812,4 +829,4 @@ Build each item separately, research it first, verify it, and commit it before m
 
 ## Recommended immediate next step
 
-Add the **booking confirmation page with a mock reference and itinerary summary**. Create a deterministic confirmation record only after the prepared mock-payment state, keep it memory-only, present the complete stay and transparent total without implying a real reservation, and provide clear next paths back to discovery. Leave persistence, real payment, inventory, email, and trip-history integration to later roadmap units.
+Add the **persistent mock saved-state store** for roadmap item 32, preferably with Zustand persistence. Keep saved stays separate from the memory-only booking/confirmation draft, define a stable storage shape and hydration behavior, and preserve the existing immediate saved feedback before building the `/saved` page in item 33.
