@@ -1,6 +1,6 @@
 # LumaStay Project Handoff
 
-Last updated: 8 August 2026
+Last updated: 9 August 2026
 
 Repository: `/Users/harshilbrahmani/Developer/Personal/lumstay`
 
@@ -657,6 +657,20 @@ Important limitation: validation is deterministic and client-only. It is suitabl
 
 Important limitation: all pricing, inclusions, and cancellation amounts are deterministic interface fixtures. They do not reflect live room rates, availability, tax law, property-settled charges, exchange rates, binding policy deadlines, or a payment-provider quote.
 
+### Mock payment submission and recovery states
+
+- The payment form now runs a deterministic page-local attempt after valid submission, disables every card field and the submit action while processing, exposes `aria-busy`, and prevents duplicate submission without introducing a provider request or route transition
+- Full card and security values clear as soon as processing begins; the attempt retains only the normalized cardholder name, last four digits, expiry, and a non-sensitive outcome category, all of which disappear when the payment route unmounts or reloads
+- Three documented security-code fixtures make every state directly reviewable: `123` prepares the masked summary, `000` returns a declined mock payment, and `999` returns a recoverable connection interruption
+- Decline feedback explains that no charge or reservation was created and returns the guest to an empty enabled form with focus restored to the first field
+- The connection-interruption retry runs from the masked summary alone, repeats the short processing state, and resolves to the prepared result without asking the guest to re-enter cleared sensitive values
+- Processing uses a polite status announcement, failures use assertive alert semantics, every retry action is at least 44px tall, and reduced-motion preferences neutralize the existing spinner animation through the global motion rule
+- The full stay and transparent-price ledger remain visible in every state; payment confirmation, a booking reference, itinerary creation, persistence, and any real transaction remain assigned to later roadmap units
+- Reference lock keeps Kobu's warm shadowless editorial foundation, Farfetch's visible checkout context during processing, Mews' explicit failure/retry hierarchy, and Incident's flat destructive treatment; blocking marketplace modals, blurred overlays, harsh full-page red, timers, fake provider/security claims, and premature confirmation UI were rejected
+- Verified against the production build at 1440×1000 and 390×844 through the real property → review → guest → payment journey: processing disables submission and clears all four fields, approval exposes only the masked card, decline recovery restores focus, interruption retries from masked data, the ₹129,252 final total remains present, mobile has zero horizontal overflow, retry controls are 44px tall, all observed requests return 200 with no payment POST, the console has zero warnings/errors, the full page has zero axe violations, and both new error surfaces have zero scoped axe violations or incomplete checks
+
+Important limitation: every response is a deterministic client-side simulation selected by the documented security-code fixture. No provider, network authorization, inventory hold, reservation, refund, confirmation, or durable payment record exists.
+
 ## Current homepage order
 
 `src/app/page.tsx` renders:
@@ -681,12 +695,13 @@ The implemented routes are `/`, `/destinations`, `/edit`, `/search`, `/propertie
 - `mockBookingPricingPolicy`: one INR interface fixture with a 12% estimated-tax rate and ₹900 service fee per room; it is deliberately not sourced from live tax or property data
 - `mockBookings`: empty array
 - No live availability, date-sensitive room pricing, tax/fee provider, complete facility catalog, booking, payment-provider, or confirmation fixture yet
-- `src/stores/booking-store.ts` contains the memory-only cross-route stay and lead-guest draft plus a fully derived mock pricing/cancellation summary; mock card values never enter the store, and only a masked prepared summary exists in payment-page component state
+- `src/stores/booking-store.ts` contains the memory-only cross-route stay and lead-guest draft plus a fully derived mock pricing/cancellation summary; mock card values never enter the store, while the payment page keeps only a route-local masked attempt and deterministic outcome category
 - Saved and trips feature indexes are scaffolds only
 
 ## Commit history
 
 ```text
+5b9d6ae feat: add transparent booking pricing
 3f40dc2 feat: validate booking forms
 a9932f9 feat: add mock payment step
 fd57b35 feat: add guest details step
@@ -771,7 +786,7 @@ Build each item separately, research it first, verify it, and commit it before m
 27. ~~Checkout and mock payment form~~ Complete
 28. ~~React Hook Form and Zod validation with accessible inline errors~~ Complete
 29. ~~Taxes, fees, inclusions, cancellation, and total-price breakdown~~ Complete
-30. Submitting/loading, payment-failure, recoverable-error, and retry states
+30. ~~Submitting/loading, payment-failure, recoverable-error, and retry states~~ Complete
 31. Booking confirmation page with mock reference and itinerary summary
 
 ### Phase 5 — Saved properties and trips
@@ -797,4 +812,4 @@ Build each item separately, research it first, verify it, and commit it before m
 
 ## Recommended immediate next step
 
-Add **submitting/loading, payment-failure, recoverable-error, and retry states** to the mock payment step. Keep preparation local and non-transactional, prevent duplicate submission, preserve the complete pricing ledger and masked-only card handling, and make failure/retry behavior deterministic and accessible. Leave booking confirmation, persistence, and real payment integration to their later roadmap units.
+Add the **booking confirmation page with a mock reference and itinerary summary**. Create a deterministic confirmation record only after the prepared mock-payment state, keep it memory-only, present the complete stay and transparent total without implying a real reservation, and provide clear next paths back to discovery. Leave persistence, real payment, inventory, email, and trip-history integration to later roadmap units.

@@ -1,16 +1,16 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   ArrowLeft,
   CalendarBlank,
-  CheckCircle,
   CreditCard,
   EnvelopeSimple,
   LockKey,
   MapPin,
   ShieldCheck,
+  SpinnerGap,
   UsersThree,
 } from "@phosphor-icons/react";
 import Link from "next/link";
@@ -23,6 +23,7 @@ import {
   BookingFieldError,
   BookingFormErrorSummary,
 } from "@/features/booking/components/booking-form-errors";
+import { BookingPaymentAttemptFeedback } from "@/features/booking/components/booking-payment-attempt-feedback";
 import { BookingPriceBreakdown } from "@/features/booking/components/booking-price-breakdown";
 import { IncompleteBookingState } from "@/features/booking/components/incomplete-booking-state";
 import { IncompleteGuestDetailsState } from "@/features/booking/components/incomplete-guest-details-state";
@@ -30,6 +31,11 @@ import {
   mockPaymentSchema,
   type MockPaymentFormValues,
 } from "@/features/booking/lib/booking-form-validation";
+import {
+  getMockPaymentOutcome,
+  mockPaymentProcessingDelay,
+  type MockPaymentAttempt,
+} from "@/features/booking/lib/mock-payment-simulation";
 import {
   formatMoney,
   formatStayDate,
@@ -42,12 +48,6 @@ import { hasCompleteBookingPriceSummary } from "@/stores/booking-store";
 const fieldClassName =
   "h-12 rounded-none border-brand-forest-deep/32 bg-brand-paper px-4 text-base text-brand-forest-deep shadow-none placeholder:text-brand-stone/70 focus-visible:border-brand-brass focus-visible:ring-brand-brass/24 aria-invalid:focus-visible:border-destructive aria-invalid:focus-visible:ring-destructive/24 md:text-base";
 
-interface PreparedMockCard {
-  cardholderName: string;
-  lastFour: string;
-  expiry: string;
-}
-
 export function BookingPayment() {
   const property = useBookingStore((state) => state.property);
   const room = useBookingStore((state) => state.room);
@@ -55,13 +55,13 @@ export function BookingPayment() {
   const guests = useBookingStore((state) => state.guests);
   const guestDetails = useBookingStore((state) => state.guestDetails);
   const priceSummary = useBookingStore((state) => state.priceSummary);
-  const [preparedCard, setPreparedCard] = useState<PreparedMockCard | null>(
-    null,
-  );
+  const [paymentAttempt, setPaymentAttempt] =
+    useState<MockPaymentAttempt | null>(null);
   const {
     register,
     handleSubmit,
     reset,
+    setFocus,
     formState: { errors },
   } = useForm<MockPaymentFormValues>({
     resolver: zodResolver(mockPaymentSchema),
@@ -75,6 +75,31 @@ export function BookingPayment() {
     reValidateMode: "onChange",
     shouldFocusError: true,
   });
+  const isProcessing = paymentAttempt?.status === "processing";
+
+  useEffect(() => {
+    if (paymentAttempt?.status !== "processing") {
+      return;
+    }
+
+    const timeoutId = window.setTimeout(() => {
+      setPaymentAttempt((currentAttempt) => {
+        if (currentAttempt?.status !== "processing") {
+          return currentAttempt;
+        }
+
+        return {
+          ...currentAttempt,
+          status:
+            currentAttempt.outcome === "approved"
+              ? "prepared"
+              : currentAttempt.outcome,
+        };
+      });
+    }, mockPaymentProcessingDelay);
+
+    return () => window.clearTimeout(timeoutId);
+  }, [paymentAttempt?.status]);
 
   if (
     !property ||
@@ -123,13 +148,36 @@ export function BookingPayment() {
     priceSummary.roomCount === 1 ? "room" : "rooms"
   }`;
 
-  function prepareMockPayment(values: MockPaymentFormValues) {
-    setPreparedCard({
+  function runMockPayment(values: MockPaymentFormValues) {
+    const card = {
       cardholderName: values.mockCardholderName,
       lastFour: values.mockCardNumber.replace(/\D/g, "").slice(-4),
       expiry: values.mockCardExpiry,
+    };
+
+    setPaymentAttempt({
+      status: "processing",
+      outcome: getMockPaymentOutcome(values.mockCardSecurity),
+      card,
     });
     reset();
+  }
+
+  function editMockPayment() {
+    setPaymentAttempt(null);
+    window.requestAnimationFrame(() => setFocus("mockCardholderName"));
+  }
+
+  function retryInterruptedPayment() {
+    setPaymentAttempt((currentAttempt) =>
+      currentAttempt
+        ? {
+            ...currentAttempt,
+            status: "processing",
+            outcome: "approved",
+          }
+        : currentAttempt,
+    );
   }
 
   return (
@@ -176,9 +224,10 @@ export function BookingPayment() {
                     id="test-card-guidance"
                     className="mt-1 text-sm leading-6 text-foreground/66"
                   >
-                    Try 4242 4242 4242 4242, any future expiry, and any
-                    three-digit security code. Never enter real payment details
-                    in this prototype.
+                    Use 4242 4242 4242 4242 and any future expiry. Security code
+                    123 prepares the masked summary, 000 shows a decline, and
+                    999 shows a recoverable interruption. Never enter real
+                    payment details.
                   </p>
                 </div>
               </div>
@@ -209,14 +258,19 @@ export function BookingPayment() {
                 className="mt-12"
                 autoComplete="off"
                 noValidate
-                onSubmit={handleSubmit(prepareMockPayment, () =>
-                  setPreparedCard(null),
+                aria-busy={isProcessing}
+                onSubmit={handleSubmit(runMockPayment, () =>
+                  setPaymentAttempt(null),
                 )}
-                onInput={() => setPreparedCard(null)}
+                onInput={() => {
+                  if (!isProcessing) {
+                    setPaymentAttempt(null);
+                  }
+                }}
               >
                 <BookingFormErrorSummary errorCount={errorCount} />
 
-                <fieldset>
+                <fieldset disabled={isProcessing}>
                   <legend className="w-full border-b border-brand-forest-deep/24 pb-5 font-display text-3xl leading-none tracking-[-0.035em] text-brand-forest-deep sm:text-4xl">
                     Card details
                   </legend>
@@ -408,43 +462,39 @@ export function BookingPayment() {
                   </Link>
                   <button
                     type="submit"
+                    disabled={isProcessing}
+                    aria-describedby="payment-submit-note"
                     className="group inline-flex min-h-12 items-center justify-between gap-8 rounded-full border border-brand-forest-deep bg-brand-forest-deep px-6 py-3 text-sm font-semibold text-brand-paper transition-colors duration-200 hover:bg-brand-forest focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-4"
                   >
-                    Prepare mock payment
-                    <LockKey aria-hidden="true" size={16} />
+                    {isProcessing
+                      ? "Checking mock payment"
+                      : "Run mock payment attempt"}
+                    {isProcessing ? (
+                      <SpinnerGap
+                        aria-hidden="true"
+                        size={16}
+                        className="animate-spin"
+                      />
+                    ) : (
+                      <LockKey aria-hidden="true" size={16} />
+                    )}
                   </button>
                 </div>
 
-                <p className="mt-3 text-xs leading-5 text-muted-foreground sm:text-right">
-                  This action only creates a masked summary on this page.
+                <p
+                  id="payment-submit-note"
+                  className="mt-3 text-xs leading-5 text-muted-foreground sm:text-right"
+                >
+                  One mock outcome is returned after a short local delay.
                 </p>
 
-                <div
-                  aria-live="polite"
-                  aria-atomic="true"
-                  className="mt-6 min-h-24"
-                >
-                  {preparedCard ? (
-                    <div className="grid gap-4 border-y border-brand-forest-deep/22 bg-brand-linen px-5 py-5 sm:grid-cols-[auto_1fr_auto] sm:items-center sm:px-6">
-                      <CheckCircle
-                        aria-hidden="true"
-                        size={22}
-                        weight="fill"
-                        className="text-brand-brass"
-                      />
-                      <div>
-                        <p className="text-sm font-semibold text-brand-forest-deep">
-                          Mock payment details prepared
-                        </p>
-                        <p className="mt-1 text-sm leading-6 text-foreground/66">
-                          {preparedCard.cardholderName} · card ending in {" "}
-                          {preparedCard.lastFour}
-                        </p>
-                      </div>
-                      <p className="font-mono text-[0.625rem] tracking-[0.09em] text-brand-stone uppercase">
-                        Expires {preparedCard.expiry}
-                      </p>
-                    </div>
+                <div className="mt-6 min-h-28">
+                  {paymentAttempt ? (
+                    <BookingPaymentAttemptFeedback
+                      attempt={paymentAttempt}
+                      onEdit={editMockPayment}
+                      onRetry={retryInterruptedPayment}
+                    />
                   ) : null}
                 </div>
               </form>
@@ -561,8 +611,8 @@ export function BookingPayment() {
                     This step stops here
                   </p>
                   <p className="mt-2 text-xs leading-5 text-brand-paper/58">
-                    Booking submission, payment responses, retry states, and
-                    confirmation follow in later roadmap units.
+                    Mock payment responses now remain on this page. Booking
+                    confirmation follows in the next roadmap unit.
                   </p>
                 </div>
               </div>
