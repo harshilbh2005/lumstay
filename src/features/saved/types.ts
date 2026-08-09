@@ -21,3 +21,10 @@ export interface SavedPropertyEntry {
     focalPoint: string;
   };
 }
+
+export interface SavedEmptyStateMedia {
+  src: string;
+  alt: string;
+  focalPoint: string;
+  title: string;
+}

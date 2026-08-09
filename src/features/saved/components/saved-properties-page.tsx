@@ -1,7 +1,10 @@
 import { getMediaById, mockProperties } from "@/data/mock";
 
 import { SavedPropertyCollection } from "./saved-property-collection";
-import type { SavedPropertyEntry } from "../types";
+import type {
+  SavedEmptyStateMedia,
+  SavedPropertyEntry,
+} from "../types";
 
 function getSavedPropertyEntries(): SavedPropertyEntry[] {
   return mockProperties.flatMap((property) => {
@@ -36,6 +39,21 @@ function getSavedPropertyEntries(): SavedPropertyEntry[] {
   });
 }
 
+function getSavedEmptyStateMedia(): SavedEmptyStateMedia | null {
+  const media = getMediaById("kyoto-street-dusk");
+
+  if (!media) {
+    return null;
+  }
+
+  return {
+    src: media.src,
+    alt: media.alt,
+    focalPoint: media.focalPoint,
+    title: media.title,
+  };
+}
+
 export function SavedPropertiesPage() {
   return (
     <div className="bg-brand-paper">
@@ -68,7 +86,10 @@ export function SavedPropertiesPage() {
         </div>
       </section>
 
-      <SavedPropertyCollection properties={getSavedPropertyEntries()} />
+      <SavedPropertyCollection
+        properties={getSavedPropertyEntries()}
+        emptyStateMedia={getSavedEmptyStateMedia()}
+      />
     </div>
   );
 }

@@ -265,7 +265,7 @@ Important limitation: destination suggestions are currently drawn from local moc
 - Added/removed states and a “View saved” action
 - Motion respects the global reduced-motion configuration
 
-Saved state now comes from the persistent Zustand store completed in roadmap item 32 and resolves into the `/saved` collection completed in roadmap item 33. Dedicated remove/undo behavior remains separate.
+Saved state now comes from the persistent Zustand store completed in roadmap item 32 and resolves into the `/saved` collection completed in roadmap item 33. The collection-level remove/undo behavior and dedicated empty state are complete in roadmap item 34; generic save buttons retain their compact added/removed feedback.
 
 ### Beyond the Room experience gallery
 
@@ -694,11 +694,11 @@ Important limitation: this is an interface-only itinerary held in memory for the
 - Persistence normalizes malformed values, removes duplicates, bounds the collection, migrates earlier storage versions into the current shape, and falls back to session-only behavior when browser storage is unavailable
 - Rehydration is explicitly skipped during server rendering and deferred until the root client provider mounts, preventing localStorage access on the server and avoiding saved-button hydration mismatches
 - Saved controls remain briefly disabled until rehydration finishes, then every homepage, search-result, and property-detail instance reads the shared state and exposes the same `aria-pressed` value
-- Save, remove, toggle, and clear actions are available for later saved-page and undo work; newly saved property IDs are ordered first while duplicate saves remain idempotent
+- Save, remove, toggle, clear, and index-preserving restore actions support the collection and its reversible removal behavior; newly saved property IDs are ordered first while duplicate saves and duplicate restores remain idempotent
 - The existing top-center added/removed feedback, saved icon treatment, labels, and `/saved` action remain visually unchanged, so this non-visual infrastructure unit did not require a new Refero reference lock
 - Verified with lint, TypeScript, focused vanilla-store and versioned-persistence assertions, a successful production build, and visible Playwright CLI QA at 1440×1000 and 390×844 covering save, reload restoration, homepage/search synchronization, removal propagation, exact storage shape, zero mobile horizontal overflow, clean requests, and zero console warnings/errors
 
-Important limitation: saved stays are mock, browser-local preferences. They do not sync to an account, another browser, or another tab in real time, and clearing site storage resets them. Dedicated empty-state composition and remove/undo collection behavior remain roadmap item 34.
+Important limitation: saved stays are mock, browser-local preferences. They do not sync to an account, another browser, or another tab in real time, and clearing site storage resets them.
 
 ### Saved properties page
 
@@ -708,13 +708,17 @@ Important limitation: saved stays are mock, browser-local preferences. They do n
 - Explicit rehydration handling keeps the server and first client render aligned: a content-shaped two-row skeleton and live “Reading your list” status appear until local persistence has resolved, preventing an empty-list flash
 - Populated desktop rows alternate a 7/5 image-and-copy composition; mobile collapses to one sharp image-led column with location, saved folio, rating, description, atmosphere, facilities, price, and a 44px stay action
 - The route uses existing central-catalog imagery and mock property data, adds no duplicate media paths, snapshots, backend, account state, or new image assets
-- A restrained ruled fallback provides an honest path back to `/search` when no valid saved IDs exist, but the dedicated empty-state design remains intentionally assigned to item 34
+- The completed empty state replaces the baseline ruled fallback with an asymmetric Kyoto-at-dusk atlas image, a direct explanation of the browser-local heart action, and one decisive 48px path back to `/search`
+- Every populated row now exposes a plainly labelled 44px Remove action; removal immediately updates the persisted IDs, visible rows, and live collection count without a confirmation modal
+- A single compact 6.4-second branded notice names the removed stay and offers Undo; restoring inserts the property at its original collection index instead of promoting it to the newest position
+- Keyboard focus moves to the next or previous Remove action after deletion, to the empty-state CTA after deleting the last stay, and back to the restored row after Undo; the delayed Undo focus handoff yields to any deliberate focus movement by the guest
+- Surviving rows reflow with transform-only layout motion while removal itself is immediate, avoiding blank reserved space or a full-row ghost over the empty state; global reduced-motion handling remains intact
 - Saved links in the global header, footer, and branded confirmation notice now use normal prefetch behavior because the route exists; Trips and other planned destinations retain disabled prefetch where appropriate
-- The Refero lock uses Kobu’s warm linen, sharp property photography, quiet mono metadata, and generous gallery spacing as the primary direction; Christopher Ireland Creative’s ruled editorial rhythm and Airbnb/Trip’s immediate collection count, location, rating, and price scan are borrowed without rounded wishlist tiles, sidebars, discount badges, card shadows, marketplace density, or removal controls
-- UI/UX Pro Max guidance was retained for responsive `next/image` sizing, 44px targets, visible keyboard focus, and zero overflow; its blue/gold liquid-glass direction was rejected as incompatible with LumaStay
-- Verified from the production build at 1440×1000 and 390×844 with exact newest-first ordering, three decoded saved images, stale-ID filtering logic, the baseline no-items recovery path, server-rendered hydration fallback, alternating desktop geometry, single-column mobile collapse, a visible brass focus ring, 44px actions, zero horizontal overflow, zero console warnings/errors, and zero unexpected request failures
+- The page foundation retains Kobu’s warm linen, sharp property photography, quiet mono metadata, and generous gallery spacing; item 34 adds MANNA’s image-led gallery restraint, Kinfolk’s decisive CTA treatment, and Julienne’s immediate count update plus compact Undo pattern without generic centered empty cards, confirmation dialogs, saturated success chrome, account claims, or marketplace density
+- UI/UX Pro Max guidance was retained for responsive `next/image` sizing, 44px targets, visible keyboard focus, and zero overflow; its aurora gradients, conversion-page structure, and perpetual atmospheric motion were rejected as incompatible with LumaStay
+- Verified with lint, TypeScript, a successful Next.js 16 production build, and visible Playwright QA at 1440×1000, 768×1024, and 375×812: exact persisted ordering, immediate removal, original-index Undo, single-item and zero-item counts, keyboard focus recovery, Kyoto media decoding, 44px+ CTA sizing, clean console, and zero horizontal overflow all pass
 
-Important limitation: the page is read-only in this roadmap unit. Removing a stay from the collection, undo feedback, a richer empty state, cross-tab synchronization, and account-backed cloud sync are not implemented.
+Important limitation: the collection is editable only through single-stay save/remove actions. There is no bulk editing, named-list organization, cross-tab synchronization, account-backed cloud sync, or Trips/history integration.
 
 ## Current homepage order
 
@@ -747,6 +751,7 @@ The implemented routes are `/`, `/destinations`, `/edit`, `/search`, `/saved`, `
 ## Commit history
 
 ```text
+83457f4 feat: add saved stays collection
 0dc6fda feat: persist saved stays
 9b4e0d8 feat: add mock booking confirmation
 ff36c89 feat: add mock payment recovery states
@@ -842,7 +847,7 @@ Build each item separately, research it first, verify it, and commit it before m
 
 32. ~~Persistent mock saved-state store, preferably Zustand with local persistence~~ Complete
 33. ~~Saved properties page at `/saved`~~ Complete
-34. Saved empty state and remove/undo behavior
+34. ~~Saved empty state and remove/undo behavior~~ Complete
 35. Mock booking-history fixtures
 36. Trips/history page at `/trips` with upcoming, completed, cancelled, and payment-failed states
 37. Individual booking-detail page
@@ -861,4 +866,4 @@ Build each item separately, research it first, verify it, and commit it before m
 
 ## Recommended immediate next step
 
-Build the dedicated **saved empty state and remove/undo behavior** for roadmap item 34. Keep the current server-resolved collection and persistent ID store as the source of truth, make removal reversible, and do not expand into account sync or trips/history work.
+Build the **mock booking-history fixtures** for roadmap item 35. Keep the fixtures frontend-only, deterministic, varied enough to exercise upcoming, completed, cancelled, and payment-failed states in the later Trips page, and do not build the `/trips` interface in the same unit.

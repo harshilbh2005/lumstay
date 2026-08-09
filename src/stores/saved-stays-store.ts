@@ -21,6 +21,7 @@ export interface SavedStaysStoreState extends SavedStaysPersistedState {
 
 export interface SavedStaysStoreActions {
   saveStay: (propertyId: string) => void;
+  restoreSavedStay: (propertyId: string, index: number) => void;
   removeSavedStay: (propertyId: string) => void;
   toggleSavedStay: (propertyId: string) => boolean;
   clearSavedStays: () => void;
@@ -150,6 +151,34 @@ export function createSavedStaysStore(
                 propertyId,
                 ...state.savedPropertyIds,
               ].slice(0, MAX_SAVED_STAYS),
+            };
+          });
+        },
+        restoreSavedStay: (propertyIdValue, indexValue) => {
+          const propertyId = normalizePropertyId(propertyIdValue);
+
+          if (!propertyId) {
+            return;
+          }
+
+          set((state) => {
+            if (state.savedPropertyIds.includes(propertyId)) {
+              return state;
+            }
+
+            const insertionIndex = Number.isFinite(indexValue)
+              ? Math.max(0, Math.trunc(indexValue))
+              : 0;
+            const savedPropertyIds = [...state.savedPropertyIds];
+
+            savedPropertyIds.splice(
+              Math.min(insertionIndex, savedPropertyIds.length),
+              0,
+              propertyId,
+            );
+
+            return {
+              savedPropertyIds: savedPropertyIds.slice(0, MAX_SAVED_STAYS),
             };
           });
         },
