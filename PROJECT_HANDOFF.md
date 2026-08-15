@@ -736,7 +736,7 @@ Important limitation: these records are frontend-only interface fixtures. They d
 
 ### Trips/history page
 
-- A new statically prerendered `/trips` route composes the shared header/footer around a Server Component history surface; it adds no client store, browser persistence, account assumption, or backend request
+- The `/trips` route composes the shared header/footer around a Server Component history surface; roadmap item 38 now renders it on request only because reviewable state fixtures are selected through the page-level `searchParams` promise, while still adding no client store, browser persistence, account assumption, or backend request
 - The masthead introduces a compact status index that anchors to four visibly separate chapters: two image-led upcoming stays, two compact completed records, one quiet cancelled/refunded record, and one deep-forest failed-payment attempt
 - Every record is derived from the deterministic `mockBookings` fixtures and central media catalog, with the interface date fixed to `09 Aug 2026`; references, stay dates, party, room, paid/refunded totals, and cancellation outcome remain reviewable without recomputing status from the viewer's clock
 - The failed attempt is deliberately outside the reservation ledger: it says that no trip, booking reference, charge, or hold exists, exposes only the `LUMA-ATTEMPT-*` identifier, and offers a repeat-search URL carrying the original AlUla dates and party instead of a misleading payment-retry action
@@ -759,6 +759,23 @@ Important limitation: history is a fixed frontend presentation of mock records, 
 - Verified with lint, TypeScript, `git diff --check`, a successful Next.js 16 production build, and visible Playwright QA at 1440×1000, 390×844, and 320px reflow: all three status treatments, exact references/totals/refund, five history links, failed/unknown boundaries, image decoding, one-main/one-h1 semantics, 12 keyboard-focus stops, 24px+ targets, zero horizontal overflow, zero console warnings/errors, and zero axe violations pass
 
 Important limitation: these are immutable local fixture records. They cannot be changed, cancelled, downloaded, shared, supported, synced to an account, or populated by the session-only confirmation store; payment attempts never become reservation-detail pages.
+
+### Booking-history empty, loading, and error states
+
+- `/trips` now has a complete five-state presentation contract: populated history, content-shaped loading, an intentional zero-record ledger, an expected recoverable data failure, and the segment's unexpected-error boundary
+- A URL-neutral `trips/(history)` route group isolates `loading.tsx` and `error.tsx` from `/trips/[id]`, while the new parent `trips/layout.tsx` keeps one shared header/footer mounted for both history and detail routes; the five prerendered detail records and their not-found boundary retain one header, one main landmark, and one footer after the shell move
+- `getTripsHistoryData` keeps expected outcomes as explicit feature-local return values: `_demo=empty` returns a valid empty booking array, `_demo=error` returns the recoverable failure, and the normal route returns the six deterministic fixtures; `_demo=unexpected-error` deliberately throws only to exercise the real Next.js boundary
+- The real route-level `loading.tsx` and the stable `_demo=loading` review URL render the exact same `TripsHistorySkeleton`; no artificial delay, timer, request, spinner overlay, or alternate loading design was introduced
+- The skeleton preserves the ledger masthead, four-part status index, first history chapter, and representative record geometry on paper/linen surfaces; it exposes `aria-busy`, a polite screen-reader status, sharp muted blocks, and the existing global reduced-motion behavior
+- Empty history keeps all four status categories visibly at `00`, explains that the state contains no deterministic records, and offers one primary discovery path plus an explicitly labelled return to the populated prototype ledger; it makes no account or live-history claim
+- The expected error keeps status counts unavailable, uses the destructive token only for the interruption signal, exposes an assertive alert and a direct retry link, and states that retrying cannot change reservation data
+- The unexpected boundary uses Next.js 16.2's `unstable_retry` for real exceptions; review-fixture recovery first removes `_demo` with `location.replace`, so both retry paths return to populated `/trips` instead of looping on the injected fault
+- The Refero reference lock keeps Kobu and Christopher Ireland Creative's warm, ruled editorial-ledger foundation; borrows Tripadvisor and Uber's direct zero-state hierarchy, Rivian's concise loading reassurance, and Mews' precise recovery language; and rejects centered generic cards, illustrations, account sidebars, marketplace tabs, brand-blue controls, full-screen spinners, shadows, live-account claims, and retry actions that silently mutate other state
+- The app-builder workflow kept the unit inside the existing frontend Trips boundary: the route remains thin, the state contract and components are feature-local, booking fixtures stay in central mock data, and no Zustand store, persistence layer, account model, network client, reservation service, or payment-provider abstraction was added
+- Verified with lint, TypeScript, `git diff --check`, a successful Next.js 16 production build, and production Chrome QA across all five states at 1440×1100, 390×844, and 320×800: each state has one header/main/footer/H1, no duplicate IDs, no horizontal overflow, no client-console errors, visible focus, 44px+ new actions, correct status/alert/busy semantics, and zero axe WCAG 2.2 A/AA violations; the two inherited axe indeterminate checks remain limited to global header/footer ARIA and blended-color nodes
+- Both recovery paths were exercised through their real controls and return from their flagged URLs to populated `/trips`; the Casa Serein detail route was rechecked after the layout refactor and retains its metadata, one-shell structure, and record H1
+
+Important limitation: every state is a deterministic frontend presentation. Empty and expected-error results do not come from an account or request, `_demo=unexpected-error` intentionally creates a server-side review exception, and none of the states read, create, retry, cancel, charge, refund, or persist a reservation.
 
 ## Current homepage order
 
@@ -786,11 +803,12 @@ The implemented routes are `/`, `/destinations`, `/edit`, `/search`, `/saved`, `
 - No live availability, date-sensitive room pricing, tax/fee provider, complete facility catalog, booking, payment provider, account history, or durable user-generated confirmation record exists
 - `src/stores/booking-store.ts` contains the memory-only cross-route stay and lead-guest draft, fully derived mock pricing/cancellation summary, and an immutable session confirmation snapshot created only from a prepared mock-payment result; full card and security values never enter the store
 - `src/stores/saved-stays-store.ts` contains the separate versioned browser-local property-ID collection used by every saved control and the `/saved` collection page
-- `src/features/trips/index.ts` exports the server-rendered Trips history and individual detail pages; their records and deterministic formatting remain feature-local while the typed fixtures stay in the central mock-data boundary
+- `src/features/trips/index.ts` exports the server-rendered Trips history, state surface, content-shaped skeleton, and individual detail page; their records, state contract, and deterministic formatting remain feature-local while the typed fixtures stay in the central mock-data boundary
 
 ## Commit history
 
 ```text
+443b416 feat: add trip booking details
 fc58f3f feat: add trips history page
 46143ed feat: add mock booking history
 1acfe24 feat: add saved empty state and undo
@@ -894,7 +912,7 @@ Build each item separately, research it first, verify it, and commit it before m
 35. ~~Mock booking-history fixtures~~ Complete
 36. ~~Trips/history page at `/trips` with upcoming, completed, cancelled, and payment-failed states~~ Complete
 37. ~~Individual booking-detail page~~ Complete
-38. Booking-history empty, loading, and error states
+38. ~~Booking-history empty, loading, and error states~~ Complete
 
 ### Phase 6 — Supporting pages and final quality
 
@@ -909,4 +927,4 @@ Build each item separately, research it first, verify it, and commit it before m
 
 ## Recommended immediate next step
 
-Build the **booking-history empty, loading, and error states** for roadmap item 38. Preserve the fixed prototype-history disclosure and failed-payment separation, and keep the unit inside the existing Trips feature without inventing account, network, reservation, or payment-provider behavior.
+Build the **curation/about page for `/about/curation`** for roadmap item 39. Research and lock its editorial references first, reuse the existing global shell and brand tokens, explain LumaStay's selection philosophy without unverifiable operational claims, and keep the page distinct from the destination and Luma Edit experiences.

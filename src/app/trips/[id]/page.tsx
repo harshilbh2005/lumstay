@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
-import { SiteFooter } from "@/components/layout/site-footer";
-import { SiteHeader } from "@/components/layout/site-header";
 import { getMockBookingById, mockBookings } from "@/data/mock";
 import { TripDetailPage } from "@/features/trips";
 import type { CancelledBooking, ConfirmedBooking } from "@/types/domain";
@@ -57,11 +55,5 @@ export default async function TripDetailRoute({
     notFound();
   }
 
-  return (
-    <>
-      <SiteHeader />
-      <TripDetailPage booking={booking} />
-      <SiteFooter />
-    </>
-  );
+  return <TripDetailPage booking={booking} />;
 }

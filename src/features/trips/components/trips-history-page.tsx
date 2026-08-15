@@ -3,9 +3,9 @@ import { ArrowDown, ArrowRight } from "@phosphor-icons/react/ssr";
 
 import {
   MOCK_BOOKING_HISTORY_REFERENCE_DATE,
-  mockBookings,
 } from "@/data/mock";
 import type {
+  Booking,
   CancelledBooking,
   ConfirmedBooking,
   PaymentFailedBooking,
@@ -18,44 +18,47 @@ import {
 } from "./trip-history-record";
 import { formatTripDate } from "../lib/trips-formatters";
 
-const upcomingBookings = mockBookings.filter(
-  (booking): booking is ConfirmedBooking => booking.status === "upcoming",
-);
-const completedBookings = mockBookings.filter(
-  (booking): booking is ConfirmedBooking => booking.status === "completed",
-);
-const cancelledBookings = mockBookings.filter(
-  (booking): booking is CancelledBooking => booking.status === "cancelled",
-);
-const failedPaymentAttempts = mockBookings.filter(
-  (booking): booking is PaymentFailedBooking =>
-    booking.status === "payment-failed",
-);
+export function TripsHistoryPage({
+  bookings,
+}: {
+  bookings: readonly Booking[];
+}) {
+  const upcomingBookings = bookings.filter(
+    (booking): booking is ConfirmedBooking => booking.status === "upcoming",
+  );
+  const completedBookings = bookings.filter(
+    (booking): booking is ConfirmedBooking => booking.status === "completed",
+  );
+  const cancelledBookings = bookings.filter(
+    (booking): booking is CancelledBooking => booking.status === "cancelled",
+  );
+  const failedPaymentAttempts = bookings.filter(
+    (booking): booking is PaymentFailedBooking =>
+      booking.status === "payment-failed",
+  );
+  const statusNavigation = [
+    {
+      href: "#upcoming-trips",
+      label: "Upcoming",
+      count: upcomingBookings.length,
+    },
+    {
+      href: "#completed-trips",
+      label: "Completed",
+      count: completedBookings.length,
+    },
+    {
+      href: "#cancelled-trips",
+      label: "Cancelled",
+      count: cancelledBookings.length,
+    },
+    {
+      href: "#payment-attempts",
+      label: "Payment attempt",
+      count: failedPaymentAttempts.length,
+    },
+  ] as const;
 
-const statusNavigation = [
-  {
-    href: "#upcoming-trips",
-    label: "Upcoming",
-    count: upcomingBookings.length,
-  },
-  {
-    href: "#completed-trips",
-    label: "Completed",
-    count: completedBookings.length,
-  },
-  {
-    href: "#cancelled-trips",
-    label: "Cancelled",
-    count: cancelledBookings.length,
-  },
-  {
-    href: "#payment-attempts",
-    label: "Payment attempt",
-    count: failedPaymentAttempts.length,
-  },
-] as const;
-
-export function TripsHistoryPage() {
   return (
     <main id="main-content" className="min-h-screen bg-brand-paper">
       <section
@@ -100,7 +103,7 @@ export function TripsHistoryPage() {
               Prototype history
             </p>
             <p className="mt-3 text-sm leading-6 text-foreground/66">
-              Six deterministic interface records. Status is fixed as of{" "}
+              {bookings.length} deterministic interface records. Status is fixed as of{" "}
               {formatTripDate(MOCK_BOOKING_HISTORY_REFERENCE_DATE)}.
             </p>
           </div>
