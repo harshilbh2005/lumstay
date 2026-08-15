@@ -39,6 +39,12 @@ export function getTripRoomLabel(roomCount: number) {
   return `${roomCount} ${roomCount === 1 ? "room" : "rooms"}`;
 }
 
+export function getTripLocationLabel(booking: BookingHistoryBase) {
+  const { city, country, region } = booking.property.location;
+
+  return region ? `${region}, ${country}` : `${city}, ${country}`;
+}
+
 export function getRepeatSearchHref(booking: BookingHistoryBase) {
   const params = new URLSearchParams({
     destination: `${booking.property.location.city}, ${booking.property.location.country}`,

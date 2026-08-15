@@ -1,6 +1,6 @@
 # LumaStay Project Handoff
 
-Last updated: 9 August 2026
+Last updated: 15 August 2026
 
 Repository: `/Users/harshilbrahmani/Developer/Personal/lumstay`
 
@@ -745,7 +745,20 @@ Important limitation: these records are frontend-only interface fixtures. They d
 - UI/UX Pro Max guidance was retained for responsive `next/image` sizing, visible focus, 44px+ targets, sticky-anchor clearance, and zero overflow; its aurora gradients, generic conversion-page structure, and perpetual atmospheric motion were rejected in favor of the existing LumaStay tokens and editorial restraint
 - Verified with lint, TypeScript, a successful Next.js 16 production build, and visible Playwright QA at 1440×1000 and 390×844: all six images decode, each article has an accessible label, all four anchors clear the sticky header, the repeat-search intent reaches `/search`, keyboard targets measure 44–80px with visible focus rings, both viewports have zero horizontal overflow, axe reports zero violations, and the production console reports zero errors or warnings
 
-Important limitation: history is a fixed frontend presentation of mock records, not an account-backed ledger or a continuation of the session-only confirmation flow. Individual booking details and booking-history empty, loading, and error states remain roadmap items 37 and 38.
+Important limitation: history is a fixed frontend presentation of mock records, not an account-backed ledger or a continuation of the session-only confirmation flow. Booking-history empty, loading, and error states remain roadmap item 38.
+
+### Individual booking-detail page
+
+- A new `/trips/[id]` route prerenders the five confirmed or cancelled reservation snapshots and composes each read-only record inside the shared header/footer shell; unmatched IDs remain dynamic only long enough to resolve through the segment's accurate unavailable-record boundary
+- Upcoming, completed, and cancelled records share one server-rendered editorial itinerary with status, mock reservation reference, booking/payment dates, property and room image, stay dates, party, lead guest, room details, inclusions, exclusions, cancellation policy, and the full stored price ledger
+- Cancelled stays add a distinct outcome chapter for cancellation date, reason, zero retained fee, refund date, refund amount, and masked test-card suffix; confirmed stays retain only the fixture's paid date and masked suffix
+- Trips history now exposes exactly five `View full record` links. The failed-payment fixture has no detail link, is excluded from generated reservation params, and resolves to copy explaining that payment attempts remain history entries rather than bookings
+- Every detail page exports fixture-derived metadata with `noindex, nofollow`, keeps the room image as the prioritized LCP asset, and ends with honest paths back to Trips or a repeat search rather than modify, cancel, support, receipt-download, or other controls that would imply a live reservation system
+- The reference lock keeps Kobu and Christopher Ireland Creative's warm, shadowless editorial-document foundation; borrows Onefinestay's image/itinerary balance, Trip's fast status and receipt scan, and BelArosa's forest/linen/brass rhythm; and rejects account sidebars, stacked dashboard cards, QR/app promotion, brand-blue actions, surveys, and live-management controls
+- The app-builder workflow kept the route thin, server-rendered, static for its five known reservation IDs, and fixture-bound; no client state, store mutation, persistence, backend, or payment/account integration was introduced
+- Verified with lint, TypeScript, `git diff --check`, a successful Next.js 16 production build, and visible Playwright QA at 1440×1000, 390×844, and 320px reflow: all three status treatments, exact references/totals/refund, five history links, failed/unknown boundaries, image decoding, one-main/one-h1 semantics, 12 keyboard-focus stops, 24px+ targets, zero horizontal overflow, zero console warnings/errors, and zero axe violations pass
+
+Important limitation: these are immutable local fixture records. They cannot be changed, cancelled, downloaded, shared, supported, synced to an account, or populated by the session-only confirmation store; payment attempts never become reservation-detail pages.
 
 ## Current homepage order
 
@@ -759,7 +772,7 @@ Important limitation: history is a fixed frontend presentation of mock records, 
 6. `ClosingBookingCta`
 7. `SiteFooter`
 
-The implemented routes are `/`, `/destinations`, `/edit`, `/search`, `/saved`, `/trips`, `/properties/casa-serein`, `/booking/review`, `/booking/guest-details`, `/booking/payment`, and `/booking/confirmation`. Other property slugs and navigation links to planned pages use the branded not-found state until their routes are built.
+The implemented routes are `/`, `/destinations`, `/edit`, `/search`, `/saved`, `/trips`, the five fixture-backed `/trips/[id]` reservation paths, `/properties/casa-serein`, `/booking/review`, `/booking/guest-details`, `/booking/payment`, and `/booking/confirmation`. Other property slugs and navigation links to planned pages use the branded not-found state until their routes are built.
 
 ## Current mock-data state
 
@@ -773,11 +786,12 @@ The implemented routes are `/`, `/destinations`, `/edit`, `/search`, `/saved`, `
 - No live availability, date-sensitive room pricing, tax/fee provider, complete facility catalog, booking, payment provider, account history, or durable user-generated confirmation record exists
 - `src/stores/booking-store.ts` contains the memory-only cross-route stay and lead-guest draft, fully derived mock pricing/cancellation summary, and an immutable session confirmation snapshot created only from a prepared mock-payment result; full card and security values never enter the store
 - `src/stores/saved-stays-store.ts` contains the separate versioned browser-local property-ID collection used by every saved control and the `/saved` collection page
-- `src/features/trips/index.ts` exports the server-rendered Trips history page; its records and deterministic formatting remain feature-local while the typed fixtures stay in the central mock-data boundary
+- `src/features/trips/index.ts` exports the server-rendered Trips history and individual detail pages; their records and deterministic formatting remain feature-local while the typed fixtures stay in the central mock-data boundary
 
 ## Commit history
 
 ```text
+fc58f3f feat: add trips history page
 46143ed feat: add mock booking history
 1acfe24 feat: add saved empty state and undo
 83457f4 feat: add saved stays collection
@@ -879,7 +893,7 @@ Build each item separately, research it first, verify it, and commit it before m
 34. ~~Saved empty state and remove/undo behavior~~ Complete
 35. ~~Mock booking-history fixtures~~ Complete
 36. ~~Trips/history page at `/trips` with upcoming, completed, cancelled, and payment-failed states~~ Complete
-37. Individual booking-detail page
+37. ~~Individual booking-detail page~~ Complete
 38. Booking-history empty, loading, and error states
 
 ### Phase 6 — Supporting pages and final quality
@@ -895,4 +909,4 @@ Build each item separately, research it first, verify it, and commit it before m
 
 ## Recommended immediate next step
 
-Build the **individual booking-detail page** for roadmap item 37. Reuse the deterministic history contract and central media catalog, keep payment-failed attempts outside reservation-detail semantics, and do not add the booking-history empty/loading/error states from item 38 in the same unit.
+Build the **booking-history empty, loading, and error states** for roadmap item 38. Preserve the fixed prototype-history disclosure and failed-payment separation, and keep the unit inside the existing Trips feature without inventing account, network, reservation, or payment-provider behavior.

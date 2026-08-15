@@ -28,14 +28,9 @@ import {
   formatTripMoney,
   getRepeatSearchHref,
   getTripGuestLabel,
+  getTripLocationLabel,
   getTripRoomLabel,
 } from "../lib/trips-formatters";
-
-function getLocationLabel(booking: Booking) {
-  const { city, country, region } = booking.property.location;
-
-  return region ? `${region}, ${country}` : `${city}, ${country}`;
-}
 
 function TripMediaFigure({
   booking,
@@ -272,7 +267,7 @@ export function FeaturedTripRecord({
             size={16}
             className="mt-1 shrink-0 text-brand-brass"
           />
-          {getLocationLabel(booking)}
+          {getTripLocationLabel(booking)}
         </p>
 
         <div className="mt-6 border-l border-brand-brass/55 pl-4">
@@ -294,6 +289,17 @@ export function FeaturedTripRecord({
         <div className="mt-7">
           <BookingRecordLedger booking={booking} />
         </div>
+        <Link
+          href={`/trips/${booking.id}`}
+          className="group mt-6 inline-flex min-h-11 items-center gap-3 rounded-sm px-1 text-sm font-semibold text-brand-forest-deep underline decoration-brand-forest-deep/30 underline-offset-4 transition-colors duration-200 hover:text-brand-brass-dark focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-4 focus-visible:ring-offset-brand-linen motion-reduce:transition-none"
+        >
+          View full record
+          <ArrowRight
+            aria-hidden="true"
+            size={15}
+            className="transition-transform duration-200 ease-luma group-hover:translate-x-1 motion-reduce:transition-none"
+          />
+        </Link>
       </div>
     </article>
   );
@@ -339,7 +345,7 @@ export function ArchivedTripRecord({
             size={16}
             className="mt-1 shrink-0 text-brand-brass"
           />
-          {getLocationLabel(booking)}
+          {getTripLocationLabel(booking)}
         </p>
         <p className="mt-6 text-base font-semibold text-brand-forest-deep">
           {booking.room.name}
@@ -368,6 +374,17 @@ export function ArchivedTripRecord({
         className="min-w-0 lg:col-span-3"
       >
         <BookingRecordLedger booking={booking} />
+        <Link
+          href={`/trips/${booking.id}`}
+          className="group mt-5 inline-flex min-h-11 items-center gap-3 rounded-sm px-1 text-sm font-semibold text-brand-forest-deep underline decoration-brand-forest-deep/30 underline-offset-4 transition-colors duration-200 hover:text-brand-brass-dark focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-4 focus-visible:ring-offset-brand-paper motion-reduce:transition-none"
+        >
+          View full record
+          <ArrowRight
+            aria-hidden="true"
+            size={15}
+            className="transition-transform duration-200 ease-luma group-hover:translate-x-1 motion-reduce:transition-none"
+          />
+        </Link>
       </aside>
     </article>
   );
