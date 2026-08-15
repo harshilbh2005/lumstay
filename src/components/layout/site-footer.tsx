@@ -84,7 +84,9 @@ export function SiteFooter() {
                       <Link
                         href={item.href}
                         prefetch={
-                          item.href === "/saved" || item.href === "/trips"
+                          item.href === "/saved" ||
+                          item.href === "/trips" ||
+                          item.href === "/about/curation"
                             ? null
                             : false
                         }

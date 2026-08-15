@@ -1,6 +1,6 @@
 # LumaStay Project Handoff
 
-Last updated: 15 August 2026
+Last updated: 16 August 2026
 
 Repository: `/Users/harshilbrahmani/Developer/Personal/lumstay`
 
@@ -285,7 +285,7 @@ Important limitation: collection links reach `/search?...`, but the results page
 - “How the edit works” and “Ask Luma” actions
 - Responsive mobile layout with no horizontal overflow
 
-Important limitation: `/about/curation` and `/support` are not implemented.
+Important limitation: `/support` is not implemented.
 
 ### Homepage closing search CTA
 
@@ -777,6 +777,18 @@ Important limitation: these are immutable local fixture records. They cannot be 
 
 Important limitation: every state is a deterministic frontend presentation. Empty and expected-error results do not come from an account or request, `_demo=unexpected-error` intentionally creates a server-side review exception, and none of the states read, create, retry, cancel, charge, refund, or persist a reservation.
 
+### Curation/about page
+
+- A new static `/about/curation` route explains LumaStay's selection philosophy inside the shared header/footer shell without introducing client state, data fetching, or a parallel about-page system
+- The manifesto-led masthead, close-reading study, four-pass standards ledger, asymmetric evidence gallery, explicit boundaries, and final collection/journal paths keep the page distinct from the destination atlas and publication-style Luma Edit
+- The editorial framework focuses on place, coherent character, room truth, and practical clarity while explicitly rejecting star-score positioning, certification language, live-review-network claims, and any suggestion that prototype fixtures are verified inventory
+- Existing central-catalog media supplies one licensed Mediterranean study and three generated setting, room, and ritual references; no new image was generated, downloaded, or duplicated outside the media catalog
+- The reference lock uses Christopher Ireland Creative's warm parchment, oversized editorial typography, sharp rules, and contained photography as the foundation; Kobu's mono hospitality folios, mono's visible standards grid, BelArosa's single forest/brass chapter, New Balance's image/text cadence, and Hers' readable standards structure are borrowed without corporate mission cards, icon badges, fake reviewer credentials, or dense prose walls
+- The app-builder workflow keeps the route thin and the surface feature-local under `src/features/curation`; the existing homepage and footer curation links now resolve normally, while every call to action points only to implemented `/search` and `/edit` routes
+- Verified with lint, TypeScript, `git diff --check`, a successful Next.js 16.2 production build, and production Chromium QA at 1440×1000 and 390×844: all four images decode after native lazy loading, in-page anchors clear the sticky header by 112px, new controls measure 48–72px, keyboard focus and hover feedback remain visible, the semantic snapshot exposes one H1 and six labelled regions, both viewports have zero horizontal overflow, and the console, page-error, and failed-request logs are clean
+
+Important limitation: the page describes the editorial standard the interface is designed toward, not a current hotel inspection or certification program. All shown stays, prices, policies, reviews, availability, booking outcomes, generated media, and licensed stock associations remain prototype fixtures rather than live or verified inventory.
+
 ## Current homepage order
 
 `src/app/page.tsx` renders:
@@ -789,7 +801,7 @@ Important limitation: every state is a deterministic frontend presentation. Empt
 6. `ClosingBookingCta`
 7. `SiteFooter`
 
-The implemented routes are `/`, `/destinations`, `/edit`, `/search`, `/saved`, `/trips`, the five fixture-backed `/trips/[id]` reservation paths, `/properties/casa-serein`, `/booking/review`, `/booking/guest-details`, `/booking/payment`, and `/booking/confirmation`. Other property slugs and navigation links to planned pages use the branded not-found state until their routes are built.
+The implemented routes are `/`, `/about/curation`, `/destinations`, `/edit`, `/search`, `/saved`, `/trips`, the five fixture-backed `/trips/[id]` reservation paths, `/properties/casa-serein`, `/booking/review`, `/booking/guest-details`, `/booking/payment`, and `/booking/confirmation`. Other property slugs and navigation links to planned pages use the branded not-found state until their routes are built.
 
 ## Current mock-data state
 
@@ -916,7 +928,7 @@ Build each item separately, research it first, verify it, and commit it before m
 
 ### Phase 6 — Supporting pages and final quality
 
-39. Curation/about page for `/about/curation`
+39. ~~Curation/about page for `/about/curation`~~ Complete
 40. Support/contact experience for `/support`
 41. Complete route-level metadata and social previews
 42. Final mobile navigation and responsive review at 375, 390, 768, 1024, and 1440 widths
@@ -927,4 +939,4 @@ Build each item separately, research it first, verify it, and commit it before m
 
 ## Recommended immediate next step
 
-Build the **curation/about page for `/about/curation`** for roadmap item 39. Research and lock its editorial references first, reuse the existing global shell and brand tokens, explain LumaStay's selection philosophy without unverifiable operational claims, and keep the page distinct from the destination and Luma Edit experiences.
+Build the **support/contact experience for `/support`** for roadmap item 40. Research and lock its service/recovery references first, keep the experience honest about the frontend-only prototype, and avoid controls or response-time claims that imply a live support operation.
