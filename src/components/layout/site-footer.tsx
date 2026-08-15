@@ -86,7 +86,8 @@ export function SiteFooter() {
                         prefetch={
                           item.href === "/saved" ||
                           item.href === "/trips" ||
-                          item.href === "/about/curation"
+                          item.href === "/about/curation" ||
+                          item.href.startsWith("/support")
                             ? null
                             : false
                         }

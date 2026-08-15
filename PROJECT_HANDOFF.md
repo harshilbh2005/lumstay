@@ -285,7 +285,7 @@ Important limitation: collection links reach `/search?...`, but the results page
 - “How the edit works” and “Ask Luma” actions
 - Responsive mobile layout with no horizontal overflow
 
-Important limitation: `/support` is not implemented.
+Important limitation: “Ask Luma” now reaches the scoped `/support` experience, but the prototype has no live support desk, connected inbox, or response-time commitment.
 
 ### Homepage closing search CTA
 
@@ -302,7 +302,7 @@ Important limitation: `/support` is not implemented.
 - Server-rendered layout with accessible navigation landmarks, focus states, and mobile targets
 - Prefetch disabled for planned routes so the footer does not generate avoidable 404 prefetch errors
 
-Important limitation: footer destination, company, support, account, and legal routes are planned but mostly not implemented yet.
+Important limitation: the footer support links now resolve to `/support` and its booking/cancellation chapters. Destination query links, account shortcuts, and curation also resolve, while the remaining company and legal destinations are still planned.
 
 ### Destination discovery page
 
@@ -813,6 +813,20 @@ Important limitation: every state is a deterministic frontend presentation. Empt
 
 Important limitation: the page describes the editorial standard the interface is designed toward, not a current hotel inspection or certification program. All shown stays, prices, policies, reviews, availability, booking outcomes, generated media, and licensed stock associations remain prototype fixtures rather than live or verified inventory.
 
+### Support/contact experience
+
+- A new static `/support` route places a clearly scoped help experience inside the shared header/footer shell, with route-level metadata and normal prefetch behavior for the existing homepage and footer support links
+- The page moves from an editorial masthead and four-part scope ledger into booking, cancellation, mock-payment, and Trips/saved chapters; eleven native disclosure rows keep the answers server-rendered, keyboard-operable, and available without a client accordion dependency
+- Every answer is grounded in the current frontend contract: booking and confirmation remain memory-only, room availability and prices are deterministic, cancellation outcomes are read-only fixtures, mock payment never contacts a provider, Saved stores only property IDs locally, and Trips does not ingest the session confirmation
+- The contact section deliberately prepares rather than sends: one isolated client leaf collects a topic, contact email, optional `LUMA-MOCK` or `LUMA-ATTEMPT` reference, and a bounded description, then creates a focusable local summary labelled `Prepared locally / Not sent`
+- React Hook Form and Zod provide first-invalid-field focus, a counted alert, inline errors, email/reference validation, and a 24–1,200 character message boundary; the optional clipboard action normalizes the mock reference and preserves the not-sent disclosure
+- No network request, Server Action, support address, phone number, chat, attachment, response schedule, store, URL state, persistence layer, account model, timer, or delivery confirmation was introduced; editing the form clears a stale prepared result
+- The Refero reference lock uses Rivian's topic-first support hierarchy as the behavioral foundation, Christopher Ireland Creative's sharp editorial ledger as the visual translation, and Explore's focused two-column composer for form hierarchy; hero search, category cards, chat/phone/email promises, service hours, attachments, and “message sent” confirmation were rejected
+- The app-builder workflow kept the route thin and static, feature content under `src/features/support`, validation under a feature-local library, and client JavaScript limited to the note composer and clipboard interaction
+- Verified with lint, TypeScript, `git diff --check`, a successful Next.js 16.2 production build, and production Chromium QA at 1440×1000, 390×844, and 320×800: the route has one H1/main and no duplicate IDs, all eleven disclosures operate, both index and footer hash links clear the sticky header, invalid and prepared-result focus handoffs pass, clipboard content retains its disclosure and normalized reference, new targets measure 48–222px, all viewports have zero horizontal overflow, and the console/page-error logs are clean
+
+Important limitation: this is a self-service explanation and local note formatter, not a support channel. It cannot receive, deliver, queue, store, respond to, or resolve a request; it is not appropriate for emergencies or live reservation, payment, account, or property help.
+
 ## Current homepage order
 
 `src/app/page.tsx` renders:
@@ -825,7 +839,7 @@ Important limitation: the page describes the editorial standard the interface is
 6. `ClosingBookingCta`
 7. `SiteFooter`
 
-The implemented routes are `/`, `/about/curation`, `/destinations`, `/edit`, `/search`, `/saved`, `/trips`, the five fixture-backed `/trips/[id]` reservation paths, `/properties/casa-serein`, `/booking/review`, `/booking/guest-details`, `/booking/payment`, and `/booking/confirmation`. Other property slugs and navigation links to planned pages use the branded not-found state until their routes are built.
+The implemented routes are `/`, `/about/curation`, `/destinations`, `/edit`, `/search`, `/saved`, `/support`, `/trips`, the five fixture-backed `/trips/[id]` reservation paths, `/properties/casa-serein`, `/booking/review`, `/booking/guest-details`, `/booking/payment`, and `/booking/confirmation`. Other property slugs and navigation links to planned pages use the branded not-found state until their routes are built.
 
 ## Current mock-data state
 
@@ -954,7 +968,7 @@ Build each item separately, research it first, verify it, and commit it before m
 ### Phase 6 — Supporting pages and final quality
 
 39. ~~Curation/about page for `/about/curation`~~ Complete
-40. Support/contact experience for `/support`
+40. ~~Support/contact experience for `/support`~~ Complete
 41. Complete route-level metadata and social previews
 42. Final mobile navigation and responsive review at 375, 390, 768, 1024, and 1440 widths
 43. Full keyboard-navigation, semantic-structure, contrast, and reduced-motion review
@@ -964,4 +978,4 @@ Build each item separately, research it first, verify it, and commit it before m
 
 ## Recommended immediate next step
 
-Build the **support/contact experience for `/support`** for roadmap item 40. Research and lock its service/recovery references first, keep the experience honest about the frontend-only prototype, and avoid controls or response-time claims that imply a live support operation.
+Complete the **route-level metadata and social preview system** for roadmap item 41. Audit every implemented route against the installed Next.js 16.2 metadata guidance, establish one reusable LumaStay preview language without flattening route-specific titles and descriptions, and keep fixture-only booking or trip pages honest about indexing and sharing.
