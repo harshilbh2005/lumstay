@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
+import { createPageMetadata } from "@/config/metadata";
 import { getMockBookingById, mockBookings } from "@/data/mock";
 import { TripDetailPage } from "@/features/trips";
 import type { CancelledBooking, ConfirmedBooking } from "@/types/domain";
@@ -35,14 +36,14 @@ export async function generateMetadata({
     notFound();
   }
 
-  return {
+  return createPageMetadata({
     title: `${booking.property.name} trip record`,
     description: `Review the read-only ${booking.status} prototype reservation record for ${booking.property.name}.`,
-    robots: {
-      index: false,
-      follow: false,
-    },
-  };
+    path: `/trips/${booking.id}`,
+    eyebrow: `${booking.status} fixture record`,
+    detail: "Read-only fixture · Not a real reservation",
+    indexing: "noindex-nofollow",
+  });
 }
 
 export default async function TripDetailRoute({

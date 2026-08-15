@@ -1,7 +1,8 @@
-import type { Metadata, Viewport } from "next";
+import type { Viewport } from "next";
 import { Bodoni_Moda, Geist_Mono, Jost } from "next/font/google";
 
 import { AppProviders } from "@/components/providers/app-providers";
+import { rootMetadata } from "@/config/metadata";
 
 import "./globals.css";
 
@@ -23,14 +24,7 @@ const geistMono = Geist_Mono({
   display: "swap",
 });
 
-export const metadata: Metadata = {
-  title: {
-    default: "LumaStay — Considered stays, beautifully found",
-    template: "%s · LumaStay",
-  },
-  description:
-    "A premium hotel discovery and booking experience for exceptional stays.",
-};
+export const metadata = rootMetadata;
 
 export const viewport: Viewport = {
   colorScheme: "light",

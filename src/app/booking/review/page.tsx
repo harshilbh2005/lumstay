@@ -1,12 +1,15 @@
-import type { Metadata } from "next";
-
+import { createPageMetadata } from "@/config/metadata";
 import { BookingReview } from "@/features/booking";
 
-export const metadata: Metadata = {
+export const metadata = createPageMetadata({
   title: "Review your stay",
   description:
-    "Review your selected LumaStay property, room, dates, guests, and provisional accommodation subtotal.",
-};
+    "Review a memory-only LumaStay draft with fictional property, room, dates, guests, and a transparent mock total.",
+  path: "/booking/review",
+  eyebrow: "Prototype booking / review",
+  detail: "Memory-only draft · No reservation created",
+  indexing: "noindex-nofollow",
+});
 
 export default function BookingReviewPage() {
   return <BookingReview />;

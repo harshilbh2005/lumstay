@@ -827,6 +827,20 @@ Important limitation: the page describes the editorial standard the interface is
 
 Important limitation: this is a self-service explanation and local note formatter, not a support channel. It cannot receive, deliver, queue, store, respond to, or resolve a request; it is not appropriate for emergencies or live reservation, payment, account, or property help.
 
+### Route metadata and social previews
+
+- One typed metadata model in `src/config/metadata.ts` now owns the site origin, root metadata, canonical composition, social-image URLs, and the three explicit indexing policies instead of repeating partial objects across routes
+- Root metadata now supplies the title template, frontend-honest description, application/author/publisher identity, canonical URL, format-detection policy, Open Graph/Twitter cards, and large-preview crawler directives; every implemented child route adds a canonical, route-specific title/description, social copy, and explicit robots policy
+- `/`, `/destinations`, `/edit`, `/about/curation`, `/support`, and the fictional Casa Serein folio remain indexable; `/search` canonicalizes all query variants to `/search` and uses `noindex, follow`; browser-local `/saved`, all booking steps, `/trips`, and every fixture trip detail use `noindex, nofollow, nocache`
+- Dynamic property metadata identifies Casa Serein as fictional and discloses that no live availability exists; dynamic trip metadata is derived only from the fixture ID, property name, and status, never from guest names, mock references, card digits, prices, or other record details
+- The dynamic `/social-preview` image endpoint returns a cached 1200×630 PNG from bounded query text with no external runtime media or font request; one sharp paper/forest/brass folio language adapts to each route while keeping `Frontend prototype / No live inventory` visible
+- Production origins resolve from `NEXT_PUBLIC_SITE_URL`, then Vercel's production/deployment hosts, and finally `http://localhost:3000` for local review; invalid protocols and URL paths are discarded so canonicals stay on one normalized origin
+- The reference lock keeps Kobu and Christopher Ireland Creative's warm, shadowless editorial restraint as the foundation, borrows Mercury's split-frame hierarchy and Waka Waka's poster geometry, and rejects gradients, rounded preview cards, invented destination photography, decorative iconography, and social copy that implies live inventory or a user account
+- The app-builder workflow kept route files declarative, centralized framework-specific metadata under `src/config`, bounded the image handler at the route edge, and avoided new packages, client JavaScript, persistence, networking, or duplicated fixture content
+- Verified with lint, TypeScript, `git diff --check`, a successful Next.js 16.2 production build, rendered-head checks across 14 representative route policies, restrictive metadata on both dynamic not-found boundaries, a fixture-sensitive metadata leak assertion, PNG response/header and 1200×630 dimension checks, and visual inspection of the home, property, and support card variants after correcting the forest-rail wrap
+
+Important limitation: a deployed build must set `NEXT_PUBLIC_SITE_URL` or expose one of the supported Vercel host variables before social links are published. Without one, canonical and preview URLs intentionally point to `http://localhost:3000`; the cards remain generated prototype media and do not certify or advertise real properties, prices, availability, bookings, accounts, or support services.
+
 ## Current homepage order
 
 `src/app/page.tsx` renders:
@@ -858,6 +872,8 @@ The implemented routes are `/`, `/about/curation`, `/destinations`, `/edit`, `/s
 ## Commit history
 
 ```text
+f1962c9 feat: add support experience
+ce28337 fix: add property stay date selection
 7a82767 fix: preserve hero dates for curated stays
 443b416 feat: add trip booking details
 fc58f3f feat: add trips history page
@@ -969,7 +985,7 @@ Build each item separately, research it first, verify it, and commit it before m
 
 39. ~~Curation/about page for `/about/curation`~~ Complete
 40. ~~Support/contact experience for `/support`~~ Complete
-41. Complete route-level metadata and social previews
+41. ~~Complete route-level metadata and social previews~~ Complete
 42. Final mobile navigation and responsive review at 375, 390, 768, 1024, and 1440 widths
 43. Full keyboard-navigation, semantic-structure, contrast, and reduced-motion review
 44. Image loading, bundle, and Core Web Vitals review
@@ -978,4 +994,4 @@ Build each item separately, research it first, verify it, and commit it before m
 
 ## Recommended immediate next step
 
-Complete the **route-level metadata and social preview system** for roadmap item 41. Audit every implemented route against the installed Next.js 16.2 metadata guidance, establish one reusable LumaStay preview language without flattening route-specific titles and descriptions, and keep fixture-only booking or trip pages honest about indexing and sharing.
+Complete the **final mobile navigation and responsive review** for roadmap item 42. Audit the global header, menu sheet, route shells, fixed/sticky booking controls, data ledgers, forms, galleries, and recovery states at 375, 390, 768, 1024, and 1440 widths; resolve only reproducible cross-route navigation or layout defects and preserve each feature's established visual language.

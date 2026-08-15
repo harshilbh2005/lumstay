@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 
+import { createPageMetadata } from "@/config/metadata";
 import {
   getPropertyDetailBySlug,
   mockPropertyDetails,
@@ -35,10 +36,21 @@ export async function generateMetadata({
     notFound();
   }
 
-  return {
+  const location = [
+    property.summary.location.city,
+    property.summary.location.region,
+    property.summary.location.country,
+  ]
+    .filter(Boolean)
+    .join(", ");
+
+  return createPageMetadata({
     title: property.summary.name,
-    description: property.summary.description,
-  };
+    description: `Explore the fictional ${property.summary.name} profile in ${location}, including editorial detail, room fixtures, and a prototype booking journey.`,
+    path: `/properties/${property.summary.slug}`,
+    eyebrow: "Fictional property folio",
+    detail: "Prototype inventory · No live availability",
+  });
 }
 
 export default async function PropertyPage({ params }: PropertyPageProps) {

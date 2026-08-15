@@ -1,14 +1,17 @@
-import type { Metadata } from "next";
-
 import { SiteFooter } from "@/components/layout/site-footer";
 import { SiteHeader } from "@/components/layout/site-header";
+import { createPageMetadata } from "@/config/metadata";
 import { SavedPropertiesPage } from "@/features/saved/components/saved-properties-page";
 
-export const metadata: Metadata = {
+export const metadata = createPageMetadata({
   title: "Saved stays",
   description:
-    "Return to the considered hotels, cabins, lodges, and retreats saved to your private LumaStay list.",
-};
+    "Return to the fictional stays saved in this browser-local LumaStay prototype collection.",
+  path: "/saved",
+  eyebrow: "Browser-local collection",
+  detail: "Local saved state · Not a user account",
+  indexing: "noindex-nofollow",
+});
 
 export default function SavedPage() {
   return (

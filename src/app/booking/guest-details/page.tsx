@@ -1,12 +1,15 @@
-import type { Metadata } from "next";
-
+import { createPageMetadata } from "@/config/metadata";
 import { BookingGuestDetails } from "@/features/booking";
 
-export const metadata: Metadata = {
+export const metadata = createPageMetadata({
   title: "Guest details",
   description:
-    "Add the lead guest identity and contact details for your selected LumaStay stay.",
-};
+    "Prepare locally held guest details for a fictional LumaStay booking draft without sending personal information to a live service.",
+  path: "/booking/guest-details",
+  eyebrow: "Prototype booking / guest",
+  detail: "Local form state · No data transmitted",
+  indexing: "noindex-nofollow",
+});
 
 export default function BookingGuestDetailsPage() {
   return <BookingGuestDetails />;

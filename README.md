@@ -25,6 +25,19 @@ npm run check      # Run lint and typecheck
 npm run build      # Create a production build
 ```
 
+## Site URL and social previews
+
+Set `NEXT_PUBLIC_SITE_URL` to the deployed origin, for example
+`https://example.com`, before creating a production build. Route canonicals and social
+preview URLs use that value, then fall back to Vercel's production or deployment host,
+and finally to `http://localhost:3000` for local review.
+
+Every implemented route uses the shared metadata model in `src/config/metadata.ts`.
+Public editorial routes are indexable, search query variants are `noindex, follow`, and
+browser-local saved, booking, and trip surfaces are `noindex, nofollow`. The generated
+1200×630 PNG at `/social-preview` uses route-specific copy and always discloses the
+frontend-prototype scope.
+
 ## Architecture
 
 ```text
