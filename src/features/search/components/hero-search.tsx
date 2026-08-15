@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { format } from "date-fns";
+import { format, parseISO } from "date-fns";
 import { useRouter } from "next/navigation";
 import {
   CalendarBlank,
@@ -14,6 +14,7 @@ import {
 } from "@phosphor-icons/react";
 import type { DateRange } from "react-day-picker";
 
+import { useBookingStore } from "@/components/providers/booking-store-provider";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import {
@@ -36,12 +37,6 @@ interface GuestState {
   children: number;
   rooms: number;
 }
-
-const initialGuests: GuestState = {
-  adults: 2,
-  children: 0,
-  rooms: 1,
-};
 
 function Counter({
   label,
@@ -101,14 +96,56 @@ export function HeroSearch({
   destinationSuggestions: readonly DestinationSuggestion[];
 }) {
   const router = useRouter();
+  const bookingDates = useBookingStore((state) => state.dates);
+  const bookingGuests = useBookingStore((state) => state.guests);
+  const setBookingDates = useBookingStore((state) => state.setDates);
+  const setBookingGuests = useBookingStore((state) => state.setGuests);
   const [destination, setDestination] = React.useState("Udaipur, India");
-  const [dateRange, setDateRange] = React.useState<DateRange | undefined>(
-    initialDateRange,
+  const [dateRange, setDateRange] = React.useState<DateRange | undefined>(() =>
+    bookingDates.checkIn && bookingDates.checkOut
+      ? {
+          from: parseISO(bookingDates.checkIn),
+          to: parseISO(bookingDates.checkOut),
+        }
+      : initialDateRange,
   );
-  const [guests, setGuests] = React.useState(initialGuests);
+  const [guests, setGuests] = React.useState<GuestState>(() => ({
+    ...bookingGuests,
+  }));
   const [error, setError] = React.useState("");
   const [status, setStatus] = React.useState("");
   const [isPending, startTransition] = React.useTransition();
+
+  React.useEffect(() => {
+    const checkIn = dateRange?.from
+      ? format(dateRange.from, "yyyy-MM-dd")
+      : null;
+    const checkOut = dateRange?.to
+      ? format(dateRange.to, "yyyy-MM-dd")
+      : null;
+
+    if (
+      bookingDates.checkIn !== checkIn ||
+      bookingDates.checkOut !== checkOut
+    ) {
+      setBookingDates({ checkIn, checkOut });
+    }
+
+    if (
+      bookingGuests.adults !== guests.adults ||
+      bookingGuests.children !== guests.children ||
+      bookingGuests.rooms !== guests.rooms
+    ) {
+      setBookingGuests(guests);
+    }
+  }, [
+    bookingDates,
+    bookingGuests,
+    dateRange,
+    guests,
+    setBookingDates,
+    setBookingGuests,
+  ]);
 
   function updateGuests(key: keyof GuestState, value: number) {
     setGuests((current) => ({ ...current, [key]: value }));

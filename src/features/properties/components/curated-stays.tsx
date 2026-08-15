@@ -3,6 +3,7 @@ import Link from "next/link";
 import { ArrowRight, Star } from "@phosphor-icons/react/ssr";
 
 import { getMediaById, mockProperties } from "@/data/mock";
+import { BookingIntentPropertyLink } from "@/features/booking/components/booking-intent-property-link";
 import type { PropertySummary } from "@/types/domain";
 
 import { SaveStayButton } from "./save-stay-button";
@@ -26,6 +27,8 @@ function PropertyCard({
     return null;
   }
 
+  const bookingDestination = `${property.location.city}, ${property.location.country}`;
+
   return (
     <article className="group min-w-0">
       <div
@@ -35,8 +38,9 @@ function PropertyCard({
             : "relative aspect-[4/5] overflow-hidden bg-muted sm:aspect-[5/4] lg:aspect-[16/9]"
         }
       >
-        <Link
-          href={`/properties/${property.slug}`}
+        <BookingIntentPropertyLink
+          slug={property.slug}
+          destination={bookingDestination}
           prefetch={false}
           aria-label={`View ${property.name}`}
           className="absolute inset-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-brass focus-visible:ring-inset"
@@ -56,7 +60,7 @@ function PropertyCard({
             className="absolute inset-0 bg-gradient-to-t from-brand-forest-deep/25 via-transparent to-transparent opacity-70"
             aria-hidden="true"
           />
-        </Link>
+        </BookingIntentPropertyLink>
 
         <div className="pointer-events-none absolute inset-x-4 top-4 flex items-start justify-between gap-4 sm:inset-x-5 sm:top-5">
           <div className="flex min-h-8 items-center border border-white/34 bg-brand-forest-deep/58 px-3 font-mono text-[0.625rem] tracking-[0.13em] text-white uppercase backdrop-blur-md">
@@ -85,8 +89,9 @@ function PropertyCard({
           </span>
         </div>
 
-        <Link
-          href={`/properties/${property.slug}`}
+        <BookingIntentPropertyLink
+          slug={property.slug}
+          destination={bookingDestination}
           prefetch={false}
           className="mt-2 inline-flex rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-4"
         >
@@ -99,7 +104,7 @@ function PropertyCard({
           >
             {property.name}
           </h3>
-        </Link>
+        </BookingIntentPropertyLink>
 
         <p
           className={

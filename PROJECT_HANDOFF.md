@@ -557,6 +557,17 @@ Important limitation: the unavailable room is an explicit fixture state for inte
 
 Important limitation: this unit persists and displays search intent only. It does not filter the editorial result set or introduce filter/sort/mobile-sheet behavior.
 
+### Homepage curated-stay booking-intent handoff
+
+- The hero's displayed date range and guest/room counts now mirror the existing memory-only booking draft, including when the guest returns to the homepage during the same App Router session
+- Homepage curated-stay image and title links now append canonical destination, check-in, check-out, adult, child, and room parameters before opening the property route
+- Opening Casa Serein directly from the homepage therefore hydrates the property booking draft through the same URL-backed path as a search result, so selecting a room and choosing `Review your stay` retains the hero dates
+- Existing in-progress booking dates and guest counts initialize the hero when present, avoiding a hidden reset merely from revisiting the homepage
+- The fix adds no visual treatment, persistence layer, availability claim, or parallel date source; it reuses the existing booking store and search-query normalization
+- Verified with lint, TypeScript, `git diff --check`, a successful Next.js 16.2 production build, and visible Chromium QA at 1440×1000 and 390×844 across both hero → search → property and hero → curated property → review paths; both reach the complete review with their URL dates intact and clean consoles
+
+Important limitation: dates and guest counts survive direct homepage property navigation through the property URL, but room selection and later booking details remain memory-only and still clear on reload.
+
 ### Destination autocomplete
 
 - Refero-informed destination suggestion surface anchored above the existing hero search instead of introducing a separate search experience
