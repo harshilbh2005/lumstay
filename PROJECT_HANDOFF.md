@@ -520,15 +520,16 @@ Important limitation: room choice is intentionally local browser form state. It 
 ### Casa Serein sticky booking summary
 
 - A compact ruled summary stays directly beneath the 88px global header while the guest moves through the Casa Serein room section
-- The room ledger remains server-rendered; one isolated client leaf observes the existing native radio group through `useSyncExternalStore` and receives only serializable room-summary data
+- The room ledger remains server-rendered; one isolated client leaf observes the existing native radio group, synchronizes it with the booking store, and receives only serializable room-summary data
 - The initial state shows the lowest nightly rate and a clear selection prompt; native pointer or arrow-key selection updates the room name, exact rate, breakfast inclusion, and cancellation category
-- The action is intentionally honest and local: “Choose a room” or “Review this room” scrolls to the relevant native room row instead of implying availability, checkout, or a reservation
+- The action is state-aware: it scrolls to an available room before selection, asks for stay dates when a room has no valid range, and exposes `Review your stay` only when both the room and dates are ready
 - Reduced-motion preferences disable smooth scrolling, the changing room name is announced through a polite live region, and the existing radio labels retain their focus and selected-state semantics
 - BelArosa’s forest/linen/gold luxury restraint is the primary reference direction, with Kobu’s mono editorial metadata and Navan’s compact horizontal summary grouping borrowed as supporting details
 - The property wrapper now uses overflow clipping instead of an overflow scroll container so the global header and local summary can both remain sticky without changing visual containment
-- Verified from the production build at 1440×1000 and 390×844 with exact click and arrow-key updates, summary top position at 88px, sticky-section containment, scroll targeting below the sticky stack, zero horizontal overflow, zero browser errors, and 48px action targets
+- The summary now also exposes the active stay range and a compact date editor; the date editor is detailed in the dedicated property-page stay-date unit below
+- Verified from the production build at 1440×1000 and 390×844 with exact click and arrow-key updates, summary top position at 88px, sticky-section containment, scroll targeting below the sticky stack, zero horizontal overflow, zero browser errors, and 44–48px action targets
 
-Important limitation: the panel summarizes only the current page’s illustrative room choice. It does not include dates, guest counts, availability, taxes, total-stay pricing, checkout navigation, persistence, or cross-route booking state.
+Important limitation: the panel still does not edit guest counts, check live availability, or quote date-sensitive rates. Taxes and the complete mock total remain deferred to Review, and the booking draft remains memory-only despite URL-backed dates.
 
 ### Property route and room-availability states
 
@@ -567,6 +568,18 @@ Important limitation: this unit persists and displays search intent only. It doe
 - Verified with lint, TypeScript, `git diff --check`, a successful Next.js 16.2 production build, and visible Chromium QA at 1440×1000 and 390×844 across both hero → search → property and hero → curated property → review paths; both reach the complete review with their URL dates intact and clean consoles
 
 Important limitation: dates and guest counts survive direct homepage property navigation through the property URL, but room selection and later booking details remain memory-only and still clear on reload.
+
+### Property-page stay date editor
+
+- Casa Serein no longer leaves `Any dates` as a read-only summary: the date row is a 48px popover trigger on every viewport, and a room chosen without dates changes the primary action to `Add stay dates`
+- The compact one-month range calendar uses the same fixed prototype date floor and canonical `yyyy-MM-dd` values as the homepage search, with 44px day targets, visible focus, disabled past dates, and an assertive incomplete-range error
+- Applying a valid range updates the booking store immediately, recalculates the existing derived price summary, replaces the current property URL without scrolling, and preserves the selected room as the URL-backed initializer catches up
+- Clearing removes only the two date parameters and returns the action to the honest missing-date state; `Review your stay` appears only after a valid room and date range coexist
+- Refero’s BelArosa forest/linen/gold restraint remains the visual foundation, with Kobu’s compact mono metadata and the familiar horizontally grouped property date controls seen in Expedia/Tripadvisor used only as interaction references
+- White marketplace search cards, blue booking CTAs, urgency, live-availability copy, a duplicated destination/guest form, animated date chrome, and date-sensitive price claims were explicitly rejected
+- Verified with lint, TypeScript, `git diff --check`, a successful Next.js 16.2 production build, and visible Playwright QA at 1440×1000 and 390×844: direct property entry supports date selection, URL dates update, the native room remains selected, Review reaches the complete state, both viewports have zero horizontal overflow, and consoles remain clean
+
+Important limitation: the property calendar edits booking intent only. It does not query inventory or change the illustrative room availability and nightly rates, and room selection still resets on a full reload.
 
 ### Destination autocomplete
 
@@ -831,6 +844,7 @@ The implemented routes are `/`, `/about/curation`, `/destinations`, `/edit`, `/s
 ## Commit history
 
 ```text
+7a82767 fix: preserve hero dates for curated stays
 443b416 feat: add trip booking details
 fc58f3f feat: add trips history page
 46143ed feat: add mock booking history

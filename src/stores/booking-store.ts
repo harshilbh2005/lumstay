@@ -486,6 +486,31 @@ export function createBookingStore(
           return state;
         }
 
+        const dates = normalizeDates(seed.dates);
+        const guests = normalizeGuests(seed.guests);
+        const isMatchingPropertyState =
+          state.hydrationStatus === "hydrated" &&
+          state.property?.id === seed.property.id &&
+          state.dates.checkIn === dates.checkIn &&
+          state.dates.checkOut === dates.checkOut &&
+          state.guests.adults === guests.adults &&
+          state.guests.children === guests.children &&
+          state.guests.rooms === guests.rooms;
+
+        if (isMatchingPropertyState) {
+          return {
+            ...state,
+            initializationKey: seed.initializationKey,
+            property: seed.property,
+            priceSummary: getBookingPriceSummary({
+              dates: state.dates,
+              guests: state.guests,
+              property: seed.property,
+              room: state.room,
+            }),
+          };
+        }
+
         return getSeededBookingState(seed);
       }),
     setDates: (nextDates) =>
