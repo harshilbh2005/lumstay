@@ -39,7 +39,7 @@ export function MobileNavigation() {
       <SheetContent
         side="right"
         showCloseButton={false}
-        className="w-full max-w-none gap-0 border-0 bg-brand-forest-deep p-0 text-brand-paper sm:w-[28rem] sm:max-w-[28rem]"
+        className="!w-full !max-w-none gap-0 border-0 bg-brand-forest-deep p-0 text-brand-paper sm:!w-[28rem] sm:!max-w-[28rem]"
       >
         <SheetTitle className="sr-only">LumaStay navigation</SheetTitle>
         <SheetDescription className="sr-only">
@@ -49,7 +49,7 @@ export function MobileNavigation() {
         <div className="flex h-[5.5rem] items-center justify-between border-b border-white/14 px-5 sm:px-7">
           <Link
             href="/"
-            className="brand-wordmark-inverse font-sans text-[1.7rem] leading-none font-extrabold tracking-[-0.065em]"
+            className="brand-wordmark-inverse inline-flex min-h-11 items-center font-sans text-[1.7rem] leading-none font-extrabold tracking-[-0.065em]"
           >
             LumaStay
           </Link>

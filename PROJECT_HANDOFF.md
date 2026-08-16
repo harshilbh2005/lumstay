@@ -841,6 +841,21 @@ Important limitation: this is a self-service explanation and local note formatte
 
 Important limitation: a deployed build must set `NEXT_PUBLIC_SITE_URL` or expose one of the supported Vercel host variables before social links are published. Without one, canonical and preview URLs intentionally point to `http://localhost:3000`; the cards remain generated prototype media and do not certify or advertise real properties, prices, availability, bookings, accounts, or support services.
 
+### Final mobile navigation and responsive review
+
+- The final five-width review now covers the global header and navigation, every implemented route family, search and filter states, property and room surfaces, the full booking shell, saved/trips ledgers, and representative recovery routes at 375×812, 390×844, 768×1024, 1024×768, and 1440×1000
+- The mobile navigation sheet now honors its declared responsive geometry instead of losing to the shared sheet's base width utilities: it fills 375px and 390px phone viewports, resolves to the intended 28rem rail at 768px, retains body scroll lock, and returns focus to the 44px trigger after dismissal
+- The menu wordmark/home link now has a 44px hit area without changing its typography or the 88px header rhythm; primary links remain 80px or taller and Saved/Trips shortcuts remain 96px tall
+- The homepage closing CTA now receives four grid columns between 1024px and 1279px, preventing its 256px minimum width from extending past the document while restoring the original three-column composition at `xl`
+- Narrow four-column atlas cards stack country metadata between 1024px and 1279px, removing the Graubünden/Switzerland overrun while restoring the side-by-side caption at `xl`; the page's established asymmetric editorial composition remains otherwise unchanged
+- The established sticky contract remains intact at every width: the global header stays at `top: 0`, the selected-room summary stays directly below it at 88px, desktop navigation begins at 1024px, and mobile/tablet navigation remains available below that breakpoint
+- The app-builder workflow kept this as a corrective quality unit: no route, component system, store, fixture, package, persistence boundary, or visual language was added; only four reproducible responsive defects changed
+- The browser-automation workflow verified 80 production route/viewport layouts and 25 stateful surface checks. The latter exercised mobile search-filter sheets, fullscreen property galleries, room selection, the sticky summary, populated review and guest-details steps, and the populated payment form at all five widths
+- Final production results are zero layout, interaction, console, page, and non-cancelled request failures; every checked page retains one main landmark and one H1, all visible images decode, all tested dialogs stay inside the viewport with focus return, and all four payment inputs remain visible at 48px tall
+- Verified with `npm run check`, `git diff --check`, two successful Next.js 16.2 production builds, the full 80-layout matrix, the 25-check stateful journey, and visual screenshot review of the navigation sheet, search filters, galleries, sticky booking summary, 1024px overflow fixes, and payment form across the required widths
+
+Important limitation: this review covers the five roadmap viewports and the deterministic frontend states available in the local production build. It does not claim device-lab coverage, live-network behavior, real reservation data, or the separate keyboard/semantics/contrast/reduced-motion, performance, end-to-end, and final production audits reserved for roadmap items 43–46.
+
 ## Current homepage order
 
 `src/app/page.tsx` renders:
@@ -872,6 +887,7 @@ The implemented routes are `/`, `/about/curation`, `/destinations`, `/edit`, `/s
 ## Commit history
 
 ```text
+e1c8454 feat: add route metadata previews
 f1962c9 feat: add support experience
 ce28337 fix: add property stay date selection
 7a82767 fix: preserve hero dates for curated stays
@@ -986,7 +1002,7 @@ Build each item separately, research it first, verify it, and commit it before m
 39. ~~Curation/about page for `/about/curation`~~ Complete
 40. ~~Support/contact experience for `/support`~~ Complete
 41. ~~Complete route-level metadata and social previews~~ Complete
-42. Final mobile navigation and responsive review at 375, 390, 768, 1024, and 1440 widths
+42. ~~Final mobile navigation and responsive review at 375, 390, 768, 1024, and 1440 widths~~ Complete
 43. Full keyboard-navigation, semantic-structure, contrast, and reduced-motion review
 44. Image loading, bundle, and Core Web Vitals review
 45. End-to-end mock booking-flow QA
@@ -994,4 +1010,4 @@ Build each item separately, research it first, verify it, and commit it before m
 
 ## Recommended immediate next step
 
-Complete the **final mobile navigation and responsive review** for roadmap item 42. Audit the global header, menu sheet, route shells, fixed/sticky booking controls, data ledgers, forms, galleries, and recovery states at 375, 390, 768, 1024, and 1440 widths; resolve only reproducible cross-route navigation or layout defects and preserve each feature's established visual language.
+Complete the **full keyboard-navigation, semantic-structure, contrast, and reduced-motion review** for roadmap item 43. Audit every implemented route family and state with keyboard-only traversal, landmark and heading validation, accessible-name and focus-order checks, contrast verification, and reduced-motion behavior; resolve only reproducible accessibility defects and preserve each feature's established visual language.

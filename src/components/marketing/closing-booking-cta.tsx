@@ -41,7 +41,7 @@ export function ClosingBookingCta() {
               </h2>
             </div>
 
-            <div className="lg:col-start-10 lg:col-span-3 lg:pb-2">
+            <div className="lg:col-start-9 lg:col-span-4 lg:pb-2 xl:col-start-10 xl:col-span-3">
               <p className="max-w-[28rem] text-base leading-7 text-muted-foreground">
                 Start with a place. We will bring the possibilities down to
                 the stays worth knowing.

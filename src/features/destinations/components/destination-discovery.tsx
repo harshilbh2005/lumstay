@@ -249,11 +249,11 @@ export function DestinationDiscovery() {
                           />
                         </div>
 
-                        <div className="mt-4 grid gap-3 sm:grid-cols-[1fr_auto] sm:items-baseline">
+                        <div className="mt-4 grid gap-3 sm:grid-cols-[1fr_auto] sm:items-baseline lg:grid-cols-1 xl:grid-cols-[1fr_auto]">
                           <h3 className="text-[clamp(2.25rem,4.25vw,4.5rem)] leading-[0.95] font-semibold tracking-[-0.04em] text-brand-forest-deep">
                             {destination.name}
                           </h3>
-                          <p className="font-mono text-[0.625rem] tracking-[0.11em] text-muted-foreground uppercase sm:text-right">
+                          <p className="font-mono text-[0.625rem] tracking-[0.11em] text-muted-foreground uppercase sm:text-right lg:text-left xl:text-right">
                             {destination.country}
                           </p>
                         </div>
