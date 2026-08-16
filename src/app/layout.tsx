@@ -46,6 +46,12 @@ export default function RootLayout({
       <body
         className={`${jost.variable} ${bodoniModa.variable} ${geistMono.variable} min-h-full bg-background font-sans text-foreground antialiased`}
       >
+        <a
+          href="#main-content"
+          className="fixed top-3 left-3 z-[100] -translate-y-24 rounded-sm bg-brand-forest-deep px-4 py-3 text-sm font-semibold text-brand-paper shadow-float transition-transform duration-200 focus:translate-y-0 focus:outline-none focus:ring-2 focus:ring-brand-brass focus:ring-offset-2 focus:ring-offset-brand-paper motion-reduce:transition-none"
+        >
+          Skip to main content
+        </a>
         <AppProviders>{children}</AppProviders>
       </body>
     </html>

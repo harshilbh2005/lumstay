@@ -118,7 +118,7 @@ export function SearchFilterPanel({
       <SearchFilterDisclosure activeCount={filters.activeCount}>
         <>
           <div className="hidden border-t border-brand-forest-deep/18 pt-5 lg:block">
-            <p className="font-mono text-[0.625rem] tracking-[0.14em] text-brand-brass uppercase">
+            <p className="font-mono text-[0.625rem] tracking-[0.14em] text-brand-brass-dark uppercase">
               Refine the edit
             </p>
             <h2 className="mt-4 max-w-[10ch] font-sans text-3xl leading-none font-bold tracking-[-0.045em] text-brand-forest-deep">
@@ -232,7 +232,7 @@ export function SearchFilterPanel({
                 <Link
                   href={clearHref}
                   scroll={false}
-                  className="inline-flex min-h-12 items-center justify-center px-1 text-sm font-semibold text-brand-forest-deep underline decoration-brand-forest-deep/35 underline-offset-4 transition-colors duration-200 hover:text-brand-brass focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 lg:order-2 lg:min-h-11"
+                  className="inline-flex min-h-12 items-center justify-center px-1 text-sm font-semibold text-brand-forest-deep underline decoration-brand-forest-deep/35 underline-offset-4 transition-colors duration-200 hover:text-brand-brass-dark focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 lg:order-2 lg:min-h-11"
                 >
                   Reset filters
                 </Link>

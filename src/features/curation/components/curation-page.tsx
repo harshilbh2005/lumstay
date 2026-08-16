@@ -105,7 +105,7 @@ export function CurationPage() {
 
         <div className="grid gap-9 pt-10 sm:pt-14 lg:grid-cols-12 lg:items-end lg:gap-x-8 lg:pt-18">
           <div className="lg:col-span-8">
-            <p className="flex items-center gap-3 font-mono text-[0.6875rem] tracking-[0.16em] text-brand-brass uppercase">
+            <p className="flex items-center gap-3 font-mono text-[0.6875rem] tracking-[0.16em] text-brand-brass-dark uppercase">
               <span className="h-px w-7 bg-brand-brass" aria-hidden="true" />
               How the edit works
             </p>
@@ -143,7 +143,7 @@ export function CurationPage() {
                   className="group flex min-h-16 items-center justify-between gap-4 px-4 text-sm font-semibold text-foreground/78 transition-colors duration-200 hover:bg-brand-linen hover:text-brand-forest-deep focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring motion-reduce:transition-none sm:min-h-18 sm:px-5"
                 >
                   <span>{label}</span>
-                  <span className="font-mono text-[0.625rem] tracking-[0.1em] text-brand-brass">
+                  <span className="font-mono text-[0.625rem] tracking-[0.1em] text-brand-brass-dark">
                     {String(index + 1).padStart(2, "0")}
                   </span>
                 </a>
@@ -232,7 +232,7 @@ export function CurationPage() {
               <p className="font-mono text-[0.6875rem] tracking-[0.15em] text-brand-brass uppercase">
                 The editorial standard
               </p>
-              <p className="mt-3 font-mono text-[0.625rem] tracking-[0.12em] text-white/44 uppercase">
+              <p className="mt-3 font-mono text-[0.625rem] tracking-[0.12em] text-white/48 uppercase">
                 Four passes / One clear edit
               </p>
             </div>
@@ -283,7 +283,7 @@ export function CurationPage() {
         <div className="container-luma">
           <header className="grid gap-7 border-t border-border pt-6 lg:grid-cols-12 lg:gap-x-8">
             <div className="lg:col-span-3">
-              <p className="font-mono text-[0.6875rem] tracking-[0.15em] text-brand-brass uppercase">
+              <p className="font-mono text-[0.6875rem] tracking-[0.15em] text-brand-brass-dark uppercase">
                 Evidence over ornament
               </p>
               <p className="mt-3 font-mono text-[0.625rem] tracking-[0.12em] text-muted-foreground uppercase">
@@ -324,7 +324,7 @@ export function CurationPage() {
                     </div>
                     <figcaption className="mt-4 border-t border-border pt-4">
                       <div className="flex items-center justify-between gap-4 font-mono text-[0.625rem] tracking-[0.13em] text-muted-foreground uppercase">
-                        <span className="text-brand-brass">{study.folio}</span>
+                        <span className="text-brand-brass-dark">{study.folio}</span>
                         <span>{study.label}</span>
                       </div>
                       <p className="mt-3 max-w-[33rem] text-base leading-7 text-foreground/72">
@@ -346,7 +346,7 @@ export function CurationPage() {
       >
         <div className="container-luma grid gap-12 lg:grid-cols-12 lg:gap-x-8">
           <div className="lg:col-span-4">
-            <p className="font-mono text-[0.6875rem] tracking-[0.15em] text-brand-brass uppercase">
+            <p className="font-mono text-[0.6875rem] tracking-[0.15em] text-brand-brass-dark uppercase">
               Read the footnotes
             </p>
             <h2
@@ -395,7 +395,7 @@ export function CurationPage() {
       >
         <div className="container-luma grid gap-10 border-y border-border py-10 sm:py-14 lg:grid-cols-12 lg:items-end lg:gap-x-8">
           <div className="lg:col-span-3">
-            <p className="font-mono text-[0.6875rem] tracking-[0.15em] text-brand-brass uppercase">
+            <p className="font-mono text-[0.6875rem] tracking-[0.15em] text-brand-brass-dark uppercase">
               Continue from here
             </p>
             <p className="mt-3 font-mono text-[0.625rem] tracking-[0.12em] text-muted-foreground uppercase">

@@ -62,7 +62,7 @@ function SaveConfirmation({
           />
         </Link>
       ) : (
-        <span className="px-2 font-mono text-[0.5625rem] tracking-[0.12em] text-brand-paper/42 uppercase">
+        <span className="px-2 font-mono text-[0.5625rem] tracking-[0.12em] text-brand-paper/48 uppercase">
           Updated
         </span>
       )}

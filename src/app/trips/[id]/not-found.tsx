@@ -3,7 +3,11 @@ import { ArrowLeft, ArrowRight, Receipt } from "@phosphor-icons/react/ssr";
 
 export default function TripDetailNotFound() {
   return (
-    <main id="main-content" className="min-h-[70vh] bg-brand-paper">
+    <main
+      id="main-content"
+      tabIndex={-1}
+      className="min-h-[70vh] bg-brand-paper"
+    >
       <section className="container-luma grid gap-12 py-20 sm:py-28 lg:grid-cols-12 lg:gap-x-8 lg:py-36">
         <div className="lg:col-span-7">
           <p className="font-mono text-[0.6875rem] tracking-[0.14em] text-brand-brass-dark uppercase">

@@ -21,7 +21,7 @@ function SectionLabel({
       }
     >
       <span
-        className={inverse ? "mr-3 text-[#d2ab72]" : "mr-3 text-brand-brass"}
+        className={inverse ? "mr-3 text-[#d2ab72]" : "mr-3 text-brand-brass-dark"}
       >
         {index}
       </span>
@@ -75,7 +75,7 @@ export function PropertyInformation({
                     key={quality}
                     className="grid min-h-14 grid-cols-[2rem_1fr] items-center border-b border-brand-forest-deep/18 text-sm font-semibold text-brand-forest-deep"
                   >
-                    <span className="font-mono text-[0.625rem] font-normal text-brand-brass tabular-nums">
+                    <span className="font-mono text-[0.625rem] font-normal text-brand-brass-dark tabular-nums">
                       {String(index + 1).padStart(2, "0")}
                     </span>
                     {quality}
@@ -110,7 +110,7 @@ export function PropertyInformation({
                   key={facility.name}
                   className="grid gap-4 border-b border-brand-forest-deep/24 py-6 sm:grid-cols-[2.5rem_minmax(0,0.8fr)_minmax(0,1.5fr)] sm:gap-6 sm:py-8 lg:grid-cols-[2.5rem_minmax(0,0.85fr)_minmax(0,1.35fr)_10rem]"
                 >
-                  <span className="font-mono text-[0.625rem] tracking-[0.12em] text-brand-brass tabular-nums">
+                  <span className="font-mono text-[0.625rem] tracking-[0.12em] text-brand-brass-dark tabular-nums">
                     {String(index + 1).padStart(2, "0")}
                   </span>
                   <h3 className="font-sans text-xl leading-tight font-semibold tracking-[-0.025em] text-brand-forest-deep sm:text-2xl">
@@ -257,11 +257,16 @@ export function PropertyInformation({
                   key={place.name}
                   className="grid gap-2 border-b border-brand-forest-deep/24 py-5 sm:grid-cols-[2.5rem_minmax(0,0.75fr)_minmax(0,1.25fr)] sm:items-baseline sm:gap-6 sm:py-6"
                 >
-                  <span className="font-mono text-[0.625rem] text-brand-brass tabular-nums">
-                    {String(index + 1).padStart(2, "0")}
-                  </span>
-                  <dt className="text-lg font-semibold tracking-[-0.02em] text-brand-forest-deep">
-                    {place.name}
+                  <dt className="contents">
+                    <span
+                      aria-hidden="true"
+                      className="font-mono text-[0.625rem] text-brand-brass-dark tabular-nums"
+                    >
+                      {String(index + 1).padStart(2, "0")}
+                    </span>
+                    <span className="text-lg font-semibold tracking-[-0.02em] text-brand-forest-deep">
+                      {place.name}
+                    </span>
                   </dt>
                   <dd className="text-sm leading-6 text-muted-foreground sm:text-base sm:leading-7">
                     {place.context}

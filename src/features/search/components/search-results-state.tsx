@@ -63,7 +63,7 @@ export function SearchResultsState({
       <div className="flex flex-col justify-center py-12 sm:pr-10 lg:py-16 lg:pr-16">
         <p
           className={`font-mono text-[0.6875rem] tracking-[0.15em] uppercase ${
-            variant === "error" ? "text-destructive" : "text-brand-brass"
+            variant === "error" ? "text-destructive" : "text-brand-brass-dark"
           }`}
         >
           {content.eyebrow}
@@ -93,7 +93,7 @@ export function SearchResultsState({
           </Link>
           <Link
             href="/#stay-search"
-            className="inline-flex min-h-11 items-center px-2 text-sm font-semibold text-brand-forest-deep underline decoration-brand-forest-deep/35 underline-offset-4 transition-colors duration-200 hover:text-brand-brass focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+            className="inline-flex min-h-11 items-center px-2 text-sm font-semibold text-brand-forest-deep underline decoration-brand-forest-deep/35 underline-offset-4 transition-colors duration-200 hover:text-brand-brass-dark focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
           >
             Change search
           </Link>
@@ -132,7 +132,7 @@ export function SearchStateRail({
       <div className="border-t border-brand-forest-deep/18 pt-5">
         <p
           className={`font-mono text-[0.625rem] tracking-[0.14em] uppercase ${
-            isError ? "text-destructive" : "text-brand-brass"
+            isError ? "text-destructive" : "text-brand-brass-dark"
           }`}
         >
           Collection status

@@ -15,7 +15,7 @@ export default function CurationRoute() {
   return (
     <>
       <SiteHeader />
-      <main className="min-h-screen bg-brand-paper">
+      <main id="main-content" tabIndex={-1} className="min-h-screen bg-brand-paper">
         <CurationPage />
       </main>
       <SiteFooter />

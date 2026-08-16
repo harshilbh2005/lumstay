@@ -29,7 +29,7 @@ export function ClosingBookingCta() {
           <div className="grid gap-12 py-10 sm:py-14 lg:grid-cols-12 lg:items-end lg:gap-x-8 lg:py-18">
             <div className="lg:col-span-8">
               <p className="flex items-center gap-3 font-mono text-[0.6875rem] tracking-[0.15em] text-brand-stone uppercase">
-                <span className="text-brand-brass">04</span>
+                <span className="text-brand-brass-dark">04</span>
                 Your next stay
               </p>
 

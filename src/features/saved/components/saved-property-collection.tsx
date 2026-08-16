@@ -288,7 +288,7 @@ function SavedCollectionEmptyState({
       <div className="grid gap-10 lg:grid-cols-12 lg:items-stretch lg:gap-x-8">
         <div className="flex min-w-0 flex-col justify-between lg:col-start-8 lg:col-span-5 lg:row-start-1">
           <div>
-            <p className="flex items-center gap-3 font-mono text-[0.625rem] tracking-[0.14em] text-brand-brass uppercase">
+            <p className="flex items-center gap-3 font-mono text-[0.625rem] tracking-[0.14em] text-brand-brass-dark uppercase">
               <span aria-hidden="true">00</span>
               <span className="h-px w-6 bg-brand-brass" aria-hidden="true" />
               Nothing held yet

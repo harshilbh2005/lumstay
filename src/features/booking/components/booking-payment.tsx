@@ -114,7 +114,7 @@ export function BookingPayment() {
     !hasCompleteBookingPriceSummary(priceSummary)
   ) {
     return (
-      <main id="main-content">
+      <main id="main-content" tabIndex={-1}>
         <BookingFlowHeader
           activeStep={3}
           completedThrough={0}
@@ -132,7 +132,7 @@ export function BookingPayment() {
 
   if (!hasCompleteGuestDetails(guestDetails)) {
     return (
-      <main id="main-content">
+      <main id="main-content" tabIndex={-1}>
         <BookingFlowHeader
           activeStep={3}
           completedThrough={1}
@@ -196,7 +196,7 @@ export function BookingPayment() {
   }
 
   return (
-    <main id="main-content">
+    <main id="main-content" tabIndex={-1}>
       <BookingFlowHeader
         activeStep={3}
         title="Prepare a way to pay."
@@ -470,7 +470,7 @@ export function BookingPayment() {
                 <div className="mt-10 flex flex-col-reverse gap-4 border-t border-brand-forest-deep/24 pt-7 sm:flex-row sm:items-center sm:justify-between">
                   <Link
                     href="/booking/guest-details"
-                    className="inline-flex min-h-12 w-fit items-center gap-2 rounded-sm px-2 text-sm font-semibold text-brand-forest-deep underline decoration-brand-brass/65 underline-offset-4 transition-colors duration-200 hover:text-brand-brass focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-4"
+                    className="inline-flex min-h-12 w-fit items-center gap-2 rounded-sm px-2 text-sm font-semibold text-brand-forest-deep underline decoration-brand-brass/65 underline-offset-4 transition-colors duration-200 hover:text-brand-brass-dark focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-4"
                   >
                     <ArrowLeft aria-hidden="true" size={16} />
                     Back to guest details

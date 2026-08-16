@@ -22,7 +22,9 @@ function StoryMeta({ story, inverse = false }: { story: EditorialStory; inverse?
         inverse ? "text-white/48" : "text-muted-foreground"
       }`}
     >
-      <span className="text-brand-brass">{story.department}</span>
+      <span className={inverse ? "text-brand-brass" : "text-brand-brass-dark"}>
+        {story.department}
+      </span>
       <span aria-hidden="true">/</span>
       <span>By {story.author}</span>
       <span aria-hidden="true">/</span>
@@ -38,7 +40,7 @@ function RelatedPlaceLink({ story, inverse = false }: { story: EditorialStory; i
       className={`group inline-flex min-h-11 w-fit items-center gap-3 rounded-sm text-sm font-semibold underline underline-offset-8 transition-colors duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-4 motion-reduce:transition-none ${
         inverse
           ? "text-brand-paper decoration-brand-brass/70 hover:text-brand-brass focus-visible:ring-brand-brass focus-visible:ring-offset-brand-forest-deep"
-          : "text-brand-forest-deep decoration-brand-brass/70 hover:text-brand-brass focus-visible:ring-ring focus-visible:ring-offset-brand-paper"
+          : "text-brand-forest-deep decoration-brand-brass/70 hover:text-brand-brass-dark focus-visible:ring-ring focus-visible:ring-offset-brand-paper"
       }`}
     >
       {story.relatedLabel}
@@ -92,7 +94,7 @@ export function LumaEdit() {
                   className="group flex min-h-16 items-center justify-between gap-4 px-4 text-sm font-semibold text-foreground/78 transition-colors duration-200 hover:bg-brand-linen hover:text-brand-forest-deep focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring motion-reduce:transition-none sm:min-h-18 sm:px-5"
                 >
                   <span>{label}</span>
-                  <span className="font-mono text-[0.625rem] tracking-[0.1em] text-brand-brass">
+                  <span className="font-mono text-[0.625rem] tracking-[0.1em] text-brand-brass-dark">
                     {String(index + 1).padStart(2, "0")}
                   </span>
                 </a>
@@ -162,7 +164,7 @@ export function LumaEdit() {
                 style={{ objectPosition: roomMedia.focalPoint }}
               />
             </div>
-            <figcaption className="mt-4 flex items-start justify-between gap-5 font-mono text-[0.625rem] leading-5 tracking-[0.1em] text-white/42 uppercase">
+            <figcaption className="mt-4 flex items-start justify-between gap-5 font-mono text-[0.625rem] leading-5 tracking-[0.1em] text-white/48 uppercase">
               <span>{roomMedia.title}</span>
               <span className="text-right">Material / Light / Belonging</span>
             </figcaption>
@@ -190,7 +192,7 @@ export function LumaEdit() {
       <section aria-labelledby="field-notes-heading" className="bg-brand-linen py-20 sm:py-28 lg:py-36">
         <div className="container-luma lg:grid lg:grid-cols-12 lg:gap-x-8">
           <header className="lg:col-span-3">
-            <p className="font-mono text-[0.6875rem] tracking-[0.15em] text-brand-brass uppercase">
+            <p className="font-mono text-[0.6875rem] tracking-[0.15em] text-brand-brass-dark uppercase">
               Departments / 03–07
             </p>
             <h2
@@ -222,7 +224,7 @@ export function LumaEdit() {
                   className="scroll-mt-28 border-t border-border py-8 sm:py-10"
                 >
                   <article className="grid grid-cols-[2.5rem_1fr] gap-x-4 sm:grid-cols-12 sm:gap-x-6">
-                    <p className="pt-1 font-mono text-[0.625rem] tracking-[0.12em] text-brand-brass sm:col-span-1">
+                    <p className="pt-1 font-mono text-[0.625rem] tracking-[0.12em] text-brand-brass-dark sm:col-span-1">
                       {String(index + 3).padStart(2, "0")}
                     </p>
 
@@ -265,7 +267,7 @@ export function LumaEdit() {
       <aside aria-labelledby="editors-note-heading" className="bg-brand-paper py-20 sm:py-28 lg:py-32">
         <div className="container-luma grid gap-10 border-y border-border py-10 sm:py-14 lg:grid-cols-12 lg:gap-x-8">
           <div className="lg:col-span-3">
-            <p className="font-mono text-[0.6875rem] tracking-[0.15em] text-brand-brass uppercase">
+            <p className="font-mono text-[0.6875rem] tracking-[0.15em] text-brand-brass-dark uppercase">
               Editor’s letter
             </p>
             <p className="mt-3 font-mono text-[0.625rem] tracking-[0.12em] text-muted-foreground uppercase">
@@ -288,7 +290,7 @@ export function LumaEdit() {
             </p>
             <Link
               href="/destinations"
-              className="group mt-6 inline-flex min-h-11 w-fit items-center gap-3 rounded-sm text-sm font-semibold text-brand-forest-deep underline decoration-brand-brass/70 underline-offset-8 transition-colors duration-200 hover:text-brand-brass focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-4 focus-visible:ring-offset-brand-paper motion-reduce:transition-none"
+              className="group mt-6 inline-flex min-h-11 w-fit items-center gap-3 rounded-sm text-sm font-semibold text-brand-forest-deep underline decoration-brand-brass/70 underline-offset-8 transition-colors duration-200 hover:text-brand-brass-dark focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-4 focus-visible:ring-offset-brand-paper motion-reduce:transition-none"
             >
               Continue to the atlas
               <ArrowRight

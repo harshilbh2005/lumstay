@@ -34,7 +34,7 @@ export function BookingConfidence() {
         <div className="grid gap-12 border-t border-brand-forest-deep/18 pt-6 lg:grid-cols-12 lg:gap-x-8 lg:pt-8">
           <div className="lg:col-span-5 lg:pr-8 xl:pr-16">
             <p className="flex items-center gap-3 font-mono text-[0.6875rem] tracking-[0.15em] text-brand-stone uppercase">
-              <span className="text-brand-brass">03</span>
+              <span className="text-brand-brass-dark">03</span>
               The Luma promise
             </p>
 
@@ -77,7 +77,7 @@ export function BookingConfidence() {
                   key={promise.title}
                   className="grid gap-4 border-t border-brand-forest-deep/20 py-7 sm:grid-cols-[3rem_minmax(0,0.9fr)_minmax(0,1.2fr)] sm:gap-6 sm:py-8 lg:py-10"
                 >
-                  <span className="font-mono text-[0.625rem] tracking-[0.14em] text-brand-brass">
+                  <span className="font-mono text-[0.625rem] tracking-[0.14em] text-brand-brass-dark">
                     {String(index + 1).padStart(2, "0")}
                   </span>
                   <h3 className="max-w-[15ch] font-sans text-[1.55rem] leading-[1.04] font-bold tracking-[-0.04em] text-brand-forest-deep sm:text-[1.75rem]">

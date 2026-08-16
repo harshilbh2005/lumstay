@@ -854,7 +854,21 @@ Important limitation: a deployed build must set `NEXT_PUBLIC_SITE_URL` or expose
 - Final production results are zero layout, interaction, console, page, and non-cancelled request failures; every checked page retains one main landmark and one H1, all visible images decode, all tested dialogs stay inside the viewport with focus return, and all four payment inputs remain visible at 48px tall
 - Verified with `npm run check`, `git diff --check`, two successful Next.js 16.2 production builds, the full 80-layout matrix, the 25-check stateful journey, and visual screenshot review of the navigation sheet, search filters, galleries, sticky booking summary, 1024px overflow fixes, and payment form across the required widths
 
-Important limitation: this review covers the five roadmap viewports and the deterministic frontend states available in the local production build. It does not claim device-lab coverage, live-network behavior, real reservation data, or the separate keyboard/semantics/contrast/reduced-motion, performance, end-to-end, and final production audits reserved for roadmap items 43–46.
+Important limitation: this review covers the five roadmap viewports and the deterministic frontend states available in the local production build. It does not claim device-lab coverage, live-network behavior, real reservation data, or the separate accessibility, performance, end-to-end, and final production audits reserved for roadmap items 43–46.
+
+### Full accessibility and reduced-motion review
+
+- Every rendered page state now exposes one visible `main` landmark with the consistent `#main-content` target; a root-level, reduced-motion-safe skip link is the first keyboard stop and transfers focus to that target across ordinary, loading, error, not-found, booking, saved, and Trips states
+- The complete keyboard matrix covers 24 route/state cases at 390×844 and 1440×1000. All 48 checks reach every expected tab stop in DOM order with a visible focus indicator; closed native-disclosure content remains correctly excluded from the tab sequence
+- Manual widget journeys confirm combobox Arrow/Home/End/Escape behavior, mobile-navigation and search-sheet focus containment/return, fullscreen-gallery Home/End/Escape behavior, native room-radio arrow movement, support disclosure activation, and first-invalid-field focus on both guest and mock-payment forms
+- The homepage destination combobox now exposes a visible `focus-within` ring, and its `aria-controls` relationship exists only while the popup is mounted; explanatory currency text uses native abbreviations, while named non-landmark containers now use explicit group semantics and redundant ARIA on visible rating copy was removed
+- Support, room, and nearby-place description lists now group only valid `dt`/`dd` content without changing their established grids; all audited pages retain one H1, valid heading progression, no duplicate IDs, no positive tab indices, complete image alternatives, and resolved ARIA references
+- Small brass copy on paper/linen now uses the dark text role (`#865f30`), measuring 5.49:1 on paper and 5.01:1 on linen; bright brass remains available on forest surfaces. Low-opacity forest text was raised to the 4.5:1 threshold, and status, ordering, and experience labels over imagery now use stronger forest veils or opaque backing so contrast does not depend on a favorable photo pixel
+- Forced-colour fallbacks remain intact. With `prefers-reduced-motion: reduce`, Chromium reports the preference, document scrolling changes from smooth to auto, and the maximum visible animation/transition duration collapses from 500ms to 0.01ms; dialog, gallery, save-feedback, and skeleton behavior remain usable without meaningful motion
+- The automated production matrix performs 48 mobile/desktop route-state scans plus 18 populated Saved and room-to-confirmation scans. All 66 return zero axe WCAG 2.0/2.1/2.2 A/AA violations, zero semantic/bypass failures, and zero unexpected console, page, or request failures; the expected global-404 resource responses remain the only logged 404s
+- Verified with `npm run check`, `git diff --check`, repeated successful Next.js 16.2 production builds, the 48-check keyboard/focus matrix, the 48-scan route/state axe matrix, the 18-scan populated Saved/booking matrix, manual contrast calculations and image-overlay review, and reduced-motion emulation at both preference settings
+
+Important limitation: this is a deterministic Chromium and source review rather than assistive-technology certification or a physical-device lab. It does not claim coverage of every browser/screen-reader pairing, user-authored content, live inventory, third-party widgets, or network-dependent production behavior; performance, end-to-end, and final production audits remain roadmap items 44–46.
 
 ## Current homepage order
 
@@ -887,6 +901,7 @@ The implemented routes are `/`, `/about/curation`, `/destinations`, `/edit`, `/s
 ## Commit history
 
 ```text
+f77a9e9 fix: complete responsive navigation audit
 e1c8454 feat: add route metadata previews
 f1962c9 feat: add support experience
 ce28337 fix: add property stay date selection
@@ -1003,11 +1018,11 @@ Build each item separately, research it first, verify it, and commit it before m
 40. ~~Support/contact experience for `/support`~~ Complete
 41. ~~Complete route-level metadata and social previews~~ Complete
 42. ~~Final mobile navigation and responsive review at 375, 390, 768, 1024, and 1440 widths~~ Complete
-43. Full keyboard-navigation, semantic-structure, contrast, and reduced-motion review
+43. ~~Full keyboard-navigation, semantic-structure, contrast, and reduced-motion review~~ Complete
 44. Image loading, bundle, and Core Web Vitals review
 45. End-to-end mock booking-flow QA
 46. Final visual-consistency and production-build audit
 
 ## Recommended immediate next step
 
-Complete the **full keyboard-navigation, semantic-structure, contrast, and reduced-motion review** for roadmap item 43. Audit every implemented route family and state with keyboard-only traversal, landmark and heading validation, accessible-name and focus-order checks, contrast verification, and reduced-motion behavior; resolve only reproducible accessibility defects and preserve each feature's established visual language.
+Complete the **image loading, bundle, and Core Web Vitals review** for roadmap item 44. Measure the production build across representative route families and populated states, identify image or JavaScript delivery regressions with reproducible evidence, and make only targeted performance changes that preserve the established visual and interaction contracts.

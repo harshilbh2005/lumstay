@@ -59,12 +59,12 @@ export function SiteHeader() {
             Trips
           </Link>
 
-          <span
+          <abbr
             className="hidden h-11 items-center px-2 font-mono text-[0.6875rem] tracking-[0.1em] text-muted-foreground xl:flex"
-            aria-label="Currency: Indian rupees"
+            title="Indian rupees"
           >
             INR
-          </span>
+          </abbr>
 
           <MobileNavigation />
         </div>

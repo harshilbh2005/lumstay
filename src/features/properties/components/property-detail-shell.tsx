@@ -52,7 +52,11 @@ export function PropertyDetailShell({
   }).format(summary.priceFrom.amount);
 
   return (
-    <main className="min-h-screen overflow-clip bg-brand-paper">
+    <main
+      id="main-content"
+      tabIndex={-1}
+      className="min-h-screen overflow-clip bg-brand-paper"
+    >
       <article>
         <header className="container-luma pb-10 pt-8 sm:pb-14 sm:pt-10 lg:pb-16 lg:pt-14">
           <nav aria-label="Breadcrumb">
@@ -72,7 +76,7 @@ export function PropertyDetailShell({
           <div className="mt-8 grid gap-8 border-t border-brand-forest-deep/18 pt-6 lg:mt-12 lg:grid-cols-12 lg:gap-x-8 lg:pt-8">
             <div className="lg:col-span-3">
               <p className="font-mono text-[0.6875rem] tracking-[0.14em] text-brand-stone uppercase">
-                <span className="mr-3 text-brand-brass">01</span>
+                <span className="mr-3 text-brand-brass-dark">01</span>
                 {editorial.folio}
               </p>
               <p className="mt-5 max-w-[24rem] text-sm leading-6 text-muted-foreground capitalize lg:mt-8">
@@ -116,10 +120,7 @@ export function PropertyDetailShell({
                 <p className="font-mono text-[0.625rem] tracking-[0.12em] text-brand-stone uppercase">
                   Guest rating
                 </p>
-                <p
-                  aria-label={`Rated ${summary.rating.toFixed(2)} out of 5 from ${summary.reviewCount} guest reviews`}
-                  className="mt-2 flex items-center gap-2 text-base font-semibold text-brand-forest-deep"
-                >
+                <p className="mt-2 flex items-center gap-2 text-base font-semibold text-brand-forest-deep">
                   <Star
                     aria-hidden="true"
                     size={14}
@@ -169,7 +170,7 @@ export function PropertyDetailShell({
           <div className="grid gap-10 border-t border-brand-forest-deep/18 pt-7 lg:grid-cols-12 lg:gap-x-8 lg:pt-9">
             <div className="lg:col-span-3">
               <p className="font-mono text-[0.6875rem] tracking-[0.14em] text-brand-stone uppercase">
-                <span className="mr-3 text-brand-brass">02</span>
+                <span className="mr-3 text-brand-brass-dark">02</span>
                 The Luma note
               </p>
             </div>

@@ -2,7 +2,7 @@ export function SearchResultsIntro() {
   return (
     <header className="grid gap-8 border-t border-brand-forest-deep/20 pt-6 lg:grid-cols-12 lg:gap-x-8 lg:pt-8">
       <p className="flex items-start gap-3 font-mono text-[0.6875rem] tracking-[0.15em] text-brand-stone uppercase lg:col-span-3">
-        <span className="text-brand-brass">01</span>
+        <span className="text-brand-brass-dark">01</span>
         Search the edit
       </p>
 

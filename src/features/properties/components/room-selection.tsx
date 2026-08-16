@@ -65,7 +65,7 @@ export function RoomSelection({
         <div className="grid gap-8 border-t border-brand-forest-deep/18 pt-7 lg:grid-cols-12 lg:gap-x-8 lg:pt-9">
           <div className="lg:col-span-3">
             <p className="font-mono text-[0.6875rem] tracking-[0.14em] text-brand-stone uppercase">
-              <span className="mr-3 text-brand-brass">03</span>
+              <span className="mr-3 text-brand-brass-dark">03</span>
               The rooms
             </p>
           </div>
@@ -155,7 +155,7 @@ export function RoomSelection({
                   </div>
 
                   <div className="lg:col-span-4">
-                    <p className="font-mono text-[0.625rem] tracking-[0.13em] text-brand-brass uppercase">
+                    <p className="font-mono text-[0.625rem] tracking-[0.13em] text-brand-brass-dark uppercase">
                       Room {String(index + 1).padStart(2, "0")}
                     </p>
                     <h3
@@ -173,49 +173,49 @@ export function RoomSelection({
 
                     <dl className="mt-7 border-y border-brand-forest-deep/18">
                       <div className="grid grid-cols-[1.75rem_1fr] gap-3 border-b border-brand-forest-deep/18 py-3.5">
-                        <UsersThree
-                          aria-hidden="true"
-                          size={17}
-                          className="mt-0.5 text-brand-brass"
-                        />
-                        <div>
-                          <dt className="font-mono text-[0.5625rem] tracking-[0.11em] text-brand-stone uppercase">
+                        <dt className="col-span-2 grid grid-cols-subgrid">
+                          <UsersThree
+                            aria-hidden="true"
+                            size={17}
+                            className="mt-0.5 text-brand-brass"
+                          />
+                          <span className="font-mono text-[0.5625rem] tracking-[0.11em] text-brand-stone uppercase">
                             Occupancy
-                          </dt>
-                          <dd className="mt-1 text-sm leading-6 font-medium text-brand-forest-deep">
-                            Up to {room.maxGuests} guests
-                          </dd>
-                        </div>
+                          </span>
+                        </dt>
+                        <dd className="col-start-2 mt-1 text-sm leading-6 font-medium text-brand-forest-deep">
+                          Up to {room.maxGuests} guests
+                        </dd>
                       </div>
                       <div className="grid grid-cols-[1.75rem_1fr] gap-3 border-b border-brand-forest-deep/18 py-3.5">
-                        <Bed
-                          aria-hidden="true"
-                          size={17}
-                          className="mt-0.5 text-brand-brass"
-                        />
-                        <div>
-                          <dt className="font-mono text-[0.5625rem] tracking-[0.11em] text-brand-stone uppercase">
+                        <dt className="col-span-2 grid grid-cols-subgrid">
+                          <Bed
+                            aria-hidden="true"
+                            size={17}
+                            className="mt-0.5 text-brand-brass"
+                          />
+                          <span className="font-mono text-[0.5625rem] tracking-[0.11em] text-brand-stone uppercase">
                             Beds
-                          </dt>
-                          <dd className="mt-1 text-sm leading-6 font-medium text-brand-forest-deep">
-                            {room.bedConfiguration}
-                          </dd>
-                        </div>
+                          </span>
+                        </dt>
+                        <dd className="col-start-2 mt-1 text-sm leading-6 font-medium text-brand-forest-deep">
+                          {room.bedConfiguration}
+                        </dd>
                       </div>
                       <div className="grid grid-cols-[1.75rem_1fr] gap-3 py-3.5">
-                        <Ruler
-                          aria-hidden="true"
-                          size={17}
-                          className="mt-0.5 text-brand-brass"
-                        />
-                        <div>
-                          <dt className="font-mono text-[0.5625rem] tracking-[0.11em] text-brand-stone uppercase">
+                        <dt className="col-span-2 grid grid-cols-subgrid">
+                          <Ruler
+                            aria-hidden="true"
+                            size={17}
+                            className="mt-0.5 text-brand-brass"
+                          />
+                          <span className="font-mono text-[0.5625rem] tracking-[0.11em] text-brand-stone uppercase">
                             Room size
-                          </dt>
-                          <dd className="mt-1 text-sm leading-6 font-medium text-brand-forest-deep">
-                            {room.sizeSquareMetres} m²
-                          </dd>
-                        </div>
+                          </span>
+                        </dt>
+                        <dd className="col-start-2 mt-1 text-sm leading-6 font-medium text-brand-forest-deep">
+                          {room.sizeSquareMetres} m²
+                        </dd>
                       </div>
                     </dl>
 

@@ -10,6 +10,8 @@ function SkeletonBlock({ className }: { className: string }) {
 export function PropertyDetailSkeleton() {
   return (
     <main
+      id="main-content"
+      tabIndex={-1}
       aria-busy="true"
       aria-labelledby="property-loading-status"
       className="min-h-screen overflow-clip bg-brand-paper"

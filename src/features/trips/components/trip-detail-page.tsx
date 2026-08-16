@@ -157,7 +157,7 @@ export function TripDetailPage({ booking }: { booking: ReservationBooking }) {
       : `Paid ${formatTripEventDate(booking.payment.paidAt)}`;
 
   return (
-    <main id="main-content" className="min-h-screen bg-brand-paper">
+    <main id="main-content" tabIndex={-1} className="min-h-screen bg-brand-paper">
       <section
         aria-labelledby="trip-detail-heading"
         className="container-luma pt-10 pb-16 sm:pt-14 sm:pb-24 lg:pt-16 lg:pb-28"

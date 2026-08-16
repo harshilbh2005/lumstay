@@ -114,6 +114,7 @@ export function SearchResults({
         <SearchResultsIntro />
 
         <div
+          role="group"
           aria-label="Current search"
           className="mt-12 grid border-y border-brand-forest-deep/18 bg-brand-linen lg:mt-16 lg:grid-cols-[1fr_1fr_1fr_auto]"
         >

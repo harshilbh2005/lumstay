@@ -181,7 +181,7 @@ export function SupportPage() {
 
         <div className="grid gap-10 pt-10 sm:pt-14 lg:grid-cols-12 lg:items-end lg:gap-x-8 lg:pt-18">
           <div className="lg:col-span-8">
-            <p className="flex items-center gap-3 font-mono text-[0.6875rem] tracking-[0.16em] text-brand-brass uppercase">
+            <p className="flex items-center gap-3 font-mono text-[0.6875rem] tracking-[0.16em] text-brand-brass-dark uppercase">
               <span className="h-px w-7 bg-brand-brass" aria-hidden="true" />
               Help, without the maze
             </p>
@@ -215,7 +215,7 @@ export function SupportPage() {
                   className="group flex min-h-16 items-center justify-between gap-4 px-4 text-sm font-semibold text-foreground/78 transition-colors duration-200 hover:bg-brand-linen hover:text-brand-forest-deep focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring motion-reduce:transition-none sm:min-h-18 sm:px-5"
                 >
                   <span>{label}</span>
-                  <span className="font-mono text-[0.625rem] tracking-[0.1em] text-brand-brass">
+                  <span className="font-mono text-[0.625rem] tracking-[0.1em] text-brand-brass-dark">
                     {String(index + 1).padStart(2, "0")}
                   </span>
                 </a>
@@ -265,11 +265,16 @@ export function SupportPage() {
                 key={term}
                 className="grid gap-4 border-t border-white/16 py-7 sm:grid-cols-[3rem_8rem_1fr] sm:gap-6 sm:py-8"
               >
-                <span className="font-mono text-[0.625rem] tracking-[0.13em] text-brand-brass">
-                  {String(index + 1).padStart(2, "0")}
-                </span>
-                <dt className="font-sans text-xl leading-tight font-bold tracking-[-0.025em]">
-                  {term}
+                <dt className="contents">
+                  <span
+                    aria-hidden="true"
+                    className="font-mono text-[0.625rem] tracking-[0.13em] text-brand-brass"
+                  >
+                    {String(index + 1).padStart(2, "0")}
+                  </span>
+                  <span className="font-sans text-xl leading-tight font-bold tracking-[-0.025em]">
+                    {term}
+                  </span>
                 </dt>
                 <dd className="max-w-[34rem] text-base leading-7 text-brand-paper/64">
                   {detail}

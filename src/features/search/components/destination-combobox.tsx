@@ -222,7 +222,7 @@ export function DestinationCombobox({
       <label
         htmlFor="hero-destination"
         className={cn(
-          "group flex min-h-16 min-w-0 items-center gap-3 rounded-[0.9rem] bg-white px-4 transition-colors duration-200 lg:rounded-l-[1.15rem] lg:rounded-r-none lg:px-5",
+          "group flex min-h-16 min-w-0 items-center gap-3 rounded-[0.9rem] bg-white px-4 transition-[box-shadow,color] duration-200 focus-within:ring-2 focus-within:ring-brand-brass focus-within:ring-inset lg:rounded-l-[1.15rem] lg:rounded-r-none lg:px-5",
           hasError && "ring-2 ring-destructive/70",
         )}
       >
@@ -244,7 +244,7 @@ export function DestinationCombobox({
             spellCheck={false}
             value={value}
             aria-autocomplete="list"
-            aria-controls={listboxId}
+            aria-controls={isOpen ? listboxId : undefined}
             aria-expanded={isOpen}
             aria-haspopup="listbox"
             aria-activedescendant={

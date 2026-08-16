@@ -124,16 +124,14 @@ export function SiteFooter() {
             </ul>
           </nav>
 
-          <p
-            aria-label={`Market: ${siteConfig.market.country}; currency: ${siteConfig.market.currency}`}
-            className="flex min-h-11 items-center gap-2 font-mono text-[0.6875rem] tracking-[0.1em] uppercase sm:col-span-2 sm:justify-self-end lg:col-span-1"
-          >
+          <p className="flex min-h-11 items-center gap-2 font-mono text-[0.6875rem] tracking-[0.1em] uppercase sm:col-span-2 sm:justify-self-end lg:col-span-1">
             <GlobeHemisphereEast
               aria-hidden="true"
               size={17}
               className="text-brand-brass"
             />
-            {siteConfig.market.country} / {siteConfig.market.currency}
+            {siteConfig.market.country} /{" "}
+            <abbr title="Indian rupees">{siteConfig.market.currency}</abbr>
           </p>
         </div>
       </div>

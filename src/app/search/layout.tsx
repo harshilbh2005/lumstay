@@ -9,7 +9,9 @@ export default function SearchLayout({
   return (
     <>
       <SiteHeader />
-      <main className="min-h-screen bg-brand-paper">{children}</main>
+      <main id="main-content" tabIndex={-1} className="min-h-screen bg-brand-paper">
+        {children}
+      </main>
       <SiteFooter />
     </>
   );

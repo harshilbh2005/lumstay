@@ -159,7 +159,7 @@ export function MobileSearchSheet({
         >
           <header className="grid min-h-20 shrink-0 grid-cols-[1fr_auto] items-center gap-4 border-b border-brand-forest-deep/16 px-5">
             <div>
-              <p className="font-mono text-[0.625rem] tracking-[0.14em] text-brand-brass uppercase">
+              <p className="font-mono text-[0.625rem] tracking-[0.14em] text-brand-brass-dark uppercase">
                 Edit the trip
               </p>
               <SheetTitle className="mt-1 font-sans text-xl font-bold tracking-[-0.035em] text-brand-forest-deep">
@@ -316,7 +316,7 @@ export function MobileSearchSheet({
                 render={
                   <button
                     type="button"
-                    className="min-h-12 px-1 text-sm font-semibold text-brand-forest-deep underline decoration-brand-forest-deep/35 underline-offset-4 transition-colors duration-200 hover:text-brand-brass focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                    className="min-h-12 px-1 text-sm font-semibold text-brand-forest-deep underline decoration-brand-forest-deep/35 underline-offset-4 transition-colors duration-200 hover:text-brand-brass-dark focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                   />
                 }
               >

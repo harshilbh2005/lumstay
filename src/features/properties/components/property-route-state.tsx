@@ -26,12 +26,16 @@ export function PropertyRouteState({
   tone?: "brass" | "error";
 }) {
   return (
-    <main className="min-h-[calc(100dvh-5.5rem)] bg-brand-paper py-12 sm:py-16 lg:py-20">
+    <main
+      id="main-content"
+      tabIndex={-1}
+      className="min-h-[calc(100dvh-5.5rem)] bg-brand-paper py-12 sm:py-16 lg:py-20"
+    >
       <div className="container-luma">
         <header className="grid gap-8 border-t border-brand-forest-deep/20 pt-6 lg:grid-cols-12 lg:gap-x-8 lg:pt-8">
           <p
             className={`font-mono text-[0.6875rem] tracking-[0.15em] uppercase lg:col-span-3 ${
-              tone === "error" ? "text-destructive" : "text-brand-brass"
+              tone === "error" ? "text-destructive" : "text-brand-brass-dark"
             }`}
           >
             {eyebrow}
@@ -55,7 +59,7 @@ export function PropertyRouteState({
           <div className="flex flex-col justify-center p-6 sm:p-10 lg:col-span-8 lg:p-14">
             <p
               className={`font-mono text-[0.6875rem] tracking-[0.15em] uppercase ${
-                tone === "error" ? "text-destructive" : "text-brand-brass"
+                tone === "error" ? "text-destructive" : "text-brand-brass-dark"
               }`}
             >
               {statusLabel}

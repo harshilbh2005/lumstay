@@ -61,7 +61,7 @@ export function SavedPropertiesPage() {
         aria-labelledby="saved-page-heading"
         className="container-luma pt-14 pb-16 sm:pt-20 sm:pb-24 lg:pt-24 lg:pb-28"
       >
-        <div className="flex items-center gap-3 font-mono text-[0.6875rem] tracking-[0.16em] text-brand-brass uppercase">
+        <div className="flex items-center gap-3 font-mono text-[0.6875rem] tracking-[0.16em] text-brand-brass-dark uppercase">
           <span className="h-px w-7 bg-brand-brass" aria-hidden="true" />
           Your Luma list
         </div>

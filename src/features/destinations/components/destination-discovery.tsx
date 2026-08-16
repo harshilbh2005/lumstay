@@ -62,7 +62,7 @@ export function DestinationDiscovery() {
         aria-labelledby="destinations-heading"
         className="container-luma pt-14 pb-16 sm:pt-20 sm:pb-24 lg:pt-24"
       >
-        <div className="flex items-center gap-3 font-mono text-[0.6875rem] tracking-[0.16em] text-brand-brass uppercase">
+        <div className="flex items-center gap-3 font-mono text-[0.6875rem] tracking-[0.16em] text-brand-brass-dark uppercase">
           <span className="h-px w-7 bg-brand-brass" aria-hidden="true" />
           The Luma atlas
         </div>
@@ -94,7 +94,7 @@ export function DestinationDiscovery() {
                   href={`#${destination.slug}`}
                   className="group flex min-h-16 items-center justify-between gap-3 px-4 text-sm font-semibold text-foreground/78 transition-colors duration-200 hover:bg-brand-linen hover:text-brand-forest-deep focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-ring motion-reduce:transition-none lg:min-h-20 lg:flex-col lg:items-start lg:justify-center"
                 >
-                  <span className="font-mono text-[0.625rem] tracking-[0.1em] text-brand-brass">
+                  <span className="font-mono text-[0.625rem] tracking-[0.1em] text-brand-brass-dark">
                     {String(index + 1).padStart(2, "0")}
                   </span>
                   <span>{destination.name}</span>
@@ -130,7 +130,7 @@ export function DestinationDiscovery() {
 
             <dl className="mt-10 grid grid-cols-2 border-y border-white/16 sm:mt-14">
               <div className="border-r border-white/16 py-5 pr-5">
-                <dt className="font-mono text-[0.625rem] tracking-[0.13em] text-white/45 uppercase">
+                <dt className="font-mono text-[0.625rem] tracking-[0.13em] text-white/48 uppercase">
                   Best season
                 </dt>
                 <dd className="mt-2 text-sm leading-6 text-white/78">
@@ -138,7 +138,7 @@ export function DestinationDiscovery() {
                 </dd>
               </div>
               <div className="py-5 pl-5">
-                <dt className="font-mono text-[0.625rem] tracking-[0.13em] text-white/45 uppercase">
+                <dt className="font-mono text-[0.625rem] tracking-[0.13em] text-white/48 uppercase">
                   Rhythm
                 </dt>
                 <dd className="mt-2 text-sm leading-6 text-white/78">
@@ -173,7 +173,7 @@ export function DestinationDiscovery() {
                 style={{ objectPosition: featuredMedia.focalPoint }}
               />
             </div>
-            <figcaption className="mt-4 flex items-start justify-between gap-5 font-mono text-[0.625rem] leading-5 tracking-[0.1em] text-white/42 uppercase">
+            <figcaption className="mt-4 flex items-start justify-between gap-5 font-mono text-[0.625rem] leading-5 tracking-[0.1em] text-white/48 uppercase">
               <span>{featuredMedia.title}</span>
               <span className="text-right">
                 {featuredDestination.country} / {featuredDestination.region}
@@ -190,7 +190,7 @@ export function DestinationDiscovery() {
         <div className="container-luma">
           <header className="grid gap-5 border-t border-border pt-6 sm:grid-cols-[1fr_auto] sm:items-end">
             <div>
-              <p className="font-mono text-[0.6875rem] tracking-[0.15em] text-brand-brass uppercase">
+              <p className="font-mono text-[0.6875rem] tracking-[0.15em] text-brand-brass-dark uppercase">
                 Continue around the map
               </p>
               <h2

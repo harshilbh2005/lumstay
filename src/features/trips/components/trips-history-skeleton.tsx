@@ -55,6 +55,7 @@ export function TripsHistorySkeleton() {
   return (
     <main
       id="main-content"
+      tabIndex={-1}
       aria-busy="true"
       className="min-h-screen bg-brand-paper"
     >

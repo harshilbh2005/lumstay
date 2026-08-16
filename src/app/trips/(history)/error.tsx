@@ -28,7 +28,7 @@ export default function TripsHistoryError({
   }
 
   return (
-    <main id="main-content" className="min-h-screen bg-brand-paper">
+    <main id="main-content" tabIndex={-1} className="min-h-screen bg-brand-paper">
       <section
         aria-labelledby="trips-unexpected-error-heading"
         className="container-luma pt-14 pb-[var(--space-section)] sm:pt-20 lg:pt-24"

@@ -63,7 +63,7 @@ export function SearchFilterDisclosure({
           >
             <header className="grid min-h-20 shrink-0 grid-cols-[1fr_auto] items-center gap-4 border-b border-brand-forest-deep/16 px-5">
               <div>
-                <p className="font-mono text-[0.625rem] tracking-[0.14em] text-brand-brass uppercase">
+                <p className="font-mono text-[0.625rem] tracking-[0.14em] text-brand-brass-dark uppercase">
                   Refine the edit
                 </p>
                 <SheetTitle className="mt-1 font-sans text-xl font-bold tracking-[-0.035em] text-brand-forest-deep">

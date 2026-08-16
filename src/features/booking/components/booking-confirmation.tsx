@@ -47,7 +47,7 @@ export function BookingConfirmation() {
 
   if (!confirmation) {
     return (
-      <main id="main-content">
+      <main id="main-content" tabIndex={-1}>
         <BookingFlowHeader
           activeStep={4}
           completedThrough={canReturnToPayment ? 2 : 0}
@@ -93,7 +93,7 @@ export function BookingConfirmation() {
                   </Link>
                   <Link
                     href="/"
-                    className="inline-flex min-h-12 items-center px-3 text-sm font-semibold text-brand-forest-deep underline decoration-brand-brass/70 underline-offset-4 transition-colors duration-200 hover:text-brand-brass focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-4"
+                    className="inline-flex min-h-12 items-center px-3 text-sm font-semibold text-brand-forest-deep underline decoration-brand-brass/70 underline-offset-4 transition-colors duration-200 hover:text-brand-brass-dark focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-4"
                   >
                     Return home
                   </Link>
@@ -132,7 +132,7 @@ export function BookingConfirmation() {
   }`;
 
   return (
-    <main id="main-content">
+    <main id="main-content" tabIndex={-1}>
       <BookingFlowHeader
         activeStep={4}
         completedThrough={3}

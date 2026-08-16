@@ -30,7 +30,11 @@ export function ExperienceGallery({ stories }: { stories: ExperienceStory[] }) {
     <div className="mt-12 lg:mt-20">
       <div className="hidden min-h-[43rem] grid-cols-12 gap-x-8 lg:grid">
         <div className="col-span-4 flex min-w-0 flex-col pr-6 xl:pr-12">
-          <div aria-label="Choose an experience" className="border-b border-white/16">
+          <div
+            role="group"
+            aria-label="Choose an experience"
+            className="border-b border-white/16"
+          >
             {stories.map((story, index) => {
               const isActive = index === activeIndex;
 
@@ -56,7 +60,7 @@ export function ExperienceGallery({ stories }: { stories: ExperienceStory[] }) {
                   <span className="min-w-0">
                     <span
                       className={`block font-mono text-[0.625rem] tracking-[0.14em] uppercase transition-colors duration-200 motion-reduce:transition-none ${
-                        isActive ? "text-brand-brass" : "text-white/45"
+                        isActive ? "text-brand-brass" : "text-white/48"
                       }`}
                     >
                       {String(index + 1).padStart(2, "0")} · {story.eyebrow}
@@ -124,12 +128,12 @@ export function ExperienceGallery({ stories }: { stories: ExperienceStory[] }) {
                 className="object-cover"
               />
               <span
-                className="absolute inset-0 bg-gradient-to-t from-brand-forest-deep/76 via-transparent to-brand-forest-deep/8"
+                className="absolute inset-0 bg-gradient-to-t from-brand-forest-deep/90 via-brand-forest-deep/8 to-brand-forest-deep/8"
                 aria-hidden="true"
               />
               <div className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-8 p-8 xl:p-10">
                 <div>
-                  <p className="font-mono text-[0.625rem] tracking-[0.15em] text-white/60 uppercase">
+                  <p className="font-mono text-[0.625rem] tracking-[0.15em] text-white/72 uppercase">
                     {activeStory.location ?? "LumaStay collection"}
                   </p>
                   <p className="mt-2 max-w-[12ch] font-sans text-[clamp(2.25rem,3.5vw,4.25rem)] leading-[0.92] font-bold tracking-[-0.055em] text-white">
@@ -169,11 +173,11 @@ export function ExperienceGallery({ stories }: { stories: ExperienceStory[] }) {
                   className="object-cover"
                 />
                 <span
-                  className="absolute inset-0 bg-gradient-to-t from-brand-forest-deep/82 via-transparent to-transparent"
+                  className="absolute inset-0 bg-gradient-to-t from-brand-forest-deep/92 via-brand-forest-deep/8 to-transparent"
                   aria-hidden="true"
                 />
                 <div className="absolute inset-x-0 bottom-0 p-5 sm:p-6">
-                  <p className="font-mono text-[0.625rem] tracking-[0.14em] text-brand-brass uppercase">
+                  <p className="font-mono text-[0.625rem] tracking-[0.14em] text-[#d2ab72] uppercase">
                     {String(index + 1).padStart(2, "0")} · {story.eyebrow}
                   </p>
                   <div className="mt-2 flex items-end justify-between gap-5">
@@ -196,7 +200,7 @@ export function ExperienceGallery({ stories }: { stories: ExperienceStory[] }) {
         ))}
       </ol>
 
-      <p className="mt-3 flex items-center gap-3 font-mono text-[0.625rem] tracking-[0.12em] text-white/46 uppercase lg:hidden">
+      <p className="mt-3 flex items-center gap-3 font-mono text-[0.625rem] tracking-[0.12em] text-white/48 uppercase lg:hidden">
         <span className="h-px w-8 bg-brand-brass" aria-hidden="true" />
         Swipe through the stories
       </p>

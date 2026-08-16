@@ -16,7 +16,7 @@ export default function SupportRoute() {
   return (
     <>
       <SiteHeader />
-      <main id="main-content" className="min-h-screen bg-brand-paper">
+      <main id="main-content" tabIndex={-1} className="min-h-screen bg-brand-paper">
         <SupportPage />
       </main>
       <SiteFooter />

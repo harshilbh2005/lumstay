@@ -57,13 +57,13 @@ function PropertyCard({
             className="object-cover transition-transform duration-500 ease-luma group-hover:scale-[1.018]"
           />
           <span
-            className="absolute inset-0 bg-gradient-to-t from-brand-forest-deep/25 via-transparent to-transparent opacity-70"
+            className="absolute inset-0 bg-gradient-to-t from-brand-forest-deep/78 via-brand-forest-deep/8 to-transparent"
             aria-hidden="true"
           />
         </BookingIntentPropertyLink>
 
         <div className="pointer-events-none absolute inset-x-4 top-4 flex items-start justify-between gap-4 sm:inset-x-5 sm:top-5">
-          <div className="flex min-h-8 items-center border border-white/34 bg-brand-forest-deep/58 px-3 font-mono text-[0.625rem] tracking-[0.13em] text-white uppercase backdrop-blur-md">
+          <div className="flex min-h-8 items-center border border-white/34 bg-brand-forest-deep/88 px-3 font-mono text-[0.625rem] tracking-[0.13em] text-white uppercase backdrop-blur-md">
             {property.isNew ? "Just added" : property.isLumaPick ? "Luma pick" : "Considered stay"}
           </div>
           <SaveStayButton
@@ -142,7 +142,7 @@ export function CuratedStays() {
       <div className="container-luma">
         <div className="grid gap-8 border-t border-brand-forest-deep/18 pt-6 lg:grid-cols-12 lg:gap-x-8 lg:pt-8">
           <p className="flex items-center gap-3 font-mono text-[0.6875rem] tracking-[0.15em] text-brand-stone uppercase lg:col-span-3">
-            <span className="text-brand-brass">01</span>
+            <span className="text-brand-brass-dark">01</span>
             The LumaStay edit
           </p>
 

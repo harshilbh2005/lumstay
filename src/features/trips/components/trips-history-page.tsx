@@ -60,7 +60,7 @@ export function TripsHistoryPage({
   ] as const;
 
   return (
-    <main id="main-content" className="min-h-screen bg-brand-paper">
+    <main id="main-content" tabIndex={-1} className="min-h-screen bg-brand-paper">
       <section
         aria-labelledby="trips-page-heading"
         className="container-luma pt-14 pb-16 sm:pt-20 sm:pb-24 lg:pt-24 lg:pb-28"
