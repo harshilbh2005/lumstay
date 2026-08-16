@@ -431,7 +431,7 @@ Important limitation: this is incremental reveal over a synchronous local collec
 - Thin route handles async Next.js 16 params, static param generation, route metadata, and unknown-slug `notFound()` behavior
 - Restrained editorial shell uses a folio-led masthead, one decisive existing architectural image, a caption ledger, and a Luma note
 - Existing property links disable speculative prefetch so listings without full fixtures continue to reach the branded 404 only when deliberately opened
-- Header Saved and Trips links now reach their implemented routes with normal prefetch behavior
+- Header Saved and Trips links now reach their implemented routes; roadmap item 44 later disables speculative prefetch in the always-visible header
 - No new image was generated or downloaded for this unit; the existing Casa Serein catalog asset is reused
 - Verified from the production build at 1440×1000 and 390×844 with decoded imagery, exact metadata, visible keyboard focus, 44px navigation, zero horizontal overflow, clean consoles, and a branded unknown-slug 404 carrying `noindex`
 
@@ -737,7 +737,7 @@ Important limitation: saved stays are mock, browser-local preferences. They do n
 - A single compact 6.4-second branded notice names the removed stay and offers Undo; restoring inserts the property at its original collection index instead of promoting it to the newest position
 - Keyboard focus moves to the next or previous Remove action after deletion, to the empty-state CTA after deleting the last stay, and back to the restored row after Undo; the delayed Undo focus handoff yields to any deliberate focus movement by the guest
 - Surviving rows reflow with transform-only layout motion while removal itself is immediate, avoiding blank reserved space or a full-row ghost over the empty state; global reduced-motion handling remains intact
-- Saved links in the global header, footer, and branded confirmation notice use normal prefetch behavior; Trips now does the same because `/trips` is implemented, while still-planned destinations retain disabled prefetch where appropriate
+- Saved links in the footer and branded confirmation notice use normal prefetch behavior, while the global header opts out after roadmap item 44; Trips follows the same implemented-route split, and still-planned destinations retain disabled prefetch where appropriate
 - The page foundation retains Kobu’s warm linen, sharp property photography, quiet mono metadata, and generous gallery spacing; item 34 adds MANNA’s image-led gallery restraint, Kinfolk’s decisive CTA treatment, and Julienne’s immediate count update plus compact Undo pattern without generic centered empty cards, confirmation dialogs, saturated success chrome, account claims, or marketplace density
 - UI/UX Pro Max guidance was retained for responsive `next/image` sizing, 44px targets, visible keyboard focus, and zero overflow; its aurora gradients, conversion-page structure, and perpetual atmospheric motion were rejected as incompatible with LumaStay
 - Verified with lint, TypeScript, a successful Next.js 16 production build, and visible Playwright QA at 1440×1000, 768×1024, and 375×812: exact persisted ordering, immediate removal, original-index Undo, single-item and zero-item counts, keyboard focus recovery, Kyoto media decoding, 44px+ CTA sizing, clean console, and zero horizontal overflow all pass
@@ -764,7 +764,7 @@ Important limitation: these records are frontend-only interface fixtures. They d
 - The masthead introduces a compact status index that anchors to four visibly separate chapters: two image-led upcoming stays, two compact completed records, one quiet cancelled/refunded record, and one deep-forest failed-payment attempt
 - Every record is derived from the deterministic `mockBookings` fixtures and central media catalog, with the interface date fixed to `09 Aug 2026`; references, stay dates, party, room, paid/refunded totals, and cancellation outcome remain reviewable without recomputing status from the viewer's clock
 - The failed attempt is deliberately outside the reservation ledger: it says that no trip, booking reference, charge, or hold exists, exposes only the `LUMA-ATTEMPT-*` identifier, and offers a repeat-search URL carrying the original AlUla dates and party instead of a misleading payment-retry action
-- Header and footer Trips links now use normal Next.js prefetch behavior because the route exists; other still-planned destinations retain their current handling
+- Header and footer Trips links reach the implemented route; roadmap item 44 later disables speculative header prefetch while retaining the footer's normal behavior, and other still-planned destinations retain their current handling
 - The reference lock combines Kobu's warm linen gallery/ledger foundation, Trip's fast status and itinerary scan, Onefinestay's image/detail balance, and Mews' precise state separation. Account sidebars, marketplace tabs/card stacks, brand-blue actions, and controls implying live management were rejected
 - UI/UX Pro Max guidance was retained for responsive `next/image` sizing, visible focus, 44px+ targets, sticky-anchor clearance, and zero overflow; its aurora gradients, generic conversion-page structure, and perpetual atmospheric motion were rejected in favor of the existing LumaStay tokens and editorial restraint
 - Verified with lint, TypeScript, a successful Next.js 16 production build, and visible Playwright QA at 1440×1000 and 390×844: all six images decode, each article has an accessible label, all four anchors clear the sticky header, the repeat-search intent reaches `/search`, keyboard targets measure 44–80px with visible focus rings, both viewports have zero horizontal overflow, axe reports zero violations, and the production console reports zero errors or warnings
@@ -870,6 +870,21 @@ Important limitation: this review covers the five roadmap viewports and the dete
 
 Important limitation: this is a deterministic Chromium and source review rather than assistive-technology certification or a physical-device lab. It does not claim coverage of every browser/screen-reader pairing, user-authored content, live inventory, third-party widgets, or network-dependent production behavior; performance, end-to-end, and final production audits remain roadmap items 44–46.
 
+### Image loading, bundle, and Core Web Vitals review
+
+- A controlled production Chromium matrix now covers Home, Search, Casa Serein, populated Saved, Trips, Support, Destinations, Luma Edit, Curation, and one fixture trip detail at 390×844 and 1440×1000; each cold browser context runs with 4× CPU slowdown, 1.6 Mbps throughput, 150ms latency, blocked service workers, and reduced motion
+- The measured budgets are LCP at or below 2.5s, CLS at or below 0.10, and a lab interaction-duration surrogate at or below 200ms; final results peak at 2.352s LCP on the desktop Home hero, 1.840s LCP on mobile Casa Serein, 0.000 CLS everywhere, and 88ms interaction duration
+- The Home hero now requests an exact 1440px candidate at desktop width, uses explicit eager/high-priority discovery, and receives the sole quality-40 exception under the existing dark veil; its encoded image payload falls from 141KB at the first right-sized quality-75 pass to 88KB, while repeated 1440px and 390px visual inspection shows no visible compression or crop regression
+- Casa Serein's lead-gallery `sizes` contract now follows the rendered seven-column width rather than overstating it at 58vw; the desktop candidate falls from 1080px to 828px and its throttled LCP improves from 2.880s to 2.072s
+- Deprecated `priority` usage and false preloads were removed from Search, Destinations, Luma Edit, and Curation because measured LCP attribution stayed on their headings; populated and empty Saved imagery no longer forces eager loading, while the genuine property-gallery and trip-detail LCP preloads remain
+- The Home's below-fold curated-stay images retain native lazy loading and now declare low fetch priority so the hero owns the constrained connection; all other editorial/property imagery remains at the default quality 75
+- Global header and mobile-menu links now opt out of speculative route prefetch, preventing the Home/search/Saved/Trips client trees from downloading merely because global navigation is visible; compressed desktop JavaScript transfer drops from 424.8 to 325.6KiB on Home, 503.3 to 409.0KiB on Casa Serein, 424.8 to 269.1KiB on Saved, 515.5 to 297.9KiB on Support, and 416.5 to 217.8KiB on the mostly server-rendered image-led pages
+- The final route ceiling is 409.0KiB of compressed initial JavaScript on the interaction-heavy property page; the separate Turbopack module graph remains available through `next experimental-analyze --output`, and no new package or client boundary was added
+- A separate lazy-image journey scrolls all visible imagery across seven image-heavy routes at both viewports: 68 of 101 visible images are initially deferred, every one requests and decodes when brought into view, and the matrix records zero decode, console, or non-cancelled request failures
+- Verified with repeated Next.js 16.2 production builds, `npm run check`, Turbopack's experimental bundle analyzer, the 20-case throttled route-family matrix, the 14-case lazy-image scroll matrix, and repeated desktop/mobile hero screenshots
+
+Important limitation: these are deterministic local Chromium lab measurements, not field Core Web Vitals or a device/CDN certification. The image optimizer variants were warmed before the final comparison so the results isolate browser delivery rather than one-time local encoding; real-user p75 data, deployment compression/CDN behavior, cache-miss frequency, other browsers, and physical devices still need production monitoring.
+
 ## Current homepage order
 
 `src/app/page.tsx` renders:
@@ -901,6 +916,7 @@ The implemented routes are `/`, `/about/curation`, `/destinations`, `/edit`, `/s
 ## Commit history
 
 ```text
+37eead1 fix: complete accessibility audit
 f77a9e9 fix: complete responsive navigation audit
 e1c8454 feat: add route metadata previews
 f1962c9 feat: add support experience
@@ -1019,10 +1035,10 @@ Build each item separately, research it first, verify it, and commit it before m
 41. ~~Complete route-level metadata and social previews~~ Complete
 42. ~~Final mobile navigation and responsive review at 375, 390, 768, 1024, and 1440 widths~~ Complete
 43. ~~Full keyboard-navigation, semantic-structure, contrast, and reduced-motion review~~ Complete
-44. Image loading, bundle, and Core Web Vitals review
+44. ~~Image loading, bundle, and Core Web Vitals review~~ Complete
 45. End-to-end mock booking-flow QA
 46. Final visual-consistency and production-build audit
 
 ## Recommended immediate next step
 
-Complete the **image loading, bundle, and Core Web Vitals review** for roadmap item 44. Measure the production build across representative route families and populated states, identify image or JavaScript delivery regressions with reproducible evidence, and make only targeted performance changes that preserve the established visual and interaction contracts.
+Complete the **end-to-end mock booking-flow QA** for roadmap item 45. Exercise the complete deterministic journey from discovery through room selection, review, guest details, mock payment outcomes, confirmation, reload recovery, and alternate back/edit paths without expanding the frontend-only product scope.

@@ -78,7 +78,6 @@ export function PropertyResultCard({
                   ? "(max-width: 767px) calc(100vw - 2.5rem), (max-width: 1023px) 42vw, 39vw"
                   : "(max-width: 767px) calc(100vw - 2.5rem), (max-width: 1023px) 42vw, 27vw"
               }
-              priority={index === 0}
               className="object-cover transition-transform duration-500 ease-luma group-hover:scale-[1.018]"
               style={{ objectPosition: media.focalPoint }}
             />

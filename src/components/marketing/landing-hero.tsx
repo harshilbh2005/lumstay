@@ -20,7 +20,9 @@ export function LandingHero() {
     >
       <Image
         fill
-        preload
+        fetchPriority="high"
+        loading="eager"
+        quality={40}
         sizes="100vw"
         src={hero.src}
         alt={hero.alt}

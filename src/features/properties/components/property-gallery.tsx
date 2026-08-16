@@ -91,7 +91,7 @@ export function PropertyGallery({
                   alt={asset.alt}
                   sizes={
                     index === 0
-                      ? "(max-width: 639px) 84vw, (max-width: 1023px) 72vw, 58vw"
+                      ? "(max-width: 639px) 84vw, (max-width: 1023px) 72vw, (max-width: 1535px) 55vw, 51.75rem"
                       : "(max-width: 639px) 84vw, (max-width: 1023px) 72vw, 25vw"
                   }
                   className="object-cover transition-transform duration-300 ease-luma group-hover:scale-[1.015]"

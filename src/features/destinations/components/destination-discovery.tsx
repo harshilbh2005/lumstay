@@ -167,7 +167,6 @@ export function DestinationDiscovery() {
                 src={featuredMedia.src}
                 alt={featuredMedia.alt}
                 fill
-                priority
                 sizes="(min-width: 1024px) 50vw, 100vw"
                 className="object-cover"
                 style={{ objectPosition: featuredMedia.focalPoint }}

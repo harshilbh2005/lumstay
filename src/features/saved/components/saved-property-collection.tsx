@@ -106,7 +106,6 @@ function SavedPropertyRow({
               src={property.media.src}
               alt={property.media.alt}
               sizes="(max-width: 1023px) calc(100vw - 2.5rem), 55vw"
-              loading={index === 0 ? "eager" : "lazy"}
               className="object-cover transition-transform duration-500 ease-luma group-hover/image:scale-[1.018] motion-reduce:transition-none"
               style={{ objectPosition: property.media.focalPoint }}
             />
@@ -324,7 +323,6 @@ function SavedCollectionEmptyState({
                 src={media.src}
                 alt={media.alt}
                 sizes="(max-width: 1023px) calc(100vw - 2.5rem), 48vw"
-                loading="eager"
                 className="object-cover"
                 style={{ objectPosition: media.focalPoint }}
               />

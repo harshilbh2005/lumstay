@@ -49,6 +49,7 @@ export function MobileNavigation() {
         <div className="flex h-[5.5rem] items-center justify-between border-b border-white/14 px-5 sm:px-7">
           <Link
             href="/"
+            prefetch={false}
             className="brand-wordmark-inverse inline-flex min-h-11 items-center font-sans text-[1.7rem] leading-none font-extrabold tracking-[-0.065em]"
           >
             LumaStay
@@ -75,6 +76,7 @@ export function MobileNavigation() {
                   render={
                     <Link
                       href={item.href}
+                      prefetch={false}
                       className="group grid min-h-20 grid-cols-[2rem_1fr_auto] items-center gap-3 py-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-brass focus-visible:ring-inset"
                     />
                   }
@@ -102,6 +104,7 @@ export function MobileNavigation() {
             render={
               <Link
                 href="/saved"
+                prefetch={false}
                 className="flex min-h-24 items-center gap-3 bg-brand-forest-deep px-5 text-sm font-medium text-brand-paper/78 transition-colors duration-200 hover:bg-white/6 hover:text-brand-paper focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-brass focus-visible:ring-inset sm:px-7"
               />
             }
@@ -113,6 +116,7 @@ export function MobileNavigation() {
             render={
               <Link
                 href="/trips"
+                prefetch={false}
                 className="flex min-h-24 items-center gap-3 bg-brand-forest-deep px-5 text-sm font-medium text-brand-paper/78 transition-colors duration-200 hover:bg-white/6 hover:text-brand-paper focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-brass focus-visible:ring-inset sm:px-7"
               />
             }

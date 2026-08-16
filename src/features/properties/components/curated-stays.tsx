@@ -49,6 +49,7 @@ function PropertyCard({
             fill
             src={media.src}
             alt={media.alt}
+            fetchPriority="low"
             sizes={
               featured
                 ? "(max-width: 1023px) 86vw, 62vw"
