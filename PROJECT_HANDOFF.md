@@ -885,6 +885,21 @@ Important limitation: this is a deterministic Chromium and source review rather 
 
 Important limitation: these are deterministic local Chromium lab measurements, not field Core Web Vitals or a device/CDN certification. The image optimizer variants were warmed before the final comparison so the results isolate browser delivery rather than one-time local encoding; real-user p75 data, deployment compression/CDN behavior, cache-miss frequency, other browsers, and physical devices still need production monitoring.
 
+### End-to-end mock booking-flow QA
+
+- The complete production journey now has an explicit browser-verified contract from the Home hero through Search, Casa Serein, room selection, Review, Guest details, mock Payment, and Confirmation at 1440×1000 and 390×844
+- The primary path preserves the hero's canonical `2026-09-18` to `2026-09-21` stay intent, selects Garden Room, derives the shared ₹129,252 total, saves the normalized lead guest, prepares only a masked `4242` test-card summary, and creates the deterministic `LUMA-MOCK-CS-GR-260918` interface record
+- Alternate navigation is verified rather than assumed: Review → Change room restores the selected native radio after client hydration, switching to Sea Terrace Room recalculates the total to ₹158,148, returning to Garden Room restores ₹129,252, and Edit dates or guests retains both canonical dates through Search and browser history
+- Guest details survive the Guest details → Review → Guest details round trip with the payment action still correctly gated by a saved, unchanged draft
+- All three documented payment outcomes run through their real controls: security code `000` declines and returns focus to an empty first field, `999` interrupts and retries from the masked summary alone, and `123` prepares the direct success state
+- During every mock attempt the payment controls disable while processing, the full card number and security code clear immediately, and only the cardholder name, `4242` suffix, and normalized expiry remain in the rendered prepared result
+- Confirmation reload removes the memory-only itinerary and reference as designed; fresh direct visits to Review, Guest details, Payment, and Confirmation expose their deliberate recovery ledgers instead of reconstructing a stay or implying persistence
+- The browser-automation workflow used isolated fresh contexts and user-facing roles/labels, waited on actual state and decoded-image conditions rather than fixed sleeps, and finished 45 explicit assertions with one main landmark, one H1, zero horizontal overflow, decoded visible imagery, and zero console warnings/errors, page errors, failed requests, or HTTP error responses
+- The optimized baseline also passes `npm run check` and a successful Next.js 16.2 production build; visual review of the desktop and mobile confirmation captures found no clipping, hierarchy drift, sticky-header collision, or unexpected marketplace styling
+- No application code, fixture, dependency, persistence boundary, or product scope changed in this audit; the completed flow already met the intended deterministic frontend contract
+
+Important limitation: this QA covers deterministic local Chromium behavior and the documented mock outcomes, not real payment authorization, reservation inventory, server persistence, email delivery, account history, other browser engines, physical devices, or an external production deployment.
+
 ## Current homepage order
 
 `src/app/page.tsx` renders:
@@ -916,6 +931,7 @@ The implemented routes are `/`, `/about/curation`, `/destinations`, `/edit`, `/s
 ## Commit history
 
 ```text
+45e997b perf: complete image and web vitals audit
 37eead1 fix: complete accessibility audit
 f77a9e9 fix: complete responsive navigation audit
 e1c8454 feat: add route metadata previews
@@ -1036,9 +1052,9 @@ Build each item separately, research it first, verify it, and commit it before m
 42. ~~Final mobile navigation and responsive review at 375, 390, 768, 1024, and 1440 widths~~ Complete
 43. ~~Full keyboard-navigation, semantic-structure, contrast, and reduced-motion review~~ Complete
 44. ~~Image loading, bundle, and Core Web Vitals review~~ Complete
-45. End-to-end mock booking-flow QA
+45. ~~End-to-end mock booking-flow QA~~ Complete
 46. Final visual-consistency and production-build audit
 
 ## Recommended immediate next step
 
-Complete the **end-to-end mock booking-flow QA** for roadmap item 45. Exercise the complete deterministic journey from discovery through room selection, review, guest details, mock payment outcomes, confirmation, reload recovery, and alternate back/edit paths without expanding the frontend-only product scope.
+Complete the **final visual-consistency and production-build audit** for roadmap item 46. Review every implemented route family and representative state against the established tokens, typography, spacing, responsive, metadata, resource, and production-runtime contracts; correct only reproducible release defects and finish with a clean optimized build.
