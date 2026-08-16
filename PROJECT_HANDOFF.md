@@ -900,6 +900,21 @@ Important limitation: these are deterministic local Chromium lab measurements, n
 
 Important limitation: this QA covers deterministic local Chromium behavior and the documented mock outcomes, not real payment authorization, reservation inventory, server persistence, email delivery, account history, other browser engines, physical devices, or an external production deployment.
 
+### Final visual-consistency and production-build audit
+
+- The final production matrix covers 21 implemented route or representative state cases at 390×844 and 1440×1000, then repeats six high-risk families—Home, Search, Casa Serein, Support, Trips, and booking recovery—at 375×812, 768×1024, and 1024×768 for 60 settled surface checks in total
+- Covered states include every public editorial route, Search success/no-results/empty/error, the Casa Serein property, Saved empty, Trips populated/empty/error, one trip detail, all four direct-access booking recoveries, the property missing boundary, and the global 404
+- Every settled page exposes one `#main-content`, one H1, no duplicate IDs, complete image alt attributes, decoded eager/visible imagery, the expected Jost body and Jost/Bodoni heading families, the paper theme/background contract, the 88px header plus its one-pixel rule, one labelled global destination footer, and zero horizontal overflow at every audited width
+- Console, page-error, failed-request, and subresource checks finish clean across the matrix; the deliberately requested global 404 document response is the only expected browser 404 signal
+- Human review of paired desktop/mobile captures for Home, Search, Casa Serein, Curation, Support, Saved empty, Trips, and Payment recovery confirms consistent paper/linen/forest sequencing, sharp image framing, restrained brass, ruled ledgers, typography hierarchy, mobile collapse, and honest recovery-state presentation without generic marketplace cards or palette drift
+- The source-level consistency review finds no blue/purple/orange design-system intrusion, arbitrary card shadows, or new rounded-panel language; remaining raw colours are limited to the central token definitions, the generated social-preview palette, established dark-image/gallery overlays, and accessibility-safe inverse accents
+- The link inventory contains 45 unique internal destinations with no `undefined`, `null`, `NaN`, empty-fragment, or script URLs; 12 deliberate not-found destinations remain confined to the documented planned About/legal pages and property summaries without full fixtures
+- `npm run check` passes, and the final Next.js 16.2 Turbopack build succeeds with all 22 generated page outputs when `NEXT_PUBLIC_SITE_URL=https://lumastay.example` is supplied as a representative HTTPS production origin
+- The built Home response uses that HTTPS canonical, Open Graph URL, and social-preview URL; Search canonicalizes to `https://lumastay.example/search` without query state and retains `noindex, follow, nocache`; the dynamic social-preview endpoint returns HTTP 200, `image/png`, the intended cache policy, and exact 1200×630 dimensions
+- The browser-automation workflow was used for isolated contexts, user-visible state checks, real font/image readiness, and responsive captures. No application code, dependency, fixture, route, product claim, persistence boundary, or visual language changed during this final audit
+
+Important limitation: this is a local optimized-build and Chromium release audit using a representative HTTPS origin, not a hosted deployment, cross-browser/device lab, penetration test, live-data certification, or real-user monitoring program. A real deployment must set its actual `NEXT_PUBLIC_SITE_URL`; the 12 intentionally planned destinations will continue to reach branded not-found states until separately implemented.
+
 ## Current homepage order
 
 `src/app/page.tsx` renders:
@@ -931,6 +946,7 @@ The implemented routes are `/`, `/about/curation`, `/destinations`, `/edit`, `/s
 ## Commit history
 
 ```text
+a10a71f test: complete mock booking flow audit
 45e997b perf: complete image and web vitals audit
 37eead1 fix: complete accessibility audit
 f77a9e9 fix: complete responsive navigation audit
@@ -1053,8 +1069,8 @@ Build each item separately, research it first, verify it, and commit it before m
 43. ~~Full keyboard-navigation, semantic-structure, contrast, and reduced-motion review~~ Complete
 44. ~~Image loading, bundle, and Core Web Vitals review~~ Complete
 45. ~~End-to-end mock booking-flow QA~~ Complete
-46. Final visual-consistency and production-build audit
+46. ~~Final visual-consistency and production-build audit~~ Complete
 
 ## Recommended immediate next step
 
-Complete the **final visual-consistency and production-build audit** for roadmap item 46. Review every implemented route family and representative state against the established tokens, typography, spacing, responsive, metadata, resource, and production-runtime contracts; correct only reproducible release defects and finish with a clean optimized build.
+The planned LumaStay frontend roadmap is complete through Phase 6 item 46. The next safe product step is deployment preparation: set the real `NEXT_PUBLIC_SITE_URL`, deploy the existing frontend without changing its mock-data claims, and add field monitoring; backend inventory, authentication, payment, messaging, and account history remain out of scope unless the user explicitly starts a new roadmap.
